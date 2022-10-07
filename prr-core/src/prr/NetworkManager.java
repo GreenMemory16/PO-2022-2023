@@ -2,7 +2,9 @@ package prr;
 
 import java.io.IOException;
 import java.io.FileNotFoundException;
+import java.util.Collection;
 
+import prr.clients.Client;
 import prr.exceptions.ImportFileException;
 import prr.exceptions.MissingFileAssociationException;
 import prr.exceptions.UnavailableFileException;
@@ -69,6 +71,18 @@ public class NetworkManager {
                 } catch (IOException | UnrecognizedEntryException /* FIXME maybe other exceptions */ e) {
                         throw new ImportFileException(filename, e);
     }
+	}
+
+	public void registerClient(String key, String name, int taxId) {
+		this._network.registerClient(key, name, taxId);
+	}
+
+	public Client getClient(String key) {
+		return this._network.getClient(key);
+	}
+
+	public Collection<Client> getAllClients() {
+		return this._network.getAllClients();
 	}
 
 }

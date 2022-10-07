@@ -2,6 +2,12 @@ package prr;
 
 import java.io.Serializable;
 import java.io.IOException;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.Map;
+import java.util.HashMap;
+
+import prr.clients.Client;
 import prr.exceptions.UnrecognizedEntryException;
 
 // FIXME add more import if needed (cannot import from pt.tecnico or prr.app)
@@ -13,6 +19,9 @@ public class Network implements Serializable {
 
 	/** Serial number for serialization. */
 	private static final long serialVersionUID = 202208091753L;
+
+	private Map<String, Client> _clients = new HashMap<>();
+
 
         // FIXME define attributes
         // FIXME define contructor(s)
@@ -28,5 +37,21 @@ public class Network implements Serializable {
 	void importFile(String filename) throws UnrecognizedEntryException, IOException /* FIXME maybe other exceptions */  {
 		//FIXME implement method
         }
+
+	public Client registerClient(String key, String name, int taxId) {
+
+		Client client = new Client(key, name, taxId);
+		_clients.put(key, client);
+
+		return client;
+	}
+
+	public Client getClient(String key) {
+		return _clients.get(key);
+	}
+
+	public Collection<Client> getAllClients() {
+		return Collections.unmodifiableCollection(_clients.values());
+	}
 }
 
