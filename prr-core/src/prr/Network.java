@@ -1,12 +1,13 @@
 package prr;
 
-import java.io.Serializable;
 import java.io.IOException;
+import java.io.Serializable;
 import java.util.Collection;
 import java.util.Collections;
-import java.util.Map;
 import java.util.HashMap;
+import java.util.Map;
 
+import prr.exceptions.DuplicateClientKeyExceptionCore;
 import prr.clients.Client;
 import prr.exceptions.UnrecognizedEntryException;
 
@@ -38,7 +39,12 @@ public class Network implements Serializable {
 		//FIXME implement method
         }
 
-	public Client registerClient(String key, String name, int taxId) {
+
+	
+	public Client registerClient(String key, String name, int taxId) throws DuplicateClientKeyExceptionCore {
+		if (_clients.containsKey(key)) {
+			throw new DuplicateClientKeyExceptionCore(key);
+		}
 
 		Client client = new Client(key, name, taxId);
 		_clients.put(key, client);
