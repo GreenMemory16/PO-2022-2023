@@ -8,6 +8,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import prr.exceptions.DuplicateClientKeyExceptionCore;
+import prr.exceptions.UnknownClientKeyExceptionCore;
 import prr.clients.Client;
 import prr.exceptions.UnrecognizedEntryException;
 
@@ -52,8 +53,12 @@ public class Network implements Serializable {
 		return client;
 	}
 
-	public Client getClient(String key) {
-		return _clients.get(key);
+	public Client getClient(String key) throws UnknownClientKeyExceptionCore {
+		Client c = _clients.get(key);
+		if (c == null) {
+			throw new UnknownClientKeyExceptionCore(key);
+		}
+		return c;
 	}
 
 	public Collection<Client> getAllClients() {
