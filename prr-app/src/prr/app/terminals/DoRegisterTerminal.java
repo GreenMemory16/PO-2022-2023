@@ -15,11 +15,20 @@ class DoRegisterTerminal extends Command<Network> {
 
 	DoRegisterTerminal(Network receiver) {
 		super(Label.REGISTER_TERMINAL, receiver);
-		//FIXME add command fields
+		addStringField("clientkey", Prompt.clientKey());
+    	addStringField("id", Prompt.terminalKey());
+    	//addStringField("type", Prompt.terminalType());
+		//the problem is that tecnhically terminal is an
+		//asbtract class, sooooo we must think about how
+		//we wanna implement this
 	}
 
 	@Override
 	protected final void execute() throws CommandException {
-                //FIXME implement command
+		String clientkey = stringField("clientkey");
+		String id = stringField("id");
+		//Sring type = integerField("type");
+		_receiver.registerTerminal(id, clientkey /*,type*/);
+                //FIXME please
 	}
 }

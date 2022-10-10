@@ -6,14 +6,41 @@ import java.io.Serializable;
 
 /**
  * Abstract terminal.
+ lets do it after; lets see if this works yet tho
  */
-abstract public class Terminal implements Serializable /* FIXME maybe addd more interfaces */{
+ public /*abstract*/ class Terminal implements Serializable{ 
+ /* FIXME maybe addd more interfaces */
 
 	/** Serial number for serialization. */
 	private static final long serialVersionUID = 202208091753L;
 
-        // FIXME define attributes
-        // FIXME define contructor(s)
+        //define attributes
+        private String _id;
+
+        private String _clientkey;
+
+        //private Terminal _amigos[];
+
+        //define contructor(s)
+        public Terminal(String id, String clientkey){
+                _id = id;
+                _clientkey = clientkey;
+        }
+        //getters: not setters tho
+        public String getId(){
+                return _id;
+        }
+        public String getClientKey(){
+                return _clientkey;
+        }
+
+
+
+
+        @Override
+        public String toString() {
+                return "Terminal ID: " + getId() + " | Belongs to Client: " + getClientKey();
+    }
         // FIXME define methods
 
         /**

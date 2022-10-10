@@ -8,6 +8,8 @@ import java.util.Map;
 import java.util.HashMap;
 
 import prr.clients.Client;
+import prr.terminals.Terminal;
+
 import prr.exceptions.UnrecognizedEntryException;
 
 // FIXME add more import if needed (cannot import from pt.tecnico or prr.app)
@@ -21,6 +23,8 @@ public class Network implements Serializable {
 	private static final long serialVersionUID = 202208091753L;
 
 	private Map<String, Client> _clients = new HashMap<>();
+
+	private Map<String, Terminal> _terminals = new HashMap<>();
 
 
         // FIXME define attributes
@@ -52,6 +56,21 @@ public class Network implements Serializable {
 
 	public Collection<Client> getAllClients() {
 		return Collections.unmodifiableCollection(_clients.values());
+	}
+/** *********************************************** */
+	public Terminal registerTerminal(String id, String clientkey) {
+
+		Terminal terminal = new Terminal(id, clientkey);
+		_terminals.put(id, terminal);
+		//wth does this do?
+
+		return terminal;
+	}
+	public Terminal getTerminal(String id) {
+		return _terminals.get(id);
+	}
+	public Collection<Terminal> getAllTerminals() {
+		return Collections.unmodifiableCollection(_terminals.values());
 	}
 }
 
