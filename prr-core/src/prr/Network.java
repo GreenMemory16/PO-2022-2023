@@ -1,12 +1,14 @@
 package prr;
 
-import java.io.Serializable;
 import java.io.IOException;
+import java.io.Serializable;
 import java.util.Collection;
 import java.util.Collections;
-import java.util.Map;
 import java.util.HashMap;
+import java.util.Map;
 
+import prr.exceptions.DuplicateClientKeyExceptionCore;
+import prr.exceptions.UnknownClientKeyExceptionCore;
 import prr.clients.Client;
 import prr.terminals.Terminal;
 
@@ -42,7 +44,12 @@ public class Network implements Serializable {
 		//FIXME implement method
         }
 
-	public Client registerClient(String key, String name, int taxId) {
+
+	
+	public Client registerClient(String key, String name, int taxId) throws DuplicateClientKeyExceptionCore {
+		if (_clients.containsKey(key)) {
+			throw new DuplicateClientKeyExceptionCore(key);
+		}
 
 		Client client = new Client(key, name, taxId);
 		_clients.put(key, client);
@@ -50,8 +57,12 @@ public class Network implements Serializable {
 		return client;
 	}
 
-	public Client getClient(String key) {
-		return _clients.get(key);
+	public Client getClient(String key) throws UnknownClientKeyExceptionCore {
+		Client c = _clients.get(key);
+		if (c == null) {
+			throw new UnknownClientKeyExceptionCore(key);
+		}
+		return c;
 	}
 
 	public Collection<Client> getAllClients() {
