@@ -1,5 +1,7 @@
 package prr;
 
+import java.io.BufferedReader;
+import java.io.FileReader;
 import java.io.IOException;
 import java.io.Serializable;
 import java.util.Collection;
@@ -8,6 +10,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import prr.exceptions.DuplicateClientKeyExceptionCore;
+import prr.exceptions.ImportFileException;
 import prr.exceptions.UnknownClientKeyExceptionCore;
 import prr.clients.Client;
 import prr.terminals.Terminal;
@@ -23,6 +26,8 @@ public class Network implements Serializable {
 
 	/** Serial number for serialization. */
 	private static final long serialVersionUID = 202208091753L;
+
+	private boolean _changed = false; 
 
 	private Map<String, Client> _clients = new HashMap<>();
 
@@ -41,8 +46,40 @@ public class Network implements Serializable {
 	 * @throws IOException if there is an IO erro while processing the text file
 	 */
 	void importFile(String filename) throws UnrecognizedEntryException, IOException /* FIXME maybe other exceptions */  {
-		//FIXME implement method
-        }
+		try (BufferedReader reader = new BufferedReader(new FileReader(filename))) {
+			String line;
+			while ((line = reader.readLine()) != null) {
+				String[] fields = line.split("\\|");
+
+				try {
+					registerEntry(fields);
+				} catch (DuplicateClientKeyExceptionCore | UnknownClientKeyExceptionCore e) {
+					e.printStackTrace();
+				}
+			} 
+		} catch (IOException e1) {
+			throw new UnrecognizedEntryException(filename);
+		} 
+    	
+	}
+
+	public void registerEntry(String... fields) throws DuplicateClientKeyExceptionCore, 
+		UnknownClientKeyExceptionCore {
+		int taxId = Integer.parseInt(fields[3]);
+
+		switch(fields[0]) {
+			case "CLIENT" -> registerClient(fields[1], fields[2], taxId);
+		}
+
+	}
+
+	public void setChanged(boolean v) {
+		_changed = v;
+	}
+
+	public void changed() {
+		_changed = true;
+	}
 
 
 	
@@ -83,5 +120,6 @@ public class Network implements Serializable {
 	public Collection<Terminal> getAllTerminals() {
 		return Collections.unmodifiableCollection(_terminals.values());
 	}
+
 }
 

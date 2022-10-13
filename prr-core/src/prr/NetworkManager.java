@@ -1,10 +1,19 @@
 package prr;
 
 import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.io.BufferedInputStream;
+import java.io.BufferedOutputStream;
+import java.io.BufferedReader;
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.FileReader;
 import java.util.Collection;
 
 import prr.clients.Client;
+import prr.exceptions.DuplicateClientKeyExceptionCore;
 import prr.exceptions.ImportFileException;
 import prr.exceptions.MissingFileAssociationException;
 import prr.exceptions.UnavailableFileException;
@@ -21,6 +30,8 @@ public class NetworkManager {
 	private Network _network = new Network();
         //FIXME  addmore fields if needed
 
+	private String _filename = "";
+
         public Network getNetwork() {
 		return _network;
 	}
@@ -31,8 +42,12 @@ public class NetworkManager {
 	 * @throws UnavailableFileException if the specified file does not exist or there is
          *         an error while processing this file.
 	 */
-	public void load(String filename) throws UnavailableFileException {
-		//FIXME implement serialization method
+	public void load(String filename) throws UnavailableFileException, IOException, FileNotFoundException, ClassNotFoundException{
+		_filename = filename;
+		try (ObjectInputStream ois = new ObjectInputStream(new BufferedInputStream(new FileInputStream(filename)))){
+			_network = (Network) ois.readObject();
+			_network.setChanged(false);
+		}
 	}
 
 	/**
@@ -43,7 +58,13 @@ public class NetworkManager {
 	 * @throws IOException if there is some error while serializing the state of the network to disk.
 	 */
 	public void save() throws FileNotFoundException, MissingFileAssociationException, IOException {
-		//FIXME implement serialization method
+		if (_filename == null || _filename.equals("")) {
+			throw new MissingFileAssociationException();
+		}
+		try (ObjectOutputStream oos = new ObjectOutputStream(new BufferedOutputStream(new FileOutputStream(_filename)))) {
+			oos.writeObject(_network);
+			_network.setChanged(false);
+		}
 	}
 
 	/**
@@ -56,7 +77,8 @@ public class NetworkManager {
 	 * @throws IOException if there is some error while serializing the state of the network to disk.
 	 */
 	public void saveAs(String filename) throws FileNotFoundException, MissingFileAssociationException, IOException {
-		//FIXME implement serialization method
+		_filename = filename;
+		save();
 	}
 
 	/**
@@ -67,8 +89,9 @@ public class NetworkManager {
 	 */
 	public void importFile(String filename) throws ImportFileException {
 		try {
-                        _network.importFile(filename);
-                } catch (IOException | UnrecognizedEntryException /* FIXME maybe other exceptions */ e) {
+			_network.importFile(filename);
+            
+        } catch (IOException | UnrecognizedEntryException /* FIXME maybe other exceptions */ e) {
                         throw new ImportFileException(filename, e);
     }
 	}
