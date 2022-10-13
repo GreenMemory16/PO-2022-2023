@@ -1,5 +1,7 @@
 package prr.terminals;
 
+import java.util.List;
+import java.util.ArrayList;
 import java.io.Serializable;
 
 // FIXME add more import if needed (cannot import from pt.tecnico or prr.app)
@@ -19,12 +21,25 @@ import java.io.Serializable;
 
         private String _clientkey;
 
-        //private Terminal _amigos[];
+        //private Estado _estado;
+
+        //lista de amigos; mudar para um map maybe ou probably treemap
+        private List<Terminal> _amigos;
+
+        //private lista ou map de dividas e pagamentos
+        //enunciado diz que o terminal deve ter contabilidade propria
+        private List<int> _payments;
+        private List<int> _debts;
 
         //define contructor(s)
         public Terminal(String id, String clientkey){
+                //_estado = new Idle(); 
+                //fazer estados;
                 _id = id;
                 _clientkey = clientkey;
+                _amigos = new ArrayList<Terminal>();
+                _payments = new ArrayList<int>();
+                _debts = new ArrayList<int>();
         }
         //getters: not setters tho
         public String getId(){
@@ -33,8 +48,28 @@ import java.io.Serializable;
         public String getClientKey(){
                 return _clientkey;
         }
+        public int getAllPayments(){
+                return getAllSomething(_payments);
+        }
+        public int getAllDebts(){
+                return getAllSomething(_debts);
+        }
+        //for abstração sake
+        public int getAllSomething(List list){
+                int total = 0;
+                for(int i = 0; i < list.size() ; i++){
+                        total+=list[i];
+                }
+                return total;
+        }
 
-
+        public void AddFriend(Terminal terminal){
+                if(this.equals(terminal)){
+                        return ;
+                        //it should return an exception, FIXME later
+                }
+                _amigos.add(terminal);
+        }
         @Override
         public String toString() {
                 return "Terminal ID: " + getId() + " | Belongs to Client: " + getClientKey();
