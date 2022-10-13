@@ -2,6 +2,8 @@ package prr.terminals;
 
 import java.util.List;
 import java.util.ArrayList;
+import java.util.Map;
+import java.util.TreeMap;
 import java.io.Serializable;
 
 // FIXME add more import if needed (cannot import from pt.tecnico or prr.app)
@@ -24,7 +26,8 @@ import java.io.Serializable;
         //private Estado _estado;
 
         //lista de amigos; mudar para um map maybe ou probably treemap
-        private List<Terminal> _amigos;
+        //a key será o id do terminal
+        private Map<String,Terminal> _amigos;
 
         //private lista ou map de dividas e pagamentos
         //enunciado diz que o terminal deve ter contabilidade propria
@@ -37,9 +40,11 @@ import java.io.Serializable;
                 //fazer estados;
                 _id = id;
                 _clientkey = clientkey;
-                _amigos = new ArrayList<Terminal>();
+                _amigos = new TreeMap<String,Terminal>();
                 _payments = new ArrayList<int>();
+                _payments.add(0);
                 _debts = new ArrayList<int>();
+                debts.add(0);
         }
         //getters: not setters tho
         public String getId(){
@@ -68,8 +73,16 @@ import java.io.Serializable;
                         return ;
                         //it should return an exception, FIXME later
                 }
-                _amigos.add(terminal);
+                _amigos.put(terminal.getId(), terminal);
         }
+        
+        public boolean IsFriend(String Id){
+                Terminal terminal = _amigos.get(Id);
+                if(terminal == null){
+                        return false
+                }
+        }
+        
         @Override
         public String toString() {
                 return "Terminal ID: " + getId() + " | Belongs to Client: " + getClientKey();
