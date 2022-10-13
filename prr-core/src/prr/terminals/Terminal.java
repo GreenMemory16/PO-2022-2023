@@ -35,8 +35,6 @@ import java.io.Serializable;
         }
 
 
-
-
         @Override
         public String toString() {
                 return "Terminal ID: " + getId() + " | Belongs to Client: " + getClientKey();
@@ -49,7 +47,11 @@ import java.io.Serializable;
          * @return true if this terminal is busy (i.e., it has an active interactive communication) and
          *          it was the originator of this communication.
          **/
-        public boolean canEndCurrentCommunication() {
+
+         //ist gonna be abstract bc it depoends on the terminal type
+         //or maybe do another function for that ~
+         //this is to check if the terminal is ready or not
+        /*abstract*/public boolean canEndCurrentCommunication() {
                 // FIXME add implementation code
                 return false;
         }
@@ -59,6 +61,8 @@ import java.io.Serializable;
          *
          * @return true if this terminal is neither off neither busy, false otherwise.
          **/
+
+
         public boolean canStartCommunication() {
                 // FIXME add implementation code
                 return false;
