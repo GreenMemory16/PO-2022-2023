@@ -19,45 +19,54 @@ import java.io.Serializable;
 	private static final long serialVersionUID = 202208091753L;
 
         //define attributes
-        private String _id;
+        private String id;
 
-        private String _clientkey;
+        private String clientkey;
 
         //private Estado _estado;
 
         //lista de amigos; mudar para um map maybe ou probably treemap
         //a key será o id do terminal
-        private Map<String,Terminal> _amigos;
+        private Map<String,Terminal> amigos;
 
         //private lista ou map de dividas e pagamentos
         //enunciado diz que o terminal deve ter contabilidade propria
-        private List<int> _payments;
-        private List<int> _debts;
+        private List<int> payments;
+        private List<int> debts;
 
         //define contructor(s)
         public Terminal(String id, String clientkey){
-                //_estado = new Idle(); 
+                //state = new Idle(); 
                 //fazer estados;
-                _id = id;
-                _clientkey = clientkey;
-                _amigos = new TreeMap<String,Terminal>();
-                _payments = new ArrayList<int>();
-                _payments.add(0);
-                _debts = new ArrayList<int>();
+                this.id = id;
+                this.clientkey = clientkey;
+                this.amigos = new TreeMap<String,Terminal>();
+                this.payments = new ArrayList<int>();
+                this.payments.add(0);
+                this.debts = new ArrayList<int>();
                 debts.add(0);
         }
         //getters: not setters tho
         public String getId(){
-                return _id;
+                return this.id;
         }
+        /* state related functions */
+        public State getState(){
+                return this.state;
+        }
+        /* 
+        public boolean Isbusy(){
+                return estado.some function
+        }
+*/
         public String getClientKey(){
-                return _clientkey;
+                return this.clientkey;
         }
         public int getAllPayments(){
-                return getAllSomething(_payments);
+                return getAllSomething(this.payments);
         }
         public int getAllDebts(){
-                return getAllSomething(_debts);
+                return getAllSomething(this.debts);
         }
         //for abstração sake
         public int getAllSomething(List list){
@@ -82,13 +91,15 @@ import java.io.Serializable;
                 }
         }
         
+        abstract public boolean sameType(Terminal other){
+        }
+        
         @Override
         public String toString(){
-                return "Terminal ID: " + getId() + " | Belongs to Client: " + getClientKey();
+                return "Terminal ID: " + this.getId() + " | Belongs to Client: " + this.getClientKey();
     }
         @Override
         abstract public boolean equals(){
-                return false;
         }
         // FIXME define methods
 
@@ -105,6 +116,7 @@ import java.io.Serializable;
 
         /*abstract*/public boolean canEndCurrentCommunication() {
                 // FIXME add implementation code
+
                 return false;
         }
 
