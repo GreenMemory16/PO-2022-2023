@@ -68,9 +68,9 @@ import java.io.Serializable;
                 return total;
         }
 
-        public void AddFriend(Terminal terminal){
+        public void AddFriend(Terminal terminal) throws InvalidFriendException{
                 if(this.equals(terminal)){
-                        return ;
+                        throw new InvalidFriendException() ;
                         //it should return an exception, FIXME later
                 }
                 _amigos.put(terminal.getId(), terminal);
@@ -79,7 +79,7 @@ import java.io.Serializable;
         public boolean IsFriend(String Id){
                 Terminal terminal = _amigos.get(Id);
                 if(terminal == null){
-                        return false
+                        return false;
                 }
         }
         
@@ -87,6 +87,10 @@ import java.io.Serializable;
         public String toString() {
                 return "Terminal ID: " + getId() + " | Belongs to Client: " + getClientKey();
     }
+        @Override
+        abstract public boolean equals(){
+                return false;
+        }
         // FIXME define methods
 
         /**
@@ -99,6 +103,7 @@ import java.io.Serializable;
          //ist gonna be abstract bc it depoends on the terminal type
          //or maybe do another function for that ~
          //this is to check if the terminal is ready or not
+         
         /*abstract*/public boolean canEndCurrentCommunication() {
                 // FIXME add implementation code
                 return false;
