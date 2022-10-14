@@ -6,6 +6,7 @@ import java.io.IOException;
 import java.io.Serializable;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.DuplicateFormatFlagsException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -27,8 +28,6 @@ public class Network implements Serializable {
 	/** Serial number for serialization. */
 	private static final long serialVersionUID = 202208091753L;
 
-	private boolean _changed = false; 
-
 	private Map<String, Client> _clients = new HashMap<>();
 
 	private Map<String, Terminal> _terminals = new HashMap<>();
@@ -46,39 +45,24 @@ public class Network implements Serializable {
 	 * @throws IOException if there is an IO erro while processing the text file
 	 */
 	void importFile(String filename) throws UnrecognizedEntryException, IOException /* FIXME maybe other exceptions */  {
-		try (BufferedReader reader = new BufferedReader(new FileReader(filename))) {
-			String line;
-			while ((line = reader.readLine()) != null) {
+		String temporaryKey = "";
+		try (BufferedReader in = new BufferedReader(new FileReader(filename))) {
+			String s;
+			while ((s = in.readLine()) != null) {
+				String line = new String(s.getBytes(), "UTF-8");
+				if (line.charAt(0) == '#') {
+					continue;
+				}
 				String[] fields = line.split("\\|");
-
-				try {
-					registerEntry(fields);
-				} catch (DuplicateClientKeyExceptionCore | UnknownClientKeyExceptionCore e) {
-					e.printStackTrace();
+				temporaryKey = fields[1];
+				switch(fields[0]) {
+					case "CLIENT" -> registerClient(fields[1], fields[2], Integer.parseInt(fields[3])); 
+					default -> throw new UnrecognizedEntryException(fields[0]);
 				}
 			} 
-		} catch (IOException e1) {
-			throw new UnrecognizedEntryException(filename);
-		} 
-    	
-	}
-
-	public void registerEntry(String... fields) throws DuplicateClientKeyExceptionCore, 
-		UnknownClientKeyExceptionCore {
-		int taxId = Integer.parseInt(fields[3]);
-
-		switch(fields[0]) {
-			case "CLIENT" -> registerClient(fields[1], fields[2], taxId);
+		} catch (DuplicateClientKeyExceptionCore e ) {
+			e.printStackTrace();
 		}
-
-	}
-
-	public void setChanged(boolean v) {
-		_changed = v;
-	}
-
-	public void changed() {
-		_changed = true;
 	}
 
 

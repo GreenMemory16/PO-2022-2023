@@ -1,8 +1,10 @@
 package prr.clients;
 
+import java.io.Serializable;
+
 import prr.NetworkManager;
 
-public class Client {
+public class Client implements Serializable{
 
     private String _key;
     private String _name;

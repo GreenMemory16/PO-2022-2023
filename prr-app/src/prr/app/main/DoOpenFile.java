@@ -3,6 +3,7 @@ package prr.app.main;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 
+import prr.exceptions.UnavailableFileException;
 import prr.NetworkManager;
 import prr.app.exceptions.FileOpenFailedException;
 import pt.tecnico.uilib.forms.Form;
@@ -17,34 +18,22 @@ class DoOpenFile extends Command<NetworkManager> {
 
 	DoOpenFile(NetworkManager receiver) {
 		super(Label.OPEN_FILE, receiver);
-                //FIXME add command fields
+        addStringField("filename", Prompt.openFile());
 	}
 
 	@Override
 	protected final void execute() throws CommandException {
-                try {
-                        if (_reciever.changed()) {
-                                DoSaveFile cmd = new DoSaveFile(_reciever);
-                                cmd.execute();
-                        }
-                        _reciever.load(Form.requestString(Message.OPEN_FILE));
-                } catch (FileNotFoundException e) {
-                        _display.popup(Message.fileNotFound());
-                } catch (ClassNotFoundException e) {
-                        e.printStackTrace();
-                } catch(IOException e) {
-                        e.printStackTrace();
-                }
+		String filename = stringField("filename");
+                
+        try {
+			_receiver.load(filename);
 
-
-
-                /*
-                        try {
-                                //FIXME implement command
-                        } catch (UnavailableFileException e) {
-                                throw new FileOpenFailedException(e);
-                        }
-                */
-
+        } catch (UnavailableFileException e) {
+			throw new FileOpenFailedException(e);
+		} catch (IOException e) {
+			e.printStackTrace();
+		} catch (ClassNotFoundException e) {
+			e.printStackTrace();
+		}
 	}
 }

@@ -31,8 +31,12 @@ import java.io.Serializable;
 
         //private lista ou map de dividas e pagamentos
         //enunciado diz que o terminal deve ter contabilidade propria
-        private List<int> _payments;
-        private List<int> _debts;
+        private List<Integer> _payments;
+        private List<Integer> _debts;
+
+
+        
+
 
         //define contructor(s)
         public Terminal(String id, String clientkey){
@@ -41,10 +45,10 @@ import java.io.Serializable;
                 _id = id;
                 _clientkey = clientkey;
                 _amigos = new TreeMap<String,Terminal>();
-                _payments = new ArrayList<int>();
+                _payments = new ArrayList<Integer>();
                 _payments.add(0);
-                _debts = new ArrayList<int>();
-                debts.add(0);
+                _debts = new ArrayList<Integer>();
+                _debts.add(0);
         }
         //getters: not setters tho
         public String getId(){
@@ -61,11 +65,14 @@ import java.io.Serializable;
         }
         //for abstração sake
         public int getAllSomething(List list){
+                /* 
                 int total = 0;
                 for(int i = 0; i < list.size() ; i++){
                         total+=list[i];
                 }
                 return total;
+                */
+                return 1; //APAGAR ISTO
         }
 
         public void AddFriend(Terminal terminal){
@@ -79,8 +86,10 @@ import java.io.Serializable;
         public boolean IsFriend(String Id){
                 Terminal terminal = _amigos.get(Id);
                 if(terminal == null){
-                        return false
+                        return false;
                 }
+                // COLOCADO PELO DIOGO
+                return true;
         }
         
         @Override
@@ -116,4 +125,6 @@ import java.io.Serializable;
                 return false;
 
         }
+
+        
 }

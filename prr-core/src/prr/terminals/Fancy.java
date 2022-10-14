@@ -8,6 +8,6 @@ public class Fancy extends Terminal {
     //no extra functions
     //the type of object is what matters
     public Fancy(String id, String clientkey){
-        super(String id, String clientkey);
+        super(id, clientkey);
     }
 }

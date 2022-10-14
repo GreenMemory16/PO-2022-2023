@@ -30,8 +30,6 @@ public class NetworkManager {
 	private Network _network = new Network();
         //FIXME  addmore fields if needed
 
-	private String _filename = "";
-
         public Network getNetwork() {
 		return _network;
 	}
@@ -42,12 +40,11 @@ public class NetworkManager {
 	 * @throws UnavailableFileException if the specified file does not exist or there is
          *         an error while processing this file.
 	 */
-	public void load(String filename) throws UnavailableFileException, IOException, FileNotFoundException, ClassNotFoundException{
-		_filename = filename;
-		try (ObjectInputStream ois = new ObjectInputStream(new BufferedInputStream(new FileInputStream(filename)))){
-			_network = (Network) ois.readObject();
-			_network.setChanged(false);
-		}
+	public void load(String filename) throws UnavailableFileException, IOException, ClassNotFoundException {
+		try (ObjectInputStream in = new ObjectInputStream(new BufferedInputStream(new FileInputStream(filename)))){
+			System.out.println("Loaded from file " + filename);
+			_network = (Network) in.readObject();
+		} 
 	}
 
 	/**
@@ -57,13 +54,11 @@ public class NetworkManager {
 	 * @throws MissingFileAssociationException if the current network does not have a file.
 	 * @throws IOException if there is some error while serializing the state of the network to disk.
 	 */
-	public void save() throws FileNotFoundException, MissingFileAssociationException, IOException {
-		if (_filename == null || _filename.equals("")) {
-			throw new MissingFileAssociationException();
-		}
-		try (ObjectOutputStream oos = new ObjectOutputStream(new BufferedOutputStream(new FileOutputStream(_filename)))) {
-			oos.writeObject(_network);
-			_network.setChanged(false);
+	public void save(String filename) throws FileNotFoundException, MissingFileAssociationException, IOException {
+		try (ObjectOutputStream out = new ObjectOutputStream(new BufferedOutputStream(new FileOutputStream(filename)))) {
+			out.writeObject(_network);
+		} catch (IOException e) {
+			e.printStackTrace();
 		}
 	}
 
@@ -77,8 +72,7 @@ public class NetworkManager {
 	 * @throws IOException if there is some error while serializing the state of the network to disk.
 	 */
 	public void saveAs(String filename) throws FileNotFoundException, MissingFileAssociationException, IOException {
-		_filename = filename;
-		save();
+		save(filename);
 	}
 
 	/**
@@ -87,12 +81,15 @@ public class NetworkManager {
 	 * @param filename name of the text input file
 	 * @throws ImportFileException
 	 */
-	public void importFile(String filename) throws ImportFileException {
+	public void importFile(String filename) throws ImportFileException{
 		try {
 			_network.importFile(filename);
             
-        } catch (IOException | UnrecognizedEntryException /* FIXME maybe other exceptions */ e) {
-                        throw new ImportFileException(filename, e);
-    }
+        } catch (IOException e) {
+			e.printStackTrace();
+		} catch (UnrecognizedEntryException e) {
+			e.printStackTrace();
+		} 
+    	
 	}
 }
