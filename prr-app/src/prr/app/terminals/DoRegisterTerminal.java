@@ -21,6 +21,7 @@ class DoRegisterTerminal extends Command<Network> {
 	DoRegisterTerminal(Network receiver) {
 		super(Label.REGISTER_TERMINAL, receiver);
     	addStringField("id", Prompt.terminalKey());
+		
 		addStringField("type", Prompt.terminalType());
 		addStringField("clientkey", Prompt.clientKey());
 
