@@ -15,9 +15,10 @@ class DoRegisterTerminal extends Command<Network> {
 
 	DoRegisterTerminal(Network receiver) {
 		super(Label.REGISTER_TERMINAL, receiver);
-		addStringField("clientkey", Prompt.clientKey());
     	addStringField("id", Prompt.terminalKey());
-    	//addStringField("type", Prompt.terminalType());
+		addStringField("type", Prompt.terminalType());
+		addStringField("clientkey", Prompt.clientKey());
+
 		//the problem is that tecnhically terminal is an
 		//asbtract class, sooooo we must think about how
 		//we wanna implement this
@@ -27,8 +28,8 @@ class DoRegisterTerminal extends Command<Network> {
 	protected final void execute() throws CommandException {
 		String clientkey = stringField("clientkey");
 		String id = stringField("id");
-		//Sring type = integerField("type");
-		_receiver.registerTerminal(id, clientkey /*,type*/);
-                //FIXME please
+		String type = stringField("type");
+		_receiver.registerTerminal(id, clientkey ,type);
+                
 	}
 }

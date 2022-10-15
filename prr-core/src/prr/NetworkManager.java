@@ -13,6 +13,7 @@ import java.io.FileReader;
 import java.util.Collection;
 
 import prr.clients.Client;
+import prr.terminals.Terminal;
 import prr.exceptions.DuplicateClientKeyExceptionCore;
 import prr.exceptions.ImportFileException;
 import prr.exceptions.MissingFileAssociationException;

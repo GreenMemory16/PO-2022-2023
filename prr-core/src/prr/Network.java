@@ -7,6 +7,7 @@ import java.io.Serializable;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.TreeMap;
 import java.util.Map;
 
 import prr.exceptions.DuplicateClientKeyExceptionCore;
@@ -14,6 +15,8 @@ import prr.exceptions.ImportFileException;
 import prr.exceptions.UnknownClientKeyExceptionCore;
 import prr.clients.Client;
 import prr.terminals.Terminal;
+import prr.terminals.Basic;
+import prr.terminals.Fancy;
 
 import prr.exceptions.UnrecognizedEntryException;
 
@@ -31,7 +34,7 @@ public class Network implements Serializable {
 
 	private Map<String, Client> _clients = new HashMap<>();
 
-	private Map<String, Terminal> _terminals = new HashMap<>();
+	private Map<String, Terminal> _terminals = new TreeMap<String, Terminal>();
 
 
         // FIXME define attributes
@@ -106,11 +109,18 @@ public class Network implements Serializable {
 		return Collections.unmodifiableCollection(_clients.values());
 	}
 /** *********************************************** */
-	public Terminal registerTerminal(String id, String clientkey) {
-
-		Terminal terminal = new Terminal(id, clientkey);
+	public Terminal registerTerminal(String id, String clientkey, String type) {
+		/*
+		if(type.equals("BASIC")){
+			Terminal terminal = new Basic(id, clientkey);
+		}
+		else {
+			Terminal terminal = new Fancy(id, clientkey);
+		}*/
+		Terminal terminal = new Basic(id, clientkey);
+	
 		_terminals.put(id, terminal);
-		//wth does this do?
+		//this puts in the tree table the terminal with id and the terminal itself
 
 		return terminal;
 	}

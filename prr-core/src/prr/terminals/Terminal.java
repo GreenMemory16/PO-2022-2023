@@ -1,10 +1,12 @@
 package prr.terminals;
 
+
 import java.util.List;
 import java.util.ArrayList;
 import java.util.Map;
 import java.util.TreeMap;
 import java.io.Serializable;
+import java.util.Set;
 
 // FIXME add more import if needed (cannot import from pt.tecnico or prr.app)
 
@@ -12,7 +14,7 @@ import java.io.Serializable;
  * Abstract terminal.
  lets do it after; lets see if this works yet tho
  */
- public /*abstract*/ class Terminal implements Serializable{ 
+abstract public class Terminal implements Serializable{ 
  /* FIXME maybe addd more interfaces */
 
 	/** Serial number for serialization. */
@@ -23,28 +25,29 @@ import java.io.Serializable;
 
         private String clientkey;
 
-        //private Estado _estado;
+        private State state;
 
         //lista de amigos; mudar para um map maybe ou probably treemap
         //a key será o id do terminal
-        private Map<String,Terminal> amigos;
+        private Map<String,Terminal> friends ;
 
         //private lista ou map de dividas e pagamentos
         //enunciado diz que o terminal deve ter contabilidade propria
-        private List<int> payments;
-        private List<int> debts;
+        private List<Integer> payments;
+        private List<Integer> debts;
 
         //define contructor(s)
         public Terminal(String id, String clientkey){
-                //state = new Idle(); 
-                //fazer estados;
+                this.state = new Idle(); 
                 this.id = id;
                 this.clientkey = clientkey;
-                this.amigos = new TreeMap<String,Terminal>();
-                this.payments = new ArrayList<int>();
+
+                this.friends = new TreeMap<String,Terminal>();
+
+                this.payments = new ArrayList<Integer>();
                 this.payments.add(0);
-                this.debts = new ArrayList<int>();
-                debts.add(0);
+                this.debts = new ArrayList<Integer>();
+                this.debts.add(0);
         }
         //getters: not setters tho
         public String getId(){
@@ -54,11 +57,7 @@ import java.io.Serializable;
         public State getState(){
                 return this.state;
         }
-        /* 
-        public boolean Isbusy(){
-                return estado.some function
-        }
-*/
+
         public String getClientKey(){
                 return this.clientkey;
         }
@@ -72,35 +71,52 @@ import java.io.Serializable;
         public int getAllSomething(List list){
                 int total = 0;
                 for(int i = 0; i < list.size() ; i++){
-                        total+=list[i];
+                        total += (Integer) list.get(i);
                 }
                 return total;
         }
 
-        public void AddFriend(Terminal terminal) throws InvalidFriendException{
+        public void AddFriend(Terminal terminal) /*throws InvalidFriendException*/ {
+                /*
                 if(this.equals(terminal)){
                         throw new InvalidFriendException() ;
-                }
-                _amigos.put(terminal.getId(), terminal);
+                }*/
+                friends.put(terminal.getId(), terminal);
         }
         
         public boolean IsFriend(String Id){
-                Terminal terminal = _amigos.get(Id);
-                if(terminal == null){
-                        return false;
-                }
+                Terminal terminal = friends.get(Id);
+                return terminal == null;
+                        
+
         }
         
-        abstract public boolean sameType(Terminal other){
+        //to enumerate all friends that terminal has
+        private String toStringFriends(){
+                Set<Map.Entry<String, Terminal>> entrySet = friends.entrySet();
+                 // Convert entrySet to Array using toArray method
+                Map.Entry<Integer, String>[] entryArray = entrySet.toArray(new Map.Entry[entrySet.size()]);
+                String returnString = "";
+                
+                for(int i = 0; i < entryArray.length ; i++){
+                        returnString += "|" + entryArray[i].getKey();
+                }
+                return returnString;
+                
         }
         
         @Override
         public String toString(){
-                return "Terminal ID: " + this.getId() + " | Belongs to Client: " + this.getClientKey();
+                return this.toStringType() /*BASIC OU FANCY*/ + "|" + this.getId() + "|" + this.getClientKey() + "|" 
+                +  this.getState() + 
+                "|" + getAllPayments() + "|" + getAllDebts() + toStringFriends();
     }
-        @Override
+    
+        abstract public String toStringType();
+        /*@Override
         abstract public boolean equals(){
-        }
+        }*/
+        
         // FIXME define methods
 
         /**
