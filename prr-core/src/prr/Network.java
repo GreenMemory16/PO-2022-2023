@@ -8,6 +8,7 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.DuplicateFormatFlagsException;
 import java.util.HashMap;
+import java.util.TreeMap;
 import java.util.Map;
 
 import prr.exceptions.DuplicateClientKeyExceptionCore;
@@ -28,7 +29,7 @@ public class Network implements Serializable {
 	/** Serial number for serialization. */
 	private static final long serialVersionUID = 202208091753L;
 
-	private Map<String, Client> _clients = new HashMap<>();
+	private Map<String, Client> _clients = new TreeMap<>();
 
 	private Map<String, Terminal> _terminals = new HashMap<>();
 
