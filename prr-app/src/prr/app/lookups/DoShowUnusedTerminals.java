@@ -18,16 +18,20 @@ class DoShowUnusedTerminals extends Command<Network> {
 
 	DoShowUnusedTerminals(Network receiver) {
 		super(Label.SHOW_UNUSED_TERMINALS, receiver);
-		addStringField("id", Prompt.terminalKey());
 	}
 
 	@Override
 	protected final void execute() throws CommandException {
                 //FIXME implement command
-		List<Terminal> terminal_list = _receiver.getUnusedTerminals(stringField("id"));
+		List<Terminal> terminal_list = new ArrayList<Terminal>(); //ERROR
+		System.out.println(terminal_list);
+		//terminal_list.addAll(_receiver.getUnusedTerminals());
+				//System.out.println(_receiver.getUnusedTerminals());
+
 		for(int i = 0; i < terminal_list.size(); i++){
 			_display.popup(terminal_list.get(i));
 		}
+		//i must put this in the right format
 			
 	}
 }

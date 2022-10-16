@@ -132,11 +132,12 @@ public class Network implements Serializable {
 		//FIX ME put exception here!!
 	}
 
-	public List<Terminal> getUnusedTerminals(String id) {
+	public List<Terminal> getUnusedTerminals() {
 		List<Terminal> terminal_list = new ArrayList<Terminal>();
 		int checker = 0;
 		for(int i = 0; i < _terminals.size(); i++){
 			for(int j = 0; j < _terminals.get(i).getAllCommunications().size(); i++){
+				//ERROR HERE ? i think maybe this has to be a collection???
 				if(j > 0){
 					checker = 1;
 					break;
