@@ -1,10 +1,14 @@
 package prr.terminals;
 
+
 import java.util.List;
 import java.util.ArrayList;
 import java.util.Map;
 import java.util.TreeMap;
 import java.io.Serializable;
+import java.util.Set;
+
+import prr.communication.Communication;
 
 // FIXME add more import if needed (cannot import from pt.tecnico or prr.app)
 
@@ -12,90 +16,125 @@ import java.io.Serializable;
  * Abstract terminal.
  lets do it after; lets see if this works yet tho
  */
- public /*abstract*/ class Terminal implements Serializable{ 
+abstract public class Terminal implements Serializable{ 
  /* FIXME maybe addd more interfaces */
 
 	/** Serial number for serialization. */
 	private static final long serialVersionUID = 202208091753L;
 
         //define attributes
-        private String _id;
+        private String id;
 
-        private String _clientkey;
+        private String clientkey;
 
-        //private Estado _estado;
+        private State state;
+
+        //map with all communications made by this terminal
+        private Map<Integer, Communication> _communications;
 
         //lista de amigos; mudar para um map maybe ou probably treemap
         //a key será o id do terminal
-        private Map<String,Terminal> _amigos;
+        private Map<String,Terminal> friends ;
 
         //private lista ou map de dividas e pagamentos
         //enunciado diz que o terminal deve ter contabilidade propria
-        private List<Integer> _payments;
-        private List<Integer> _debts;
-
-
-        
-
+        private List<Integer> payments;
+        private List<Integer> debts;
 
         //define contructor(s)
         public Terminal(String id, String clientkey){
-                //_estado = new Idle(); 
-                //fazer estados;
-                _id = id;
-                _clientkey = clientkey;
-                _amigos = new TreeMap<String,Terminal>();
-                _payments = new ArrayList<Integer>();
-                _payments.add(0);
-                _debts = new ArrayList<Integer>();
-                _debts.add(0);
+                this.state = new Idle(); 
+                this.id = id;
+                this.clientkey = clientkey;
+
+                this.friends = new TreeMap<String,Terminal>();
+
+                this.payments = new ArrayList<Integer>();
+                this.payments.add(0);
+                this.debts = new ArrayList<Integer>();
+                this.debts.add(0);
+
+                this._communications = new TreeMap<Integer, Communication>();
         }
         //getters: not setters tho
         public String getId(){
-                return _id;
+                return this.id;
         }
+
+        /*communications getter*/
+        public Communication getCommunication(int key){
+                return this._communications.get(key);
+        }
+        public Map<Integer,Communication> getAllCommunications(){
+                return this._communications;
+        }
+        /* state related functions */
+        public State getState(){
+                return this.state;
+        }
+
         public String getClientKey(){
-                return _clientkey;
+                return this.clientkey;
         }
         public int getAllPayments(){
-                return getAllSomething(_payments);
+                return getAllSomething(this.payments);
         }
         public int getAllDebts(){
-                return getAllSomething(_debts);
+                return getAllSomething(this.debts);
         }
         //for abstração sake
         public int getAllSomething(List list){
                 /* 
                 int total = 0;
                 for(int i = 0; i < list.size() ; i++){
-                        total+=list[i];
+                        total += (Integer) list.get(i);
                 }
                 return total;
                 */
                 return 1; //APAGAR ISTO
         }
 
-        public void AddFriend(Terminal terminal){
+        public void AddFriend(Terminal terminal) /*throws InvalidFriendException*/ {
+                /*
                 if(this.equals(terminal)){
-                        return ;
-                        //it should return an exception, FIXME later
-                }
-                _amigos.put(terminal.getId(), terminal);
+                        throw new InvalidFriendException() ;
+                }*/
+                friends.put(terminal.getId(), terminal);
         }
         
         public boolean IsFriend(String Id){
-                Terminal terminal = _amigos.get(Id);
-                if(terminal == null){
-                        return false;
+                Terminal terminal = friends.get(Id);
+                return terminal == null;
+                        
+
+        }
+        
+        //to enumerate all friends that terminal has
+        private String toStringFriends(){
+                Set<Map.Entry<String, Terminal>> entrySet = friends.entrySet();
+                 // Convert entrySet to Array using toArray method
+                Map.Entry<Integer, String>[] entryArray = entrySet.toArray(new Map.Entry[entrySet.size()]);
+                String returnString = "";
+                
+                for(int i = 0; i < entryArray.length ; i++){
+                        returnString += "|" + entryArray[i].getKey();
                 }
-                // COLOCADO PELO DIOGO
-                return true;
+                return returnString;
+                
         }
         
         @Override
-        public String toString() {
-                return "Terminal ID: " + getId() + " | Belongs to Client: " + getClientKey();
+        public String toString(){
+                return this.toStringType() /*BASIC OU FANCY*/ + "|" + this.getId() + "|" + this.getClientKey() + "|" 
+                +  this.getState() + 
+                "|" + getAllPayments() + "|" + getAllDebts() + toStringFriends();
     }
+    
+        abstract public String toStringType();
+        /*@Override
+        abstract public boolean equals(){
+        }*/
+        
         // FIXME define methods
 
         /**
@@ -108,8 +147,10 @@ import java.io.Serializable;
          //ist gonna be abstract bc it depoends on the terminal type
          //or maybe do another function for that ~
          //this is to check if the terminal is ready or not
+
         /*abstract*/public boolean canEndCurrentCommunication() {
                 // FIXME add implementation code
+
                 return false;
         }
 

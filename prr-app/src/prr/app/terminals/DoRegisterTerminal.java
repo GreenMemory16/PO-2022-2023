@@ -4,8 +4,13 @@ import prr.Network;
 import prr.app.exceptions.DuplicateTerminalKeyException;
 import prr.app.exceptions.InvalidTerminalKeyException;
 import prr.app.exceptions.UnknownClientKeyException;
+
 import pt.tecnico.uilib.menus.Command;
 import pt.tecnico.uilib.menus.CommandException;
+
+import prr.exceptions.DuplicateTerminalKeyExceptionCore;
+import prr.exceptions.InvalidTerminalKeyExceptionCore;
+import prr.exceptions.UnknownClientKeyExceptionCore;
 //FIXME add more imports if needed
 
 /**
@@ -15,9 +20,13 @@ class DoRegisterTerminal extends Command<Network> {
 
 	DoRegisterTerminal(Network receiver) {
 		super(Label.REGISTER_TERMINAL, receiver);
-		addStringField("clientkey", Prompt.clientKey());
     	addStringField("id", Prompt.terminalKey());
-    	//addStringField("type", Prompt.terminalType());
+		
+		addStringField("type", Prompt.terminalType());
+		addStringField("clientkey", Prompt.clientKey());
+
+		
+
 		//the problem is that tecnhically terminal is an
 		//asbtract class, sooooo we must think about how
 		//we wanna implement this
@@ -25,10 +34,33 @@ class DoRegisterTerminal extends Command<Network> {
 
 	@Override
 	protected final void execute() throws CommandException {
-		String clientkey = stringField("clientkey");
 		String id = stringField("id");
-		//Sring type = integerField("type");
-		_receiver.registerTerminal(id, clientkey /*,type*/);
-                //FIXME please
+		String type = stringField("type");
+		String clientkey = stringField("clientkey");
+
+		_receiver.registerTerminal(id, clientkey ,type);
+
+
+		/*
+		try{
+			String id = stringField("id");
+			String type = stringField("type");
+			
+		}
+		catch(DuplicateTerminalKeyExceptionCore e){
+			throw new DuplicateTerminalKeyException(e.getId());
+		}
+		catch(InvalidTerminalKeyExceptionCore e){
+			throw new InvalidTerminalKeyException(e.getId());
+		}
+		try{
+			String clientkey = stringField("clientkey");
+		}
+		catch(UnknownClientKeyExceptionCore e){
+			throw new UnknownClientKeyException(e.getKey());
+		}
+		
+		_receiver.registerTerminal(id, clientkey ,type);*/
+		     
 	}
 }

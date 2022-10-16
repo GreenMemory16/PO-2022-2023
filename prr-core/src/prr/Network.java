@@ -10,12 +10,17 @@ import java.util.DuplicateFormatFlagsException;
 import java.util.HashMap;
 import java.util.TreeMap;
 import java.util.Map;
+import java.util.List;
+import java.util.ArrayList;
+
 
 import prr.exceptions.DuplicateClientKeyExceptionCore;
 import prr.exceptions.ImportFileException;
 import prr.exceptions.UnknownClientKeyExceptionCore;
 import prr.clients.Client;
 import prr.terminals.Terminal;
+import prr.terminals.Basic;
+import prr.terminals.Fancy;
 
 import prr.exceptions.UnrecognizedEntryException;
 
@@ -31,7 +36,7 @@ public class Network implements Serializable {
 
 	private Map<String, Client> _clients = new TreeMap<>();
 
-	private Map<String, Terminal> _terminals = new HashMap<>();
+	private Map<String, Terminal> _terminals = new TreeMap<String, Terminal>();
 
 
         // FIXME define attributes
@@ -91,17 +96,46 @@ public class Network implements Serializable {
 		return Collections.unmodifiableCollection(_clients.values());
 	}
 /** *********************************************** */
-	public Terminal registerTerminal(String id, String clientkey) {
-
-		Terminal terminal = new Terminal(id, clientkey);
+	public Terminal registerTerminal(String id, String clientkey, String type) {
+		/*
+		if(type.equals("BASIC")){
+			Terminal terminal = new Basic(id, clientkey);
+		}
+		else {
+			Terminal terminal = new Fancy(id, clientkey);
+		}*/
+		Terminal terminal = new Basic(id, clientkey);
+	
 		_terminals.put(id, terminal);
-		//wth does this do?
+		//this puts in the tree table the terminal with id and the terminal itself
 
 		return terminal;
 	}
 	public Terminal getTerminal(String id) {
 		return _terminals.get(id);
+		//FIX ME put exception here!!
 	}
+
+	public List<Terminal> getUnusedTerminals() {
+		List<Terminal> terminal_list = new ArrayList<Terminal>();
+		int checker = 0;
+		for(int i = 0; i < _terminals.size(); i++){
+			for(int j = 0; j < _terminals.get(i).getAllCommunications().size(); i++){
+				//ERROR HERE ? i think maybe this has to be a collection???
+				if(j > 0){
+					checker = 1;
+					break;
+				}
+			}
+			if(checker == 0){
+				terminal_list.add(_terminals.get(i));
+			}
+			checker = 0;
+		}
+		return terminal_list;
+		//FIX ME put exception here!!
+	}
+
 	public Collection<Terminal> getAllTerminals() {
 		return Collections.unmodifiableCollection(_terminals.values());
 	}
