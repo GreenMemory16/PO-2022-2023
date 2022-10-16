@@ -9,6 +9,9 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.TreeMap;
 import java.util.Map;
+import java.util.List;
+import java.util.ArrayList;
+
 
 import prr.exceptions.DuplicateClientKeyExceptionCore;
 import prr.exceptions.ImportFileException;
@@ -128,6 +131,26 @@ public class Network implements Serializable {
 		return _terminals.get(id);
 		//FIX ME put exception here!!
 	}
+
+	public List<Terminal> getUnusedTerminals(String id) {
+		List<Terminal> terminal_list = new ArrayList<Terminal>();
+		int checker = 0;
+		for(int i = 0; i < _terminals.size(); i++){
+			for(int j = 0; j < _terminals.get(i).getAllCommunications().size(); i++){
+				if(j > 0){
+					checker = 1;
+					break;
+				}
+			}
+			if(checker == 0){
+				terminal_list.add(_terminals.get(i));
+			}
+			checker = 0;
+		}
+		return terminal_list;
+		//FIX ME put exception here!!
+	}
+
 	public Collection<Terminal> getAllTerminals() {
 		return Collections.unmodifiableCollection(_terminals.values());
 	}
