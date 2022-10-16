@@ -126,6 +126,7 @@ public class Network implements Serializable {
 	}
 	public Terminal getTerminal(String id) {
 		return _terminals.get(id);
+		//FIX ME put exception here!!
 	}
 	public Collection<Terminal> getAllTerminals() {
 		return Collections.unmodifiableCollection(_terminals.values());
