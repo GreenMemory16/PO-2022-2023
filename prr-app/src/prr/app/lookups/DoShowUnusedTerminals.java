@@ -23,7 +23,6 @@ class DoShowUnusedTerminals extends Command<Network> {
 	protected final void execute() throws CommandException {
                 //FIXME implement command
 		List<Terminal> terminal_list = new ArrayList<Terminal>(); //ERROR
-		System.out.println(terminal_list);
 		terminal_list.addAll(_receiver.getUnusedTerminals());
 				
 

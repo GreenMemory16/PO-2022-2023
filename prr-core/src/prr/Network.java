@@ -131,18 +131,10 @@ public class Network implements Serializable {
 	public Collection<Terminal> getUnusedTerminals() {
 		List<Terminal> terminal_list = new ArrayList<Terminal>();
 		int checker = 0;
-		for(int i = 0; i < _terminals.size(); i++){
-			for(int j = 0; j < _terminals.get(Integer.toString(i)).getAllCommunications().size(); i++){
-				//ERROR HERE ? i think maybe this has to be a collection???
-				if(j > 0){
-					checker = 1;
-					break;
-				}
+		for(Map.Entry<String,Terminal> entry : _terminals.entrySet()){
+			if(entry.getValue().NoCommunications()){
+				terminal_list.add(entry.getValue());
 			}
-			if(checker == 0){
-				terminal_list.add((Terminal)_terminals.get(i));
-			}
-			checker = 0;
 		}
 		return terminal_list;
 		//FIX ME put exception here!!
