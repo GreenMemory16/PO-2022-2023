@@ -1,12 +1,12 @@
 package prr.terminals;
 
 
-import java.util.List;
-import java.util.ArrayList;
-import java.util.Map;
-import java.util.TreeMap;
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 import java.util.Set;
+import java.util.TreeMap;
 
 import prr.clients.Client;
 import prr.communication.Communication;
@@ -69,6 +69,11 @@ abstract public class Terminal implements Serializable{
         }
         public Map<Integer,Communication> getAllCommunications(){
                 return this._communications;
+        }
+
+        //returns true if terminal is unused
+        public boolean NoCommunications(){
+                return(this._communications.size() == 0);
         }
         /* state related functions */
         public State getState(){
