@@ -4,24 +4,20 @@ import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
-import java.util.TreeMap;
-import java.util.Map;
 import java.util.List;
-import java.util.ArrayList;
+import java.util.Map;
+import java.util.TreeMap;
 
-
-import prr.exceptions.DuplicateClientKeyExceptionCore;
-import prr.exceptions.ImportFileException;
-import prr.exceptions.UnknownClientKeyExceptionCore;
 import prr.clients.Client;
-import prr.terminals.Terminal;
-import prr.terminals.Basic;
-import prr.terminals.Fancy;
-
+import prr.exceptions.DuplicateClientKeyExceptionCore;
+import prr.exceptions.UnknownClientKeyExceptionCore;
 import prr.exceptions.UnrecognizedEntryException;
+import prr.terminals.Basic;
+import prr.terminals.Terminal;
 
 // FIXME add more import if needed (cannot import from pt.tecnico or prr.app)
 
@@ -132,11 +128,11 @@ public class Network implements Serializable {
 		//FIX ME put exception here!!
 	}
 
-	public List<Terminal> getUnusedTerminals() {
+	public Collection<Terminal> getUnusedTerminals() {
 		List<Terminal> terminal_list = new ArrayList<Terminal>();
 		int checker = 0;
 		for(int i = 0; i < _terminals.size(); i++){
-			for(int j = 0; j < _terminals.get(i).getAllCommunications().size(); i++){
+			for(int j = 0; j < _terminals.get(Integer.toString(i)).getAllCommunications().size(); i++){
 				//ERROR HERE ? i think maybe this has to be a collection???
 				if(j > 0){
 					checker = 1;
@@ -144,7 +140,7 @@ public class Network implements Serializable {
 				}
 			}
 			if(checker == 0){
-				terminal_list.add(_terminals.get(i));
+				terminal_list.add((Terminal)_terminals.get(i));
 			}
 			checker = 0;
 		}
