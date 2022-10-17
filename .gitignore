@@ -3,3 +3,13 @@ prr-core/prr-core/README.md
 .vscode/settings.json
 prr-core/src/prr/clients/Client.java
 r.dat
+prr-tests-ei-daily-202210101131/runtests.sh
+prr-tests-ei-daily-202210101131/tests/A-01-01-M-ok.in
+ClassPathScript
+*.dat
+*.diff
+*.outhyp
+*.out
+*.in
+*.import
+RunTests
