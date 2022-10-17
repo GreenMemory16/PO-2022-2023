@@ -130,7 +130,6 @@ public class Network implements Serializable {
 
 	public Collection<Terminal> getUnusedTerminals() {
 		List<Terminal> terminal_list = new ArrayList<Terminal>();
-		int checker = 0;
 		for(Map.Entry<String,Terminal> entry : _terminals.entrySet()){
 			if(entry.getValue().NoCommunications()){
 				terminal_list.add(entry.getValue());
