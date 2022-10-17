@@ -17,6 +17,7 @@ import prr.exceptions.DuplicateClientKeyExceptionCore;
 import prr.exceptions.UnknownClientKeyExceptionCore;
 import prr.exceptions.UnrecognizedEntryException;
 import prr.terminals.Basic;
+import prr.terminals.Fancy;
 import prr.terminals.Terminal;
 
 // FIXME add more import if needed (cannot import from pt.tecnico or prr.app)
@@ -109,14 +110,14 @@ public class Network implements Serializable {
 	}
 /** *********************************************** */
 	public Terminal registerTerminal(String id, String clientkey, String type) {
-		/*
-		if(type.equals("BASIC")){
+		/*if(type.equals("BASIC")){
 			Terminal terminal = new Basic(id, clientkey);
 		}
-		else {
+		else{
 			Terminal terminal = new Fancy(id, clientkey);
 		}*/
 		Terminal terminal = new Basic(id, clientkey);
+	//FIX ME, WHYYY CANT THIS WORK WTH?
 	
 		_terminals.put(id, terminal);
 		//this puts in the tree table the terminal with id and the terminal itself

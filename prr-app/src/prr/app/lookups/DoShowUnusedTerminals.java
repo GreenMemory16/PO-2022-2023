@@ -8,7 +8,8 @@ import prr.Network;
 import prr.terminals.Terminal;
 import pt.tecnico.uilib.menus.Command;
 import pt.tecnico.uilib.menus.CommandException;
-//FIXME add more imports if needed
+//no need for exeptions here i think; check wiki
+
 
 /**
  * Show unused terminals (without communications).
@@ -21,8 +22,7 @@ class DoShowUnusedTerminals extends Command<Network> {
 
 	@Override
 	protected final void execute() throws CommandException {
-                //FIXME implement command
-		List<Terminal> terminal_list = new ArrayList<Terminal>(); //ERROR
+		List<Terminal> terminal_list = new ArrayList<Terminal>(); 
 		terminal_list.addAll(_receiver.getUnusedTerminals());
 				
 
