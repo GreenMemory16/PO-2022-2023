@@ -1,4 +1,7 @@
 package prr.terminals;
+
+import prr.clients.Client;
+
 import java.io.Serializable;
 
 public class Basic extends Terminal implements Serializable {
@@ -7,8 +10,8 @@ public class Basic extends Terminal implements Serializable {
     //no extra atributes~
     //no extra functions
     //the type of object is what matters
-    public Basic(String id, String clientkey){
-        super(id, clientkey);
+    public Basic(String id, Client client){
+        super(id, client);
     }
 
    /*public boolean canMakeThisTypeOfCom(Communication com){

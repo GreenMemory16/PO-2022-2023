@@ -8,6 +8,7 @@ import java.util.TreeMap;
 import java.io.Serializable;
 import java.util.Set;
 
+import prr.clients.Client;
 import prr.communication.Communication;
 
 // FIXME add more import if needed (cannot import from pt.tecnico or prr.app)
@@ -25,9 +26,9 @@ abstract public class Terminal implements Serializable{
         //define attributes
         private String id;
 
-        private String clientkey;
-
         private State state;
+
+        private Client _client;
 
         //map with all communications made by this terminal
         private Map<Integer, Communication> _communications;
@@ -42,10 +43,11 @@ abstract public class Terminal implements Serializable{
         private List<Integer> debts;
 
         //define contructor(s)
-        public Terminal(String id, String clientkey){
+        public Terminal(String id, Client client){
                 this.state = new Idle(); 
                 this.id = id;
-                this.clientkey = clientkey;
+                _client = client;
+
 
                 this.friends = new TreeMap<String,Terminal>();
 
@@ -74,7 +76,11 @@ abstract public class Terminal implements Serializable{
         }
 
         public String getClientKey(){
-                return this.clientkey;
+                return _client.getKey();
+        }
+
+        public Client getClient() {
+                return _client;
         }
         public int getAllPayments(){
                 return getAllSomething(this.payments);

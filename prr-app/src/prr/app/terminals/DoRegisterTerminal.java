@@ -21,7 +21,6 @@ class DoRegisterTerminal extends Command<Network> {
 	DoRegisterTerminal(Network receiver) {
 		super(Label.REGISTER_TERMINAL, receiver);
     	addStringField("id", Prompt.terminalKey());
-		
 		addStringField("type", Prompt.terminalType());
 		addStringField("clientkey", Prompt.clientKey());
 
@@ -34,12 +33,19 @@ class DoRegisterTerminal extends Command<Network> {
 
 	@Override
 	protected final void execute() throws CommandException {
-		String id = stringField("id");
-		String type = stringField("type");
-		String clientkey = stringField("clientkey");
+		
 
-		_receiver.registerTerminal(id, clientkey ,type);
 
+		try  {
+			String id = stringField("id");
+			String type = stringField("type");
+			String clientkey = stringField("clientkey");
+
+			_receiver.registerTerminal(id, clientkey ,type);
+
+		} catch (UnknownClientKeyExceptionCore e) {
+			throw new UnknownClientKeyException(e.getKey());
+		}
 
 		/*
 		try{

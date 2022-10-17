@@ -1,4 +1,7 @@
 package prr.terminals;
+
+import prr.clients.Client;
+
 import java.io.Serializable;
 
 public class Fancy extends Terminal implements Serializable {
@@ -7,8 +10,8 @@ public class Fancy extends Terminal implements Serializable {
     //no extra atributes~
     //no extra functions
     //the type of object is what matters
-    public Fancy(String id, String clientkey){
-        super( id, clientkey);
+    public Fancy(String id, Client client){
+        super(id, client);
     }
 
      //in this case its not an equals but a its the same type?

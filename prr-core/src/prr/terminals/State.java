@@ -1,6 +1,6 @@
 package prr.terminals;
 
-abstract public class State{
+public abstract class State{
 
 
 }

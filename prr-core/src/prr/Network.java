@@ -63,6 +63,7 @@ public class Network implements Serializable {
 				temporaryKey = fields[1];
 				switch(fields[0]) {
 					case "CLIENT" -> registerClient(fields[1], fields[2], Integer.parseInt(fields[3])); 
+					//case "BASIC" -> registerTerminal(fields[1], fields[2], fields[3]);
 					default -> throw new UnrecognizedEntryException(fields[0]);
 				}
 			} 
@@ -72,7 +73,6 @@ public class Network implements Serializable {
 	}
 
 
-	
 	public Client registerClient(String key, String name, int taxId) throws DuplicateClientKeyExceptionCore {
 		if (_clients.containsKey(key)) {
 			throw new DuplicateClientKeyExceptionCore(key);
@@ -96,7 +96,7 @@ public class Network implements Serializable {
 		return Collections.unmodifiableCollection(_clients.values());
 	}
 /** *********************************************** */
-	public Terminal registerTerminal(String id, String clientkey, String type) {
+	public Terminal registerTerminal(String id, String clientKey, String type) throws UnknownClientKeyExceptionCore{
 		/*
 		if(type.equals("BASIC")){
 			Terminal terminal = new Basic(id, clientkey);
@@ -104,13 +104,18 @@ public class Network implements Serializable {
 		else {
 			Terminal terminal = new Fancy(id, clientkey);
 		}*/
-		Terminal terminal = new Basic(id, clientkey);
+
+		Terminal terminal = new Basic(id, getClient(clientKey));
+
+		// Registers the terminal in the client _terminals list
+		getClient(clientKey).insertTerminal(terminal);
 	
 		_terminals.put(id, terminal);
 		//this puts in the tree table the terminal with id and the terminal itself
 
 		return terminal;
 	}
+
 	public Terminal getTerminal(String id) {
 		return _terminals.get(id);
 		//FIX ME put exception here!!
