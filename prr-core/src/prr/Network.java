@@ -148,11 +148,11 @@ public class Network implements Serializable {
 
 		return terminal;
 	}
-	public Terminal getTerminal(String id) /*throws UnknownTerminalKeyExceptionCore*/ {
+	public Terminal getTerminal(String id) throws UnknownTerminalKeyExceptionCore {
 		Terminal terminal = _terminals.get(id);
-		/*if (terminal == null) {
+		if (terminal == null) {
 			throw new UnknownTerminalKeyExceptionCore(id);
-		}*/
+		}
 
 		return terminal;
 	}
