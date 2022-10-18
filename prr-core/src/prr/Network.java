@@ -14,8 +14,11 @@ import java.util.TreeMap;
 
 import prr.clients.Client;
 import prr.exceptions.DuplicateClientKeyExceptionCore;
+import prr.exceptions.DuplicateTerminalKeyExceptionCore;
 import prr.exceptions.UnknownClientKeyExceptionCore;
 import prr.exceptions.UnrecognizedEntryException;
+import prr.exceptions.InvalidTerminalKeyExceptionCore;
+import prr.exceptions.UnknownTerminalKeyExceptionCore;
 import prr.terminals.Basic;
 import prr.terminals.Fancy;
 import prr.terminals.Terminal;
@@ -109,7 +112,28 @@ public class Network implements Serializable {
 		return Collections.unmodifiableCollection(_clients.values());
 	}
 /** *********************************************** */
-	public Terminal registerTerminal(String id, String clientkey, String type) {
+	public static boolean isNumeric(String str) { 
+		try {  
+	  		Double.parseDouble(str);  
+	  		return true;
+		} catch(NumberFormatException e){  
+	  	return false;  
+		}  
+	  }
+
+	public Terminal registerTerminal(String id, String clientkey, String type) throws InvalidTerminalKeyExceptionCore,
+	DuplicateTerminalKeyExceptionCore ,UnknownClientKeyExceptionCore {
+		if(id.length() != 6 || !(isNumeric(id))){
+			throw new InvalidTerminalKeyExceptionCore(id);
+		}
+
+		if(_terminals.containsKey(id)){
+			throw new DuplicateTerminalKeyExceptionCore(id);
+		}
+
+		if(!(_clients.containsKey(clientkey))){
+			throw new UnknownClientKeyExceptionCore(clientkey);
+		}
 		/*if(type.equals("BASIC")){
 			Terminal terminal = new Basic(id, clientkey);
 		}
@@ -118,15 +142,19 @@ public class Network implements Serializable {
 		}*/
 		Terminal terminal = new Basic(id, clientkey);
 	//FIX ME, WHYYY CANT THIS WORK WTH?
-	
+		
 		_terminals.put(id, terminal);
 		//this puts in the tree table the terminal with id and the terminal itself
 
 		return terminal;
 	}
-	public Terminal getTerminal(String id) {
-		return _terminals.get(id);
-		//FIX ME put exception here!!
+	public Terminal getTerminal(String id) /*throws UnknownTerminalKeyExceptionCore*/ {
+		Terminal terminal = _terminals.get(id);
+		/*if (terminal == null) {
+			throw new UnknownTerminalKeyExceptionCore(id);
+		}*/
+
+		return terminal;
 	}
 
 	public Collection<Terminal> getUnusedTerminals() {

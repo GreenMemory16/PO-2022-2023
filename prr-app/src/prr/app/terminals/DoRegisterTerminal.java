@@ -34,17 +34,19 @@ class DoRegisterTerminal extends Command<Network> {
 
 	@Override
 	protected final void execute() throws CommandException {
-		String id = stringField("id");
+		/*String id = stringField("id");
 		String type = stringField("type");
 		String clientkey = stringField("clientkey");
 
-		_receiver.registerTerminal(id, clientkey ,type);
+		_receiver.registerTerminal(id, clientkey ,type);*/
 
 
-		/*
+		
 		try{
 			String id = stringField("id");
 			String type = stringField("type");
+			String clientkey = stringField("clientkey");
+			_receiver.registerTerminal(id, clientkey ,type);
 			
 		}
 		catch(DuplicateTerminalKeyExceptionCore e){
@@ -53,14 +55,11 @@ class DoRegisterTerminal extends Command<Network> {
 		catch(InvalidTerminalKeyExceptionCore e){
 			throw new InvalidTerminalKeyException(e.getId());
 		}
-		try{
-			String clientkey = stringField("clientkey");
-		}
 		catch(UnknownClientKeyExceptionCore e){
 			throw new UnknownClientKeyException(e.getKey());
 		}
 		
-		_receiver.registerTerminal(id, clientkey ,type);*/
+		
 		     
 	}
 }
