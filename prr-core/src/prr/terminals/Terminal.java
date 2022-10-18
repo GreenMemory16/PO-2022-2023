@@ -134,6 +134,7 @@ abstract public class Terminal implements Serializable{
                         this.state = new Busy();                }
         }
 
+       
 //****************************************************** */
 
 
