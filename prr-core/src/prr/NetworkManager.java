@@ -17,7 +17,9 @@ import prr.terminals.Terminal;
 import prr.exceptions.DuplicateClientKeyExceptionCore;
 import prr.exceptions.ImportFileException;
 import prr.exceptions.MissingFileAssociationException;
+import prr.exceptions.TerminalTypeNotSupportedException;
 import prr.exceptions.UnavailableFileException;
+import prr.exceptions.UnknownClientKeyExceptionCore;
 import prr.exceptions.UnrecognizedEntryException;
 
 //FIXME add more import if needed (cannot import from pt.tecnico or prr.app)
@@ -81,11 +83,11 @@ public class NetworkManager {
 	 * 
 	 * @param filename name of the text input file
 	 * @throws ImportFileException
+	 * @throws TerminalTypeNotSupportedException
 	 */
-	public void importFile(String filename) throws ImportFileException{
+	public void importFile(String filename) throws ImportFileException {
 		try {
 			_network.importFile(filename);
-            
         } catch (IOException e) {
 			e.printStackTrace();
 		} catch (UnrecognizedEntryException e) {

@@ -46,8 +46,7 @@ public class Network implements Serializable {
          * @throws UnrecognizedEntryException if some entry is not correct
 	 * @throws IOException if there is an IO erro while processing the text file
 	 */
-	void importFile(String filename) throws UnrecognizedEntryException, IOException /* FIXME maybe other exceptions */  {
-		String temporaryKey = "";
+	void importFile(String filename) throws UnrecognizedEntryException, IOException {
 		try (BufferedReader in = new BufferedReader(new FileReader(filename))) {
 			String s;
 			while ((s = in.readLine()) != null) {
@@ -56,17 +55,18 @@ public class Network implements Serializable {
 					continue;
 				}
 				String[] fields = line.split("\\|");
-				temporaryKey = fields[1];
 				switch(fields[0]) {
 					case "CLIENT" -> registerClient(fields[1], fields[2], Integer.parseInt(fields[3])); 
-					//case "BASIC" -> registerTerminal(fields[1], fields[2], fields[3]);
+					case "BASIC", "FANCY" -> registerTerminal(fields[1], fields[2], fields[3]);
 					default -> throw new UnrecognizedEntryException(fields[0]);
 				}
 			} 
-		} catch (DuplicateClientKeyExceptionCore e ) {
+		} catch (DuplicateClientKeyExceptionCore | UnknownClientKeyExceptionCore | TerminalTypeNotSupportedException e ) {
 			e.printStackTrace();
 		}
 	}
+
+	
 
 
 	public Client registerClient(String key, String name, int taxId) throws DuplicateClientKeyExceptionCore {
