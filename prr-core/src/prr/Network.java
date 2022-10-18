@@ -107,6 +107,15 @@ public static boolean isNumeric(String str) {
 
 public Terminal registerTerminal(String id, String clientKey, String type, String state) throws UnknownClientKeyExceptionCore, TerminalTypeNotSupportedException, 
 			InvalidTerminalKeyExceptionCore, DuplicateTerminalKeyExceptionCore, UnknownTerminalKeyExceptionCore {
+		if (id.length() != 6 || !(isNumeric(id))) {
+			throw new InvalidTerminalKeyExceptionCore(id);
+		}
+		if (_terminals.containsKey(id)) {
+			throw new DuplicateTerminalKeyExceptionCore(id);
+		}
+		if (!(_clients.containsKey(clientKey))) {
+			throw new UnknownClientKeyExceptionCore(clientKey);
+		}
 
 		Terminal terminal;
 
@@ -118,16 +127,6 @@ public Terminal registerTerminal(String id, String clientKey, String type, Strin
 		}
 		else {
 			throw new TerminalTypeNotSupportedException();
-		}
-
-		if (id.length() != 6 || !(isNumeric(id))) {
-			throw new InvalidTerminalKeyExceptionCore(id);
-		}
-		if (_terminals.containsKey(clientKey)) {
-			throw new DuplicateTerminalKeyExceptionCore(id);
-		}
-		if (!(_clients.containsKey(clientKey))) {
-			throw new UnknownClientKeyExceptionCore(clientKey);
 		}
 
 		switch (state) {
