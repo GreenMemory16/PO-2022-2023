@@ -10,6 +10,7 @@ import pt.tecnico.uilib.menus.CommandException;
 
 import prr.exceptions.DuplicateTerminalKeyExceptionCore;
 import prr.exceptions.InvalidTerminalKeyExceptionCore;
+import prr.exceptions.TerminalTypeNotSupportedException;
 import prr.exceptions.UnknownClientKeyExceptionCore;
 //FIXME add more imports if needed
 
@@ -17,11 +18,12 @@ import prr.exceptions.UnknownClientKeyExceptionCore;
  * Register terminal.
  */
 class DoRegisterTerminal extends Command<Network> {
+	String[] options = new String[]{"BASIC", "FANCY"};
 
 	DoRegisterTerminal(Network receiver) {
 		super(Label.REGISTER_TERMINAL, receiver);
     	addStringField("id", Prompt.terminalKey());
-		addStringField("type", Prompt.terminalType());
+		addOptionField("type", Prompt.terminalType(), options);
 		addStringField("clientkey", Prompt.clientKey());
 
 		
@@ -45,6 +47,8 @@ class DoRegisterTerminal extends Command<Network> {
 
 		} catch (UnknownClientKeyExceptionCore e) {
 			throw new UnknownClientKeyException(e.getKey());
+		} catch (TerminalTypeNotSupportedException e) {
+			e.printStackTrace();
 		}
 
 		/*
