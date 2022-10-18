@@ -92,14 +92,11 @@ abstract public class Terminal implements Serializable{
         }
         //for abstração sake
         public int getAllSomething(List list){
-                /* 
                 int total = 0;
                 for(int i = 0; i < list.size() ; i++){
                         total += (Integer) list.get(i);
                 }
                 return total;
-                */
-                return 1; //APAGAR ISTO
         }
 
         public void AddFriend(Terminal terminal) /*throws InvalidFriendException*/ {

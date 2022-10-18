@@ -60,7 +60,7 @@ public class Network implements Serializable {
 				String[] fields = line.split("\\|");
 				switch(fields[0]) {
 					case "CLIENT" -> registerClient(fields[1], fields[2], Integer.parseInt(fields[3])); 
-					case "BASIC", "FANCY" -> registerTerminal(fields[1], fields[2], fields[3]);
+					case "BASIC", "FANCY" -> registerTerminal(fields[1], fields[2], fields[0], fields[3]);
 					default -> throw new UnrecognizedEntryException(fields[0]);
 				}
 			} 
@@ -69,6 +69,8 @@ public class Network implements Serializable {
 			e.printStackTrace();
 		}
 	}
+
+	
 
 	public Client registerClient(String key, String name, int taxId) throws DuplicateClientKeyExceptionCore {
 		if (_clients.containsKey(key)) {
@@ -103,7 +105,7 @@ public static boolean isNumeric(String str) {
   }
 
 
-public Terminal registerTerminal(String id, String clientKey, String type) throws UnknownClientKeyExceptionCore, TerminalTypeNotSupportedException, 
+public Terminal registerTerminal(String id, String clientKey, String type, String state) throws UnknownClientKeyExceptionCore, TerminalTypeNotSupportedException, 
 			InvalidTerminalKeyExceptionCore, DuplicateTerminalKeyExceptionCore, UnknownTerminalKeyExceptionCore {
 
 		Terminal terminal;
@@ -128,7 +130,12 @@ public Terminal registerTerminal(String id, String clientKey, String type) throw
 			throw new UnknownClientKeyExceptionCore(clientKey);
 		}
 
-		//Terminal terminal = new Basic(id, clientKey);
+		switch (state) {
+			case "ON" -> terminal.switchToIdleState();
+			case "OFF" -> terminal.switchToOffState();
+			case "SILENCE" -> terminal.switchToSilenceState();
+			case "BUSY" -> terminal.switchToBusyState();
+		}
 
 		// Registers the terminal in the client _terminals list
 		getClient(clientKey).insertTerminal(terminal);

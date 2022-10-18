@@ -1,6 +1,8 @@
 package prr.terminals;
 
-public class Silence extends State{
+import java.io.Serializable;
+
+public class Silence extends State implements Serializable{
 
     public Silence(){
         super();

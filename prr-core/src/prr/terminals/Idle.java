@@ -1,6 +1,8 @@
 package prr.terminals;
 
-public class Idle extends State{
+import java.io.Serializable;
+
+public class Idle extends State implements Serializable{
 
     public Idle(){
         super();

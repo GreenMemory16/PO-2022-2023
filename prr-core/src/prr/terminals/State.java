@@ -1,6 +1,8 @@
 package prr.terminals;
 
-public abstract class State{
+import java.io.Serializable;
+
+public abstract class State implements Serializable{
 
     public abstract boolean startCommunication();
     public abstract boolean receiveCommunication();

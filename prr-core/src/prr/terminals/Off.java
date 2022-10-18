@@ -1,6 +1,8 @@
 package prr.terminals;
 
-public class Off extends State{
+import java.io.Serializable;
+
+public class Off extends State implements Serializable{
 
     public Off(){
         super();

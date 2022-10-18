@@ -1,6 +1,8 @@
 package prr.terminals;
 
-public class Busy extends State{
+import java.io.Serializable;
+
+public class Busy extends State implements Serializable{
 
     public Busy(){
         super();
