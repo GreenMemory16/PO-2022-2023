@@ -1,34 +1,31 @@
 package prr.terminals;
 
-public class Idle extends State{
+public class Busy extends State{
 
-    public Idle(){
+    public Busy(){
         super();
     }
 
     @Override 
     public boolean startCommunication(){
-        return true;
-    }
-
-    @Override
-    public boolean receiveCommunication(){
-        return true;
-    }
-
-      /***** **************** */
-    //to change states
-
-//i must check this later!! FIX ME
-    //cant
-    @Override
-    public boolean switchToIdle() {
         return false;
     }
 
     @Override
-    public boolean switchToOff() {
+    public boolean receiveCommunication(){
+        //só de texto
         return true;
+    }
+
+    /***** **************** */
+    @Override
+    public boolean switchToIdle() {
+        return true;
+    }
+
+    @Override
+    public boolean switchToOff() {
+        return false;
     }
 
     //can
@@ -40,13 +37,12 @@ public class Idle extends State{
     
     @Override
     public boolean switchToBusy() {
-        return true;
+        return false;
     }
 //************************* */
 
     @Override
     public String toString(){
-        return "IDLE";
+        return "BUSY";
     }
 }
-

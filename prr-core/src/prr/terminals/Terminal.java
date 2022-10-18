@@ -8,7 +8,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.TreeMap;
 
-import prr.clients.Client;
+
 import prr.communication.Communication;
 
 // FIXME add more import if needed (cannot import from pt.tecnico or prr.app)
@@ -18,7 +18,7 @@ import prr.communication.Communication;
  lets do it after; lets see if this works yet tho
  */
 abstract public class Terminal implements Serializable{ 
- /* FIXME maybe addd more interfaces */
+
 
 	/** Serial number for serialization. */
 	private static final long serialVersionUID = 202208091753L;
@@ -43,8 +43,8 @@ abstract public class Terminal implements Serializable{
         private List<Integer> debts;
 
         //define contructor(s)
-        public Terminal(String id, String clientKey){
-                this.state = new Idle(); 
+        public Terminal(String id, String clientkey){
+                this.state = new Idle();
                 this.id = id;
                 _clientKey = clientKey;
 
@@ -63,7 +63,7 @@ abstract public class Terminal implements Serializable{
                 return this.id;
         }
 
-        /*communications getter*/
+        /*communications methods*/
         public Communication getCommunication(int key){
                 return this._communications.get(key);
         }
@@ -116,7 +116,32 @@ abstract public class Terminal implements Serializable{
                         
 
         }
-        
+/*********************************************** */
+        //State functions
+        public void switchToIdleState(){
+                if(state.switchToIdle()){
+                        this.state = new Idle();
+                }
+        }
+        public void switchToSilenceState(){
+                if(state.switchToSilence()){
+                        this.state = new Silence();
+                }
+        }
+        public void switchToOffState(){
+                if(state.switchToOff()){
+                        this.state = new Off();
+                }
+
+        }
+        public void switchToBusyState(){
+                if(state.switchToBusy()){
+                        this.state = new Busy();                }
+        }
+
+//****************************************************** */
+
+
         //to enumerate all friends that terminal has
         private String toStringFriends(){
                 Set<Map.Entry<String, Terminal>> entrySet = friends.entrySet();
@@ -170,9 +195,11 @@ abstract public class Terminal implements Serializable{
 
 
         public boolean canStartCommunication() {
-                // FIXME add implementation code
-                return false;
+                return state.startCommunication();
+        }
 
+        public boolean canReceiveCommunication(){
+                return state.receiveCommunication();
         }
 
         

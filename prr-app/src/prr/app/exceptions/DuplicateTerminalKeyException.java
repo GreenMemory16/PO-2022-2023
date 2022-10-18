@@ -9,8 +9,8 @@ public class DuplicateTerminalKeyException extends CommandException {
 	private static final long serialVersionUID = 202208091753L;
 
 	/** @param key Duplicate terminal to report. */
-	public DuplicateTerminalKeyException(String key) {
-		super(Message.duplicateTerminalKey(key));
+	public DuplicateTerminalKeyException(String id) {
+		super(Message.duplicateTerminalKey(id));
 	}
 
 }

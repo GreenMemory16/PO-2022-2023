@@ -26,35 +26,16 @@ class DoRegisterTerminal extends Command<Network> {
 		addOptionField("type", Prompt.terminalType(), options);
 		addStringField("clientkey", Prompt.clientKey());
 
-		
-
-		//the problem is that tecnhically terminal is an
-		//asbtract class, sooooo we must think about how
-		//we wanna implement this
 	}
 
 	@Override
 	protected final void execute() throws CommandException {
-		
 
-
-		try  {
-			String id = stringField("id");
-			String type = stringField("type");
-			String clientkey = stringField("clientkey");
-
-			_receiver.registerTerminal(id, clientkey ,type);
-
-		} catch (UnknownClientKeyExceptionCore e) {
-			throw new UnknownClientKeyException(e.getKey());
-		} catch (TerminalTypeNotSupportedException e) {
-			e.printStackTrace();
-		}
-
-		/*
 		try{
 			String id = stringField("id");
 			String type = stringField("type");
+			String clientkey = stringField("clientkey");
+			_receiver.registerTerminal(id, clientkey ,type);
 			
 		}
 		catch(DuplicateTerminalKeyExceptionCore e){
@@ -63,14 +44,11 @@ class DoRegisterTerminal extends Command<Network> {
 		catch(InvalidTerminalKeyExceptionCore e){
 			throw new InvalidTerminalKeyException(e.getId());
 		}
-		try{
-			String clientkey = stringField("clientkey");
-		}
 		catch(UnknownClientKeyExceptionCore e){
 			throw new UnknownClientKeyException(e.getKey());
 		}
 		
-		_receiver.registerTerminal(id, clientkey ,type);*/
+		
 		     
 	}
 }

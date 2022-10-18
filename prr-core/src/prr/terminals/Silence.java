@@ -1,8 +1,8 @@
 package prr.terminals;
 
-public class Idle extends State{
+public class Silence extends State{
 
-    public Idle(){
+    public Silence(){
         super();
     }
 
@@ -13,17 +13,15 @@ public class Idle extends State{
 
     @Override
     public boolean receiveCommunication(){
+        // só de texto
         return true;
     }
 
-      /***** **************** */
-    //to change states
+     /***** **************** */
 
-//i must check this later!! FIX ME
-    //cant
     @Override
     public boolean switchToIdle() {
-        return false;
+        return true;
     }
 
     @Override
@@ -34,7 +32,7 @@ public class Idle extends State{
     //can
     @Override
     public boolean switchToSilence() {
-        return true;
+        return false;
     }
 
     
@@ -46,7 +44,6 @@ public class Idle extends State{
 
     @Override
     public String toString(){
-        return "IDLE";
+        return "SILENCE";
     }
 }
-

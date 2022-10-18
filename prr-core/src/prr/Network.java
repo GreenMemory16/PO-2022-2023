@@ -7,18 +7,18 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
 
 import prr.clients.Client;
 import prr.exceptions.DuplicateClientKeyExceptionCore;
-import prr.exceptions.TerminalTypeNotSupportedException;
 import prr.exceptions.UnknownClientKeyExceptionCore;
 import prr.exceptions.UnrecognizedEntryException;
 import prr.terminals.Basic;
-import prr.terminals.Fancy;
 import prr.terminals.Terminal;
+import prr.exceptions.TerminalTypeNotSupportedException;
 
 // FIXME add more import if needed (cannot import from pt.tecnico or prr.app)
 
@@ -66,7 +66,14 @@ public class Network implements Serializable {
 		}
 	}
 
-	
+	public void setChanged(boolean v) {
+		_changed = v;
+	}
+
+	public void changed() {
+		_changed = true;
+	}
+
 
 
 	public Client registerClient(String key, String name, int taxId) throws DuplicateClientKeyExceptionCore {
@@ -92,7 +99,17 @@ public class Network implements Serializable {
 		return Collections.unmodifiableCollection(_clients.values());
 	}
 /** *********************************************** */
-	public Terminal registerTerminal(String id, String clientKey, String type) throws UnknownClientKeyExceptionCore, TerminalTypeNotSupportedException{
+public static boolean isNumeric(String str) { 
+	try {  
+		  Double.parseDouble(str);  
+		  return true;
+	} catch(NumberFormatException e){  
+	  return false;  
+	}  
+  }
+
+
+public Terminal registerTerminal(String id, String clientKey, String type) throws UnknownClientKeyExceptionCore, TerminalTypeNotSupportedException{
 
 		Terminal terminal;
 
@@ -116,10 +133,13 @@ public class Network implements Serializable {
 
 		return terminal;
 	}
+	public Terminal getTerminal(String id) throws UnknownTerminalKeyExceptionCore {
+		Terminal terminal = _terminals.get(id);
+		if (terminal == null) {
+			throw new UnknownTerminalKeyExceptionCore(id);
+		}
 
-	public Terminal getTerminal(String id) {
-		return _terminals.get(id);
-		//FIX ME put exception here!!
+		return terminal;
 	}
 
 	public Collection<Terminal> getUnusedTerminals() {
@@ -136,6 +156,7 @@ public class Network implements Serializable {
 	public Collection<Terminal> getAllTerminals() {
 		return Collections.unmodifiableCollection(_terminals.values());
 	}
+
 
 }
 
