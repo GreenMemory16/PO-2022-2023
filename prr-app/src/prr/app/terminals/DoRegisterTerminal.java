@@ -25,23 +25,11 @@ class DoRegisterTerminal extends Command<Network> {
 		addStringField("type", Prompt.terminalType());
 		addStringField("clientkey", Prompt.clientKey());
 
-		
-
-		//the problem is that tecnhically terminal is an
-		//asbtract class, sooooo we must think about how
-		//we wanna implement this
 	}
 
 	@Override
 	protected final void execute() throws CommandException {
-		/*String id = stringField("id");
-		String type = stringField("type");
-		String clientkey = stringField("clientkey");
 
-		_receiver.registerTerminal(id, clientkey ,type);*/
-
-
-		
 		try{
 			String id = stringField("id");
 			String type = stringField("type");

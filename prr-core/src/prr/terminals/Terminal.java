@@ -61,7 +61,7 @@ abstract public class Terminal implements Serializable{
                 return this.id;
         }
 
-        /*communications getter*/
+        /*communications methods*/
         public Communication getCommunication(int key){
                 return this._communications.get(key);
         }
@@ -164,8 +164,31 @@ abstract public class Terminal implements Serializable{
 
 
         public boolean canStartCommunication() {
-                // FIXME add implementation code
-                return false;
+                return state.startCommunication();
+        }
+
+        public boolean canReceiveCommunication(){
+                return state.receiveCommunication();
+        }
+        //let's make an abstract state class inside terminal
+        //so that it has acess to the terminal
+        public abstract class State{
+                public abstract boolean startCommunication();
+                public abstract boolean receiveCommunication();
+                protected void setState(State newState){
+                        state = new_state;
+                }
+
+         /**
+         * This method is needed so that new states can be created.
+         *
+         * @return the terminal.
+         */
+                protected Terminal getTerminalState() {
+                        return Terminal.this;
+                }
+
+
 
         }
 }

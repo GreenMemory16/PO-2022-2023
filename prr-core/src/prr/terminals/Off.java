@@ -1,24 +1,23 @@
 package prr.terminals;
 
-public class Idle extends State{
+public class Off extends State{
 
-    public Idle(Terminal terminal){
+    public Off(Terminal terminal){
         super(terminal);
     }
 
     @Override 
     public boolean startCommunication(){
-        return true;
+        return false;
     }
 
     @Override
     public boolean receiveCommunication(){
-        return true;
+        return false;
     }
 
     @Override
     public String toString(){
-        return "IDLE";
+        return "OFF";
     }
 }
-

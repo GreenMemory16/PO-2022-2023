@@ -30,5 +30,7 @@ class DoOpenMenuTerminalConsole extends Command<Network> {
 		}
                 // create an instance of prr.app.terminal.Menu with the
                 // selected Terminal
+
+				//HERE TO GET THE TERMINAL ID WHEN MENU DESSE TERMINAL
 	}
 }

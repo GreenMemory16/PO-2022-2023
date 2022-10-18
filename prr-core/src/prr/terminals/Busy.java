@@ -1,24 +1,24 @@
 package prr.terminals;
 
-public class Idle extends State{
+public class Busy extends State{
 
-    public Idle(Terminal terminal){
+    public Busy(Terminal terminal){
         super(terminal);
     }
 
     @Override 
     public boolean startCommunication(){
-        return true;
+        return false;
     }
 
     @Override
     public boolean receiveCommunication(){
+        //só de texto
         return true;
     }
 
     @Override
     public String toString(){
-        return "IDLE";
+        return "BUSY";
     }
 }
-
