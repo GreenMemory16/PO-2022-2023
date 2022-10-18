@@ -10,8 +10,8 @@ public class Basic extends Terminal implements Serializable {
     //no extra atributes~
     //no extra functions
     //the type of object is what matters
-    public Basic(String id, Client client){
-        super(id, client);
+    public Basic(String id, String clientKey){
+        super(id, clientKey);
     }
 
    /*public boolean canMakeThisTypeOfCom(Communication com){

@@ -10,8 +10,8 @@ public class Fancy extends Terminal implements Serializable {
     //no extra atributes~
     //no extra functions
     //the type of object is what matters
-    public Fancy(String id, Client client){
-        super(id, client);
+    public Fancy(String id, String clientKey){
+        super(id, clientKey);
     }
 
      //in this case its not an equals but a its the same type?

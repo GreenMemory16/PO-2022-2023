@@ -101,7 +101,7 @@ public class Network implements Serializable {
 			Terminal terminal = new Fancy(id, clientkey);
 		}*/
 
-		Terminal terminal = new Basic(id, getClient(clientKey));
+		Terminal terminal = new Basic(id, clientKey);
 
 		// Registers the terminal in the client _terminals list
 		getClient(clientKey).insertTerminal(terminal);

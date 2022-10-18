@@ -28,7 +28,7 @@ abstract public class Terminal implements Serializable{
 
         private State state;
 
-        private Client _client;
+        private String _clientKey;
 
         //map with all communications made by this terminal
         private Map<Integer, Communication> _communications;
@@ -43,10 +43,10 @@ abstract public class Terminal implements Serializable{
         private List<Integer> debts;
 
         //define contructor(s)
-        public Terminal(String id, Client client){
+        public Terminal(String id, String clientKey){
                 this.state = new Idle(); 
                 this.id = id;
-                _client = client;
+                _clientKey = clientKey;
 
 
                 this.friends = new TreeMap<String,Terminal>();
@@ -81,12 +81,9 @@ abstract public class Terminal implements Serializable{
         }
 
         public String getClientKey(){
-                return _client.getKey();
+                return _clientKey;
         }
 
-        public Client getClient() {
-                return _client;
-        }
         public int getAllPayments(){
                 return getAllSomething(this.payments);
         }
