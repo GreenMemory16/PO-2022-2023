@@ -18,7 +18,7 @@ import prr.communication.Communication;
  lets do it after; lets see if this works yet tho
  */
 abstract public class Terminal implements Serializable{ 
- /* FIXME maybe addd more interfaces */
+
 
 	/** Serial number for serialization. */
 	private static final long serialVersionUID = 202208091753L;
@@ -44,7 +44,7 @@ abstract public class Terminal implements Serializable{
 
         //define contructor(s)
         public Terminal(String id, String clientkey){
-                this.idle();
+                this.state = new Idle();
                 this.id = id;
                 this.clientkey = clientkey;
 
@@ -111,7 +111,32 @@ abstract public class Terminal implements Serializable{
                         
 
         }
-        
+/*********************************************** */
+        //State functions
+        public void switchToIdleState(){
+                if(state.switchToIdle()){
+                        this.state = new Idle();
+                }
+        }
+        public void switchToSilenceState(){
+                if(state.switchToSilence()){
+                        this.state = new Silence();
+                }
+        }
+        public void switchToOffState(){
+                if(state.switchToOff()){
+                        this.state = new Off();
+                }
+
+        }
+        public void switchToBusyState(){
+                if(state.switchToBusy()){
+                        this.state = new Busy();                }
+        }
+
+//****************************************************** */
+
+
         //to enumerate all friends that terminal has
         private String toStringFriends(){
                 Set<Map.Entry<String, Terminal>> entrySet = friends.entrySet();
@@ -170,30 +195,5 @@ abstract public class Terminal implements Serializable{
 
         public boolean canReceiveCommunication(){
                 return state.receiveCommunication();
-        }
-        //let's make an abstract state class inside terminal
-        //so that it has acess to the terminal
-        public abstract class State{
-                public abstract boolean startCommunication();
-                public abstract boolean receiveCommunication();
-                protected void setState(State newState){
-                        state = newState;
-                }
-                public abstract void busy();
-                public abstract void off();
-                public abstract void silence();
-                public abstract void idle();
-
-         /**
-         * This method is needed so that new states can be created.
-         *
-         * @return the terminal.
-         */
-                protected Terminal getTerminalState() {
-                        return Terminal.this;
-                }
-
-
-
         }
 }

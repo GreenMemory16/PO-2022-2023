@@ -2,8 +2,8 @@ package prr.terminals;
 
 public class Idle extends State{
 
-    public Idle(Terminal terminal){
-        super(terminal);
+    public Idle(){
+        super();
     }
 
     @Override 
@@ -18,26 +18,29 @@ public class Idle extends State{
 
       /***** **************** */
     //to change states
+
+//i must check this later!! FIX ME
     //cant
     @Override
-    public void idle() {
+    public boolean switchToIdle() {
+        return false;
     }
 
     @Override
-    public void off() {
-        setState(new Off(getTerminalState()));
+    public boolean switchToOff() {
+        return true;
     }
 
     //can
     @Override
-    public void silence() {
-        setState(new Silence(getTerminalState()));
+    public boolean switchToSilence() {
+        return true;
     }
 
     
     @Override
-    public void busy() {
-        setState(new Busy(getTerminalState()));
+    public boolean switchToBusy() {
+        return true;
     }
 //************************* */
 

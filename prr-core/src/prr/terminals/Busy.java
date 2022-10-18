@@ -2,8 +2,8 @@ package prr.terminals;
 
 public class Busy extends State{
 
-    public Busy(Terminal terminal){
-        super(terminal);
+    public Busy(){
+        super();
     }
 
     @Override 
@@ -18,27 +18,26 @@ public class Busy extends State{
     }
 
     /***** **************** */
-    //to change states
+    @Override
+    public boolean switchToIdle() {
+        return true;
+    }
+
+    @Override
+    public boolean switchToOff() {
+        return false;
+    }
+
     //can
     @Override
-    public void idle() {
-        setState(new Idle(getTerminalState()));
+    public boolean switchToSilence() {
+        return true;
     }
 
-    //cant
+    
     @Override
-    public void off() {
-    }
-
-    //can
-    @Override
-    public void silence() {
-        setState(new Silence(getTerminalState()));
-    }
-
-    //cant
-    @Override
-    public void busy() {
+    public boolean switchToBusy() {
+        return false;
     }
 //************************* */
 

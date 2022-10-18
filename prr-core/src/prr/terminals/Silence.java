@@ -2,8 +2,8 @@ package prr.terminals;
 
 public class Silence extends State{
 
-    public Silence(Terminal terminal){
-        super(terminal);
+    public Silence(){
+        super();
     }
 
     @Override 
@@ -18,28 +18,27 @@ public class Silence extends State{
     }
 
      /***** **************** */
-    //to change states
+
+    @Override
+    public boolean switchToIdle() {
+        return true;
+    }
+
+    @Override
+    public boolean switchToOff() {
+        return true;
+    }
+
     //can
     @Override
-    public void idle() {
-        setState(new Idle(getTerminalState()));
+    public boolean switchToSilence() {
+        return false;
     }
 
-    //
+    
     @Override
-    public void off() {
-        setState(new Off(getTerminalState()));
-    }
-
-    //cant
-    @Override
-    public void silence() {
-    }
-
-    //cant
-    @Override
-    public void busy() {
-        setState(new Busy(getTerminalState()));
+    public boolean switchToBusy() {
+        return true;
     }
 //************************* */
 
