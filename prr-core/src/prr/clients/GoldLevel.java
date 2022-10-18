@@ -1,9 +1,12 @@
 package prr.clients;
 
-public class GoldLevel extends Client.Level {
+import java.io.Serial;
+import java.io.Serializable;
+
+public class GoldLevel extends ClientLevel implements Serializable {
 
     public GoldLevel(Client client) {
-        client.super();
+        super();
     }
 
     public String getLevel() {

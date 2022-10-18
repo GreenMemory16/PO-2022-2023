@@ -1,9 +1,11 @@
 package prr.clients;
 
-public class NormalLevel extends Client.Level {
+import java.io.Serializable;
+
+public class NormalLevel extends ClientLevel implements Serializable{
 
     public NormalLevel(Client client) {
-        client.super();
+        super();
     }
 
     public String getLevel() {
