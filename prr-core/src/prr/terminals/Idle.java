@@ -16,6 +16,31 @@ public class Idle extends State{
         return true;
     }
 
+      /***** **************** */
+    //to change states
+    //cant
+    @Override
+    public void idle() {
+    }
+
+    @Override
+    public void off() {
+        setState(new Off(getTerminalState()));
+    }
+
+    //can
+    @Override
+    public void silence() {
+        setState(new Silence(getTerminalState()));
+    }
+
+    
+    @Override
+    public void busy() {
+        setState(new Busy(getTerminalState()));
+    }
+//************************* */
+
     @Override
     public String toString(){
         return "IDLE";

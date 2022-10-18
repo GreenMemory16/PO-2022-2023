@@ -43,7 +43,7 @@ abstract public class Terminal implements Serializable{
 
         //define contructor(s)
         public Terminal(String id, String clientkey){
-                this.state = new Idle(); 
+                this.idle();
                 this.id = id;
                 this.clientkey = clientkey;
 
@@ -176,8 +176,12 @@ abstract public class Terminal implements Serializable{
                 public abstract boolean startCommunication();
                 public abstract boolean receiveCommunication();
                 protected void setState(State newState){
-                        state = new_state;
+                        state = newState;
                 }
+                public abstract void busy();
+                public abstract void off();
+                public abstract void silence();
+                public abstract void idle();
 
          /**
          * This method is needed so that new states can be created.
