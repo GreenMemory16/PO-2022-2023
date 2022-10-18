@@ -4,15 +4,15 @@ import prr.Network;
 import prr.app.exceptions.DuplicateTerminalKeyException;
 import prr.app.exceptions.InvalidTerminalKeyException;
 import prr.app.exceptions.UnknownClientKeyException;
-
-import pt.tecnico.uilib.menus.Command;
-import pt.tecnico.uilib.menus.CommandException;
-
+import prr.app.exceptions.UnknownTerminalKeyException;
 import prr.exceptions.DuplicateTerminalKeyExceptionCore;
 import prr.exceptions.InvalidTerminalKeyExceptionCore;
 import prr.exceptions.TerminalTypeNotSupportedException;
 import prr.exceptions.UnknownClientKeyExceptionCore;
+import prr.exceptions.UnknownTerminalKeyExceptionCore;
 //FIXME add more imports if needed
+import pt.tecnico.uilib.menus.Command;
+import pt.tecnico.uilib.menus.CommandException;
 
 /**
  * Register terminal.
@@ -44,7 +44,13 @@ class DoRegisterTerminal extends Command<Network> {
 		catch(InvalidTerminalKeyExceptionCore e){
 			throw new InvalidTerminalKeyException(e.getId());
 		}
-		catch(UnknownClientKeyExceptionCore e){
+		catch(UnknownTerminalKeyExceptionCore e){
+			throw new UnknownTerminalKeyException(e.getId());
+		} 
+		catch(TerminalTypeNotSupportedException e) {
+			e.printStackTrace();
+		}
+		catch(UnknownClientKeyExceptionCore e) {
 			throw new UnknownClientKeyException(e.getKey());
 		}
 		

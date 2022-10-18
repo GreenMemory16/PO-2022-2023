@@ -43,7 +43,7 @@ abstract public class Terminal implements Serializable{
         private List<Integer> debts;
 
         //define contructor(s)
-        public Terminal(String id, String clientkey){
+        public Terminal(String id, String clientKey){
                 this.state = new Idle();
                 this.id = id;
                 _clientKey = clientKey;

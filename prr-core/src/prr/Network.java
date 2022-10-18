@@ -7,18 +7,21 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
 
 import prr.clients.Client;
 import prr.exceptions.DuplicateClientKeyExceptionCore;
+import prr.exceptions.DuplicateTerminalKeyExceptionCore;
+import prr.exceptions.InvalidTerminalKeyExceptionCore;
+import prr.exceptions.TerminalTypeNotSupportedException;
 import prr.exceptions.UnknownClientKeyExceptionCore;
+import prr.exceptions.UnknownTerminalKeyExceptionCore;
 import prr.exceptions.UnrecognizedEntryException;
 import prr.terminals.Basic;
+import prr.terminals.Fancy;
 import prr.terminals.Terminal;
-import prr.exceptions.TerminalTypeNotSupportedException;
 
 // FIXME add more import if needed (cannot import from pt.tecnico or prr.app)
 
@@ -61,20 +64,11 @@ public class Network implements Serializable {
 					default -> throw new UnrecognizedEntryException(fields[0]);
 				}
 			} 
-		} catch (DuplicateClientKeyExceptionCore | UnknownClientKeyExceptionCore | TerminalTypeNotSupportedException e ) {
+		} catch (DuplicateClientKeyExceptionCore | UnknownClientKeyExceptionCore | TerminalTypeNotSupportedException |
+		 		UnknownTerminalKeyExceptionCore | InvalidTerminalKeyExceptionCore | DuplicateTerminalKeyExceptionCore e ) {
 			e.printStackTrace();
 		}
 	}
-
-	public void setChanged(boolean v) {
-		_changed = v;
-	}
-
-	public void changed() {
-		_changed = true;
-	}
-
-
 
 	public Client registerClient(String key, String name, int taxId) throws DuplicateClientKeyExceptionCore {
 		if (_clients.containsKey(key)) {
@@ -109,7 +103,8 @@ public static boolean isNumeric(String str) {
   }
 
 
-public Terminal registerTerminal(String id, String clientKey, String type) throws UnknownClientKeyExceptionCore, TerminalTypeNotSupportedException{
+public Terminal registerTerminal(String id, String clientKey, String type) throws UnknownClientKeyExceptionCore, TerminalTypeNotSupportedException, 
+			InvalidTerminalKeyExceptionCore, DuplicateTerminalKeyExceptionCore, UnknownTerminalKeyExceptionCore {
 
 		Terminal terminal;
 
@@ -121,6 +116,16 @@ public Terminal registerTerminal(String id, String clientKey, String type) throw
 		}
 		else {
 			throw new TerminalTypeNotSupportedException();
+		}
+
+		if (id.length() != 6 || !(isNumeric(id))) {
+			throw new InvalidTerminalKeyExceptionCore(id);
+		}
+		if (_terminals.containsKey(clientKey)) {
+			throw new DuplicateTerminalKeyExceptionCore(id);
+		}
+		if (!(_clients.containsKey(clientKey))) {
+			throw new UnknownClientKeyExceptionCore(clientKey);
 		}
 
 		//Terminal terminal = new Basic(id, clientKey);
