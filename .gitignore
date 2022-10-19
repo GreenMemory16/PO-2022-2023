@@ -12,4 +12,5 @@ ClassPathScript
 *.out
 *.in
 *.import
+*.sh
 RunTests
