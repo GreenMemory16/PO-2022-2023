@@ -110,7 +110,9 @@ abstract public class Terminal implements Serializable{
 
         }
 /*********************************************** */
-        //State functions
+        //State functions;
+        //cada state é que sabe se pode mudar para o newstate
+        //se o state retornar falso então o state fica igual
         public void switchToIdleState(){
                 if(state.switchToIdle()){
                         this.state = new Idle();
@@ -156,6 +158,7 @@ abstract public class Terminal implements Serializable{
                 "|" + getAllPayments() + "|" + getAllDebts() + toStringFriends();
     }
     
+        //to string do tipo de terminal
         abstract public String toStringType();
         /**
          * Checks if this terminal can end the current interactive communication.
