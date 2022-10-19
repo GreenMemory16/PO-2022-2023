@@ -1,7 +1,6 @@
 {
     "java.project.sourcePaths": [
-        "prr-core/src",
-        "prr-app/src",
-        "po-uilib/src"
+        "prr-core/src/prr",
+        "prr-app/src"
     ]
 }
