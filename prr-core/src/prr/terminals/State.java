@@ -2,6 +2,7 @@ package prr.terminals;
 
 import java.io.Serializable;
 
+//abstract class fthat implements methods for all states
 public abstract class State implements Serializable{
 
     public abstract boolean startCommunication();

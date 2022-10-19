@@ -99,7 +99,9 @@ public class Network implements Serializable {
 	public Collection<Client> getAllClients() {
 		return Collections.unmodifiableCollection(_clients.values());
 	}
-/** *********************************************** */
+/** ********************Terminal related methods*************************** */
+
+//auxiliary function
 public static boolean isNumeric(String str) { 
 	try {  
 		  Double.parseDouble(str);  
@@ -110,8 +112,12 @@ public static boolean isNumeric(String str) {
   }
 
 
-public Terminal registerTerminal(String id, String clientKey, String type, String state) throws UnknownClientKeyExceptionCore, TerminalTypeNotSupportedException, 
-			InvalidTerminalKeyExceptionCore, DuplicateTerminalKeyExceptionCore, UnknownTerminalKeyExceptionCore {
+//registerTerminal
+public Terminal registerTerminal(String id, String clientKey, String type, String state) 
+			throws UnknownClientKeyExceptionCore, TerminalTypeNotSupportedException, 
+			InvalidTerminalKeyExceptionCore, DuplicateTerminalKeyExceptionCore, 
+			UnknownTerminalKeyExceptionCore {
+
 		if (id.length() != 6 || !(isNumeric(id))) {
 			throw new InvalidTerminalKeyExceptionCore(id);
 		}
@@ -158,6 +164,8 @@ public Terminal registerTerminal(String id, String clientKey, String type, Strin
 		return terminal;
 	}
 
+	//returns the list of terminals that have no communications
+
 	public Collection<Terminal> getUnusedTerminals() {
 		List<Terminal> terminal_list = new ArrayList<Terminal>();
 		for(Map.Entry<String,Terminal> entry : _terminals.entrySet()){
@@ -166,7 +174,6 @@ public Terminal registerTerminal(String id, String clientKey, String type, Strin
 			}
 		}
 		return terminal_list;
-		//FIX ME put exception here!!
 	}
 
 	public Collection<Terminal> getAllTerminals() {
@@ -175,7 +182,7 @@ public Terminal registerTerminal(String id, String clientKey, String type, Strin
 
 	//makeFRiends calls the add friend from the terminal
 	//2 different constructores depending on if it is an import issue 
-	//or if the manager menu
+	//or if the manager menu - to implement later
 
 	public void makeFriends(Terminal t1, Terminal t2) {
 		t1.AddFriend(t2);

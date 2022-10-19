@@ -5,20 +5,19 @@ import java.io.Serializable;
 public class Fancy extends Terminal implements Serializable {
 
     
-    //no extra atributes~
+    //no extra atributes
     //no extra functions
     //the type of object is what matters
     public Fancy(String id, String clientKey){
         super(id, clientKey);
     }
 
-     //in this case its not an equals but a its the same type?
     /* @Override*/
      public boolean sameType(Terminal other){
         return (other instanceof Fancy);
     }
 
-     //this one really is an equals; for friends function;
+     //this one really is an equals; for friends function later on;
      //@Override 
      public boolean equals(Terminal other){
          return (this.getId().equals(other.getId()) && 

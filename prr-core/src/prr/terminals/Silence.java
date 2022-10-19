@@ -2,12 +2,10 @@ package prr.terminals;
 
 import java.io.Serializable;
 
+//class SIlence
 public class Silence extends State implements Serializable{
 
-    public Silence(){
-        super();
-    }
-
+    //every method depends on the state
     @Override 
     public boolean startCommunication(){
         return true;
@@ -19,7 +17,7 @@ public class Silence extends State implements Serializable{
         return true;
     }
 
-     /***** **************** */
+   
 
     @Override
     public boolean switchToIdle() {
@@ -42,7 +40,6 @@ public class Silence extends State implements Serializable{
     public boolean switchToBusy() {
         return true;
     }
-//************************* */
 
     @Override
     public String toString(){

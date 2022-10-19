@@ -3,11 +3,8 @@ package prr.terminals;
 import java.io.Serializable;
 
 public class Off extends State implements Serializable{
-
-    public Off(){
-        super();
-    }
-
+  
+    //boolean methods that depend on the state in which is used
     @Override 
     public boolean startCommunication(){
         return false;
@@ -18,8 +15,7 @@ public class Off extends State implements Serializable{
         return false;
     }
 
-      /***** **************** */
-//i must check this later!! FIX ME
+
     @Override
     public boolean switchToIdle() {
         return true;
@@ -30,7 +26,7 @@ public class Off extends State implements Serializable{
         return false;
     }
 
-    //can
+
     @Override
     public boolean switchToSilence() {
         return true;
@@ -41,7 +37,6 @@ public class Off extends State implements Serializable{
     public boolean switchToBusy() {
         return false;
     }
-//************************* */
 
     @Override
     public String toString(){

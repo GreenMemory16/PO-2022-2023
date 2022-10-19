@@ -4,9 +4,7 @@ import java.io.Serializable;
 
 public class Idle extends State implements Serializable{
 
-    public Idle(){
-        super();
-    }
+    //boolean methods that depend on the state in which is used
 
     @Override 
     public boolean startCommunication(){
@@ -18,11 +16,6 @@ public class Idle extends State implements Serializable{
         return true;
     }
 
-/***** **************** */
-    //to change states
-
-//i must check this later!! FIX ME
-    //cant
     @Override
     public boolean switchToIdle() {
         return false;
@@ -44,7 +37,6 @@ public class Idle extends State implements Serializable{
     public boolean switchToBusy() {
         return true;
     }
-//************************* */
 
     @Override
     public String toString(){

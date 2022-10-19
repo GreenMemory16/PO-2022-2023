@@ -5,23 +5,18 @@ import java.io.Serializable;
 public class Basic extends Terminal implements Serializable {
 
     
-    //no extra atributes~
+    //no extra atributes
     //no extra functions
     //the type of object is what matters
     public Basic(String id, String clientKey){
         super(id, clientKey);
     }
 
-   /*public boolean canMakeThisTypeOfCom(Communication com){
-
-    }*/
-
-    //in this case its not an equals but a its the same type?
     public boolean sameType(Terminal other){
         return (other instanceof Basic);
     }
 
-    //this one really is an equals; for friends function;
+    //this one really is an equals; for friends function later on
     //@Override 
     public boolean equals(Terminal other){
         return (this.getId().equals(other.getId()) && 

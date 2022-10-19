@@ -24,12 +24,12 @@ abstract public class Terminal implements Serializable{
 
         private State state;
 
-        private String _clientKey;
+        private String clientKey;
 
         //map with all communications made by this terminal
         private Map<Integer, Communication> _communications;
 
-        //lista de amigos; mudar para um map maybe ou probably treemap
+        //amigos; usar um map: TReeMap in this case
         //a key será o id do terminal
         private Map<String,Terminal> friends ;
 
@@ -42,7 +42,7 @@ abstract public class Terminal implements Serializable{
         public Terminal(String id, String clientKey){
                 this.state = new Idle();
                 this.id = id;
-                _clientKey = clientKey;
+                this.clientKey = clientKey;
 
 
                 this.friends = new TreeMap<String,Terminal>();
@@ -71,13 +71,13 @@ abstract public class Terminal implements Serializable{
         public boolean NoCommunications(){
                 return(this._communications.size() == 0);
         }
-        /* state related functions */
+        /* state related function */
         public State getState(){
                 return this.state;
         }
 
         public String getClientKey(){
-                return _clientKey;
+                return clientKey;
         }
 
         public int getAllPayments(){
@@ -95,6 +95,7 @@ abstract public class Terminal implements Serializable{
                 return total;
         }
 
+        //functions related to Friends settings
         public void AddFriend(Terminal terminal) /*throws InvalidFriendException*/ {
                 /*
                 if(this.equals(terminal)){
@@ -109,10 +110,10 @@ abstract public class Terminal implements Serializable{
                         
 
         }
-/*********************************************** */
+
         //State functions;
         //cada state é que sabe se pode mudar para o newstate
-        //se o state retornar falso então o state fica igual
+        //se o state(class) retornar falso então o state(var) fica igual
         public void switchToIdleState(){
                 if(state.switchToIdle()){
                         this.state = new Idle();
@@ -131,10 +132,9 @@ abstract public class Terminal implements Serializable{
         }
         public void switchToBusyState(){
                 if(state.switchToBusy()){
-                        this.state = new Busy();                }
+                        this.state = new Busy();                
+                }
         }
-
-//****************************************************** */
 
 
         //to enumerate all friends that terminal has
@@ -153,13 +153,14 @@ abstract public class Terminal implements Serializable{
         
         @Override
         public String toString(){
-                return this.toStringType() /*BASIC OU FANCY*/ + "|" + this.getId() + "|" + this.getClientKey() + "|" 
+                return this.toStringType() + "|" + this.getId() + "|" + this.getClientKey() + "|" 
                 +  this.getState() + 
                 "|" + getAllPayments() + "|" + getAllDebts() + toStringFriends();
     }
     
-        //to string do tipo de terminal
+        //tostring do tipo de terminal: BASIC OR FANCY
         abstract public String toStringType();
+
         /**
          * Checks if this terminal can end the current interactive communication.
          *
@@ -173,6 +174,7 @@ abstract public class Terminal implements Serializable{
 
         /*abstract*/public boolean canEndCurrentCommunication() {
                 // FIXME add implementation code
+                //only next entrega
 
                 return false;
         }
