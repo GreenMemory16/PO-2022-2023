@@ -12,8 +12,10 @@ class DoAddFriend extends TerminalCommand {
 
 	DoAddFriend(Network context, Terminal terminal) {
 		super(Label.ADD_FRIEND, context, terminal);
-		addStringField("id", Prompt.terminalKey());
-		addStringField("terminal", terminal);
+		//addStringField("id", Prompt.terminalKey());
+		//how am i gonna pass the terminal to execute
+		//it should take an id not a terminal
+		//addStringField("terminal", terminal);
 	}
 
 	@Override
@@ -22,9 +24,9 @@ class DoAddFriend extends TerminalCommand {
 				//try{
 
 				//}
-				Terminal terminal = stringField("terminal");
+				/*Terminal terminal = stringField("terminal");
 				String id = stringField("id");
-				_receiver.makeFriends(terminal, id);
+				_receiver.makeFriends(terminal, id);*/
 
 	}
 }
