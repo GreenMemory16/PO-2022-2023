@@ -18,7 +18,7 @@ public class Idle extends State implements Serializable{
         return true;
     }
 
-      /***** **************** */
+/***** **************** */
     //to change states
 
 //i must check this later!! FIX ME

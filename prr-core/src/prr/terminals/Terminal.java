@@ -1,6 +1,5 @@
 package prr.terminals;
 
-
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
@@ -11,11 +10,8 @@ import java.util.TreeMap;
 
 import prr.communication.Communication;
 
-// FIXME add more import if needed (cannot import from pt.tecnico or prr.app)
-
 /**
  * Abstract terminal.
- lets do it after; lets see if this works yet tho
  */
 abstract public class Terminal implements Serializable{ 
 
@@ -37,7 +33,7 @@ abstract public class Terminal implements Serializable{
         //a key será o id do terminal
         private Map<String,Terminal> friends ;
 
-        //private lista ou map de dividas e pagamentos
+        //private lista de dividas e pagamentos
         //enunciado diz que o terminal deve ter contabilidade propria
         private List<Integer> payments;
         private List<Integer> debts;
@@ -161,12 +157,6 @@ abstract public class Terminal implements Serializable{
     }
     
         abstract public String toStringType();
-        /*@Override
-        abstract public boolean equals(){
-        }*/
-        
-        // FIXME define methods
-
         /**
          * Checks if this terminal can end the current interactive communication.
          *
