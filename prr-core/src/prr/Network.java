@@ -14,6 +14,7 @@ import java.util.TreeMap;
 import prr.clients.Client;
 import prr.exceptions.DuplicateClientKeyExceptionCore;
 import prr.exceptions.DuplicateTerminalKeyExceptionCore;
+import prr.exceptions.ImportFileException;
 import prr.exceptions.InvalidTerminalKeyExceptionCore;
 import prr.exceptions.TerminalTypeNotSupportedException;
 import prr.exceptions.UnknownClientKeyExceptionCore;
@@ -48,8 +49,9 @@ public class Network implements Serializable {
 	 * @param filename name of the text input file
          * @throws UnrecognizedEntryException if some entry is not correct
 	 * @throws IOException if there is an IO erro while processing the text file
+	 * @throws ImportFileException
 	 */
-	void importFile(String filename) throws UnrecognizedEntryException, IOException {
+	void importFile(String filename) throws UnrecognizedEntryException, IOException, ImportFileException {
 		try (BufferedReader in = new BufferedReader(new FileReader(filename))) {
 			String s;
 			while ((s = in.readLine()) != null) {
@@ -61,12 +63,15 @@ public class Network implements Serializable {
 				switch(fields[0]) {
 					case "CLIENT" -> registerClient(fields[1], fields[2], Integer.parseInt(fields[3])); 
 					case "BASIC", "FANCY" -> registerTerminal(fields[1], fields[2], fields[0], fields[3]);
+					case "FRIENDS" -> makeFriends(_terminals.get(fields[1]), _terminals.get(fields[2]));
 					default -> throw new UnrecognizedEntryException(fields[0]);
 				}
 			} 
 		} catch (DuplicateClientKeyExceptionCore | UnknownClientKeyExceptionCore | TerminalTypeNotSupportedException |
 		 		UnknownTerminalKeyExceptionCore | InvalidTerminalKeyExceptionCore | DuplicateTerminalKeyExceptionCore e ) {
 			e.printStackTrace();
+		} catch (IOException e) {
+			throw new ImportFileException(filename);
 		}
 	}
 
@@ -168,6 +173,9 @@ public Terminal registerTerminal(String id, String clientKey, String type, Strin
 		return Collections.unmodifiableCollection(_terminals.values());
 	}
 
+	public void makeFriends(Terminal t1, Terminal t2) {
+		t1.AddFriend(t2);
+	}
 
 }
 

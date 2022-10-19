@@ -47,7 +47,9 @@ public class NetworkManager {
 		try (ObjectInputStream in = new ObjectInputStream(new BufferedInputStream(new FileInputStream(filename)))){
 			System.out.println("Loaded from file " + filename);
 			_network = (Network) in.readObject();
-		} 
+		} catch (IOException | ClassNotFoundException e) {
+			throw new UnavailableFileException(filename);
+		}
 	}
 
 	/**
@@ -88,10 +90,8 @@ public class NetworkManager {
 	public void importFile(String filename) throws ImportFileException {
 		try {
 			_network.importFile(filename);
-        } catch (IOException e) {
-			e.printStackTrace();
-		} catch (UnrecognizedEntryException e) {
-			e.printStackTrace();
+		} catch (IOException | UnrecognizedEntryException | ImportFileException e) {
+			throw new ImportFileException(filename);
 		} 
     	
 	}
