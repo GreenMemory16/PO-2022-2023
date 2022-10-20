@@ -22,7 +22,6 @@ import prr.exceptions.UnavailableFileException;
 import prr.exceptions.UnknownClientKeyExceptionCore;
 import prr.exceptions.UnrecognizedEntryException;
 
-//FIXME add more import if needed (cannot import from pt.tecnico or prr.app)
 
 /**
  * Manage access to network and implement load/save operations.
@@ -31,7 +30,6 @@ public class NetworkManager {
 
 	/** The network itself. */
 	private Network _network = new Network();
-        //FIXME  addmore fields if needed
 
         public Network getNetwork() {
 		return _network;

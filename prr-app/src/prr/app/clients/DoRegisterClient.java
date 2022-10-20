@@ -25,7 +25,9 @@ class DoRegisterClient extends Command<Network> {
 			String key = stringField("key");
 			String name = stringField("name");
 			int taxId = integerField("taxId");
+			//registers the client
 			_receiver.registerClient(key, name, taxId);
+
 		} catch (DuplicateClientKeyExceptionCore e) {
 			throw new DuplicateClientKeyException(e.getKey());
 		}

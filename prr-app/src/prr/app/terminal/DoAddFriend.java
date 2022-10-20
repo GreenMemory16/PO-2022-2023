@@ -3,7 +3,6 @@ package prr.app.terminal;
 import prr.Network;
 import prr.terminals.Terminal;
 import pt.tecnico.uilib.menus.CommandException;
-//FIXME !
 
 /**
  * Add a friend.
@@ -31,6 +30,5 @@ class DoAddFriend extends TerminalCommand {
 				/*Terminal terminal = stringField("terminal");
 				String id = stringField("id");
 				_receiver.makeFriends(terminal, id);*/
-
 	}
 }

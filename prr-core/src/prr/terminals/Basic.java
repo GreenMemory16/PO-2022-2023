@@ -6,22 +6,15 @@ public class Basic extends Terminal implements Serializable {
 
     
     //no extra atributes
-    //no extra functions
-    //the type of object is what matters
+    //no extra methods
     public Basic(String id, String clientKey){
         super(id, clientKey);
     }
-
-    public boolean sameType(Terminal other){
-        return (other instanceof Basic);
-    }
-
-    //this one really is an equals; for friends function later on
-    //@Override 
+     //function for friends function later on;
     public boolean equals(Terminal other){
         return (this.getId().equals(other.getId()) && 
         this.getClientKey().equals(other.getClientKey())
-        && this.sameType(other));
+        &&  (other instanceof Basic));
     }
 
     @Override

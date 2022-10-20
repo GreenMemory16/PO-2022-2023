@@ -13,10 +13,11 @@ public class Busy extends State implements Serializable{
 
     @Override
     public boolean receiveCommunication(){
-        //só de texto
+        //can only recieve text communications
         return true;
     }
 
+     //changing state rules
     @Override
     public boolean switchToIdle() {
         return true;

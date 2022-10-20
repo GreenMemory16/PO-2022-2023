@@ -11,14 +11,19 @@ import prr.terminals.Terminal;
 
 public class Client implements Serializable {
 
+    //each client has it's own terminals
     private Map<String, Terminal> _terminals = new TreeMap<>();
 
+    //client's identifiers
     private String _key;
     private String _name;
     private int _taxId;
+
+    //client's characteristics
     private boolean _activeNotifications = true;
     private ClientLevel _level;
 
+    //constructor
     public Client(String key, String name, int taxId) {
         _key = key;
         _name = name;
@@ -26,10 +31,12 @@ public class Client implements Serializable {
         _level = new NormalLevel(this);
     }
 
+    //gettters
     public String getKey() { return _key; }
     public String getName() { return _name; }
     public int getTaxId() { return _taxId; }
 
+    //compares two clients
     public static final Comparator<Client> KEY_COMPARATOR = new Comparator<>() {
         @Override
         public int compare(Client c1, Client c2) {
@@ -37,10 +44,12 @@ public class Client implements Serializable {
         }    
     };
 
+    //add a terminal to the client's terminals
     public void insertTerminal(Terminal t) {
         _terminals.put(t.getId(), t);
     }
 
+    //to change notifictions status
     public String getNotificationSwitch_String() {
         if (_activeNotifications) {
             return "YES";
@@ -48,6 +57,7 @@ public class Client implements Serializable {
         return "NO";
     }
 
+    //client's toString
     @Override
     public String toString() {
         return "CLIENT|" + getKey() + "|" + getName() + "|" + getTaxId() + "|" + 

@@ -10,7 +10,7 @@ import prr.exceptions.InvalidTerminalKeyExceptionCore;
 import prr.exceptions.TerminalTypeNotSupportedException;
 import prr.exceptions.UnknownClientKeyExceptionCore;
 import prr.exceptions.UnknownTerminalKeyExceptionCore;
-//FIXME add more imports if needed
+
 import pt.tecnico.uilib.menus.Command;
 import pt.tecnico.uilib.menus.CommandException;
 
@@ -35,6 +35,7 @@ class DoRegisterTerminal extends Command<Network> {
 			String id = stringField("id");
 			String type = stringField("type");
 			String clientkey = stringField("clientkey");
+			//registers the terminal
 			_receiver.registerTerminal(id, clientkey ,type, "ON");
 			
 		}
@@ -47,6 +48,7 @@ class DoRegisterTerminal extends Command<Network> {
 		catch(UnknownTerminalKeyExceptionCore e){
 			throw new UnknownTerminalKeyException(e.getId());
 		} 
+		//this exception won't happen right now
 		catch(TerminalTypeNotSupportedException e) {
 			e.printStackTrace();
 		}

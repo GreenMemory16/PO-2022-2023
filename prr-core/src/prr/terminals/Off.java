@@ -16,6 +16,7 @@ public class Off extends State implements Serializable{
     }
 
 
+     //changing state rules
     @Override
     public boolean switchToIdle() {
         return true;

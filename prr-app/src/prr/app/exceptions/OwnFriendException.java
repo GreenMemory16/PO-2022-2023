@@ -1,6 +1,7 @@
 package prr.app.exceptions;
 
-//should i be doing this exception or should i do a simple thing in the function?
+//to be implemented LATER ON
+
 //public class OwnFriendException extends CommandException {
 
     /** Serial number for serialization. */
