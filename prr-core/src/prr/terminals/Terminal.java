@@ -96,24 +96,25 @@ abstract public class Terminal implements Serializable{
         }
 
         //functions related to Friends settings
-        public void AddFriend(Terminal terminal) /*throws InvalidFriendException*/ {
-                /*
-                if(this.equals(terminal)){
-                        throw new InvalidFriendException() ;
-                }*/
+
+        public void AddFriend(Terminal terminal) {
+              //should make an exception for this later on
+              //in case tjhe terminal is already a friend
+              //or if the terminal is the same as the one calling the function
                 friends.put(terminal.getId(), terminal);
         }
         
+        //useful to check if the terminal is already a friend
         public boolean IsFriend(String Id){
                 Terminal terminal = friends.get(Id);
-                return terminal == null;
-                        
-
+                return terminal == null;           
         }
 
         //State functions;
-        //cada state é que sabe se pode mudar para o newstate
-        //se o state(class) retornar falso então o state(var) fica igual
+        //each state (class) has its own rules on if it can change to
+        // the new state or not;
+        //that said, depending on the value of the state function, this 
+        //methods will switch to the new state or not
         public void switchToIdleState(){
                 if(state.switchToIdle()){
                         this.state = new Idle();
@@ -140,7 +141,6 @@ abstract public class Terminal implements Serializable{
         //to enumerate all friends that terminal has
         private String toStringFriends(){
                 Set<Map.Entry<String, Terminal>> entrySet = friends.entrySet();
-                 // Convert entrySet to Array using toArray method
                 Map.Entry<Integer, String>[] entryArray = entrySet.toArray(new Map.Entry[entrySet.size()]);
                 String returnString = "";
                 
@@ -151,6 +151,7 @@ abstract public class Terminal implements Serializable{
                 
         }
         
+        //to String method
         @Override
         public String toString(){
                 return this.toStringType() + "|" + this.getId() + "|" + this.getClientKey() + "|" 
@@ -158,7 +159,7 @@ abstract public class Terminal implements Serializable{
                 "|" + getAllPayments() + "|" + getAllDebts() + toStringFriends();
     }
     
-        //tostring do tipo de terminal: BASIC OR FANCY
+        //to string of terminal type: BASIC OR FANCY
         abstract public String toStringType();
 
         /**
@@ -168,11 +169,7 @@ abstract public class Terminal implements Serializable{
          *          it was the originator of this communication.
          **/
 
-         //ist gonna be abstract bc it depoends on the terminal type
-         //or maybe do another function for that ~
-         //this is to check if the terminal is ready or not
-
-        /*abstract*/public boolean canEndCurrentCommunication() {
+        public boolean canEndCurrentCommunication() {
                 // FIXME add implementation code
                 //only next entrega
 

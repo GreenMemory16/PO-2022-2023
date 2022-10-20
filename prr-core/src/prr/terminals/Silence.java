@@ -2,7 +2,7 @@ package prr.terminals;
 
 import java.io.Serializable;
 
-//class SIlence
+//class Silence
 public class Silence extends State implements Serializable{
 
     //every method depends on the state
@@ -13,12 +13,14 @@ public class Silence extends State implements Serializable{
 
     @Override
     public boolean receiveCommunication(){
-        // só de texto
+        //only text communications tho
+        //to be implemented later on
         return true;
     }
 
    
 
+    //changing state rules
     @Override
     public boolean switchToIdle() {
         return true;
@@ -29,7 +31,6 @@ public class Silence extends State implements Serializable{
         return true;
     }
 
-    //can
     @Override
     public boolean switchToSilence() {
         return false;
