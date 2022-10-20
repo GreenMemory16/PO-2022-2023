@@ -12,7 +12,8 @@ class DoAddFriend extends TerminalCommand {
 
 	DoAddFriend(Network context, Terminal terminal) {
 		super(Label.ADD_FRIEND, context, terminal);
-		//addStringField("id", Prompt.terminalKey());
+		//terminal that's gonna be added as friend
+		addStringField("id", Prompt.terminalKey());
 		//how am i gonna pass the terminal to execute
 		//it should take an id not a terminal
 		//addStringField("terminal", terminal);
@@ -21,6 +22,9 @@ class DoAddFriend extends TerminalCommand {
 	@Override
 	protected final void execute() throws CommandException {
                 //FIXME implement command
+				String id = stringField("id");
+				
+				_receiver.AddFriend(_valid, id);
 				//try{
 
 				//}
