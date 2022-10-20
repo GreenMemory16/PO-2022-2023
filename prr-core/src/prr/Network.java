@@ -175,19 +175,9 @@ public Terminal registerTerminal(String id, String clientKey, String type, Strin
 	}
 
 	//makeFRiends calls the add friend from the terminal
-	//2 different constructores depending on if it is an import issue 
-	//or if the manager menu - to implement later
-
 	public void makeFriends(Terminal t1, Terminal t2) {
 		t1.AddFriend(t2);
 	}
-	/*public void makeFriends(Terminal terminal){
-		
-		//there should be an exception here in case the id is unknown
-		//and anothre exeception in case the id is the same has the 
-		//own terminal id; to be implemented later on
-		AddFriend(terminal);
-	}*/
 
 }
 

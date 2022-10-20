@@ -23,6 +23,7 @@ class DoAddFriend extends TerminalCommand {
 
 	@Override
 	protected final void execute() throws CommandException {
+		
 				try{
 					String id = stringField("id");
 				Terminal terminal1 = _receiver;
