@@ -8,7 +8,7 @@ import pt.tecnico.uilib.menus.CommandException;
 
 
 /**
- * Show all terminals.
+ * Shows all terminals.
  */
 class DoShowAllTerminals extends Command<Network> {
 
@@ -16,9 +16,9 @@ class DoShowAllTerminals extends Command<Network> {
 		super(Label.SHOW_ALL_TERMINALS, receiver);
 	}
 
+	//no exception will be thrown here since the method getTerminals() doesn't throw any exception
 	@Override
 	protected final void execute() throws CommandException {
-                //FIXME should this have an exception?
 		_display.popup(_receiver.getAllTerminals());
 	}
 }
