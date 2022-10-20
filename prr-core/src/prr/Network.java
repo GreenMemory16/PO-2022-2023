@@ -24,7 +24,6 @@ import prr.terminals.Basic;
 import prr.terminals.Fancy;
 import prr.terminals.Terminal;
 
-// FIXME add more import if needed (cannot import from pt.tecnico or prr.app)
 
 /**
  * Class Store implements a store.
@@ -37,11 +36,6 @@ public class Network implements Serializable {
 	private Map<String, Client> _clients = new TreeMap<>();
 
 	private Map<String, Terminal> _terminals = new TreeMap<String, Terminal>();
-
-
-        // FIXME define attributes
-        // FIXME define contructor(s)
-        // FIXME define methods
 
 	/**
 	 * Read text input file and create corresponding domain entities.
@@ -150,22 +144,21 @@ public Terminal registerTerminal(String id, String clientKey, String type, Strin
 		// Registers the terminal in the client _terminals list
 		getClient(clientKey).insertTerminal(terminal);
 	
+		//register the terminal in the network list
 		_terminals.put(id, terminal);
-		//this puts in the tree table the terminal with id and the terminal itself
 
 		return terminal;
 	}
+	//terminal getter
 	public Terminal getTerminal(String id) throws UnknownTerminalKeyExceptionCore {
 		Terminal terminal = _terminals.get(id);
 		if (terminal == null) {
 			throw new UnknownTerminalKeyExceptionCore(id);
 		}
-
 		return terminal;
 	}
 
 	//returns the list of terminals that have no communications
-
 	public Collection<Terminal> getUnusedTerminals() {
 		List<Terminal> terminal_list = new ArrayList<Terminal>();
 		for(Map.Entry<String,Terminal> entry : _terminals.entrySet()){
@@ -176,6 +169,7 @@ public Terminal registerTerminal(String id, String clientKey, String type, Strin
 		return terminal_list;
 	}
 
+	//terminal getter
 	public Collection<Terminal> getAllTerminals() {
 		return Collections.unmodifiableCollection(_terminals.values());
 	}
@@ -191,7 +185,7 @@ public Terminal registerTerminal(String id, String clientKey, String type, Strin
 		Terminal terminal2 = _terminals.get(id);
 		//there should be an exception here in case the id is unknown
 		//and anothre exeception in case the id is the same has the 
-		//own terminal id
+		//own terminal id; to be implemented later on
 		terminal.AddFriend(terminal2);
 	}
 
