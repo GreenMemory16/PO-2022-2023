@@ -10,6 +10,7 @@ import prr.app.exceptions.UnknownTerminalKeyException;
  * Remove friend.
  */
 //i should make exceptions FIX ME same with addfriend
+//to be implemented later on
 class DoRemoveFriend extends TerminalCommand {
 
 	DoRemoveFriend(Network context, Terminal terminal) {
@@ -21,8 +22,8 @@ class DoRemoveFriend extends TerminalCommand {
 	protected final void execute() throws CommandException {
 		try{
 			String id = stringField("id");
-		Terminal terminal1 = _receiver;
-		Terminal terminal2 = _network.getTerminal(id);
+			Terminal terminal1 = _receiver;
+			Terminal terminal2 = _network.getTerminal(id);
 		
 		_network.deMakeFriends(terminal1, terminal2);
 		}

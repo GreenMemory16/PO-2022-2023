@@ -121,26 +121,30 @@ abstract public class Terminal implements Serializable{
         // the new state or not;
         //that said, depending on the value of the state function, this 
         //methods will switch to the new state or not
-        public void switchToIdleState(){
+        public boolean switchToIdleState(){
                 if(state.switchToIdle()){
                         this.state = new Idle();
                 }
+                return state.switchToIdle();
         }
-        public void switchToSilenceState(){
+        public boolean switchToSilenceState(){
                 if(state.switchToSilence()){
                         this.state = new Silence();
                 }
+                return state.switchToSilence();
         }
-        public void switchToOffState(){
+        public boolean switchToOffState(){
                 if(state.switchToOff()){
                         this.state = new Off();
                 }
+                return state.switchToOff();
 
         }
-        public void switchToBusyState(){
+        public boolean switchToBusyState(){
                 if(state.switchToBusy()){
                         this.state = new Busy();                
                 }
+                return state.switchToBusy();
         }
 
 

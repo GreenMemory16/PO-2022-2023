@@ -106,6 +106,26 @@ public static boolean isNumeric(String str) {
   }
 
 
+public boolean SwitchState(String state, Terminal terminal) {
+	if(state.equals("ON")){
+		return terminal.switchToIdleState();
+	}
+	else if (state.equals("OFF")){
+		return terminal.switchToOffState();
+	}
+	else if (state.equals("BUSY")){
+		return terminal.switchToBusyState();
+	}
+	else if (state.equals("IDLE")){
+		return terminal.switchToIdleState();
+	}
+	else{
+		return false;
+	}
+}
+	
+}
+
 //registerTerminal
 public Terminal registerTerminal(String id, String clientKey, String type, String state) 
 			throws UnknownClientKeyExceptionCore, TerminalTypeNotSupportedException, 
@@ -134,12 +154,7 @@ public Terminal registerTerminal(String id, String clientKey, String type, Strin
 			throw new TerminalTypeNotSupportedException();
 		}
 
-		switch (state) {
-			case "ON" -> terminal.switchToIdleState();
-			case "OFF" -> terminal.switchToOffState();
-			case "SILENCE" -> terminal.switchToSilenceState();
-			case "BUSY" -> terminal.switchToBusyState();
-		}
+		SwitchState(state, terminal);
 
 		// Registers the terminal in the client _terminals list
 		getClient(clientKey).insertTerminal(terminal);
