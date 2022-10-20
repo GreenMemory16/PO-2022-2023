@@ -14,7 +14,7 @@ public class Basic extends Terminal implements Serializable {
     public boolean equals(Terminal other){
         return (this.getId().equals(other.getId()) && 
         this.getClientKey().equals(other.getClientKey())
-        &&  (other instanceof Basic);
+        &&  (other instanceof Basic));
     }
 
     @Override
