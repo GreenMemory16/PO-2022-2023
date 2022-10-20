@@ -17,7 +17,6 @@ public class Basic extends Terminal implements Serializable {
     }
 
     //this one really is an equals; for friends function later on
-    //@Override 
     public boolean equals(Terminal other){
         return (this.getId().equals(other.getId()) && 
         this.getClientKey().equals(other.getClientKey())
