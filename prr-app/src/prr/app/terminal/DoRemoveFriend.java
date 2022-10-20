@@ -30,6 +30,6 @@ class DoRemoveFriend extends TerminalCommand {
 		catch(UnknownTerminalKeyExceptionCore e){
 			throw new UnknownTerminalKeyException(e.getId());
 		}	
-}
 	}
 }
+

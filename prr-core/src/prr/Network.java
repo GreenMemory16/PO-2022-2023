@@ -124,7 +124,7 @@ public boolean SwitchState(String state, Terminal terminal) {
 	}
 }
 	
-}
+
 
 //registerTerminal
 public Terminal registerTerminal(String id, String clientKey, String type, String state) 
