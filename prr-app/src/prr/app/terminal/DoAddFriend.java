@@ -16,14 +16,11 @@ class DoAddFriend extends TerminalCommand {
 		super(Label.ADD_FRIEND, context, terminal);
 		//terminal that's gonna be added as friend
 		addStringField("id", Prompt.terminalKey());
-		//how am i gonna pass the terminal to execute
-		//it should take an id not a terminal
-		//addStringField("terminal", terminal);
 	}
 
 	@Override
 	protected final void execute() throws CommandException {
-		
+
 				try{
 					String id = stringField("id");
 				Terminal terminal1 = _receiver;

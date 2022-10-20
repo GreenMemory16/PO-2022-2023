@@ -179,5 +179,9 @@ public Terminal registerTerminal(String id, String clientKey, String type, Strin
 		t1.AddFriend(t2);
 	}
 
+	public void deMakeFriends( Terminal terminal1, Terminal terminal2){
+		terminal1.RemoveFriend(terminal2);
+	}
+
 }
 

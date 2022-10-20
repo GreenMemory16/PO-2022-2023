@@ -103,6 +103,12 @@ abstract public class Terminal implements Serializable{
               //or if the terminal is the same as the one calling the function
                 friends.put(terminal.getId(), terminal);
         }
+        public void RemoveFriend(Terminal terminal) {
+                //should make an exception for this later on
+                //in case tjhe terminal is already a friend
+                //or if the terminal is the same as the one calling the function
+                  friends.remove(terminal.getId(), terminal);
+          }
         
         //useful to check if the terminal is already a friend
         public boolean IsFriend(String Id){

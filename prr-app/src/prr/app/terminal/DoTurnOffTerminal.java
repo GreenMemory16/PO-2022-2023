@@ -12,10 +12,13 @@ class DoTurnOffTerminal extends TerminalCommand {
 
 	DoTurnOffTerminal(Network context, Terminal terminal) {
 		super(Label.POWER_OFF, context, terminal);
+		//addstringField(Prompt.terminalKey());
 	}
 
 	@Override
 	protected final void execute() throws CommandException {
+
+		//_network.Message.alreadyOff();
                 //FIXME implement command
 	}
 }
