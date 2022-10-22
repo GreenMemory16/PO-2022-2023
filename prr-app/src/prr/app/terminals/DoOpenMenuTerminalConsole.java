@@ -12,7 +12,7 @@ import pt.tecnico.uilib.menus.CommandException;
 /**
  * Open a specific terminal's menu.
  */
-class DoOpenMenuTerminalConsole extends Command<Network> {
+class DoOpenMenuTerminalConsole extends $<Network> {
 
 
 	DoOpenMenuTerminalConsole(Network receiver) {
