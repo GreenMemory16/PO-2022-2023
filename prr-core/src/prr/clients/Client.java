@@ -31,10 +31,15 @@ public class Client implements Serializable {
         _level = new NormalLevel(this);
     }
 
-    //gettters
+    //getters
     public String getKey() { return _key; }
     public String getName() { return _name; }
     public int getTaxId() { return _taxId; }
+
+    //setters
+    public void setActiveNotifications(Boolean value) {
+        _activeNotifications = value;
+    }
 
     //compares two clients
     public static final Comparator<Client> KEY_COMPARATOR = new Comparator<>() {

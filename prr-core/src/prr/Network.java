@@ -70,7 +70,6 @@ public class Network implements Serializable {
 	}
 
 	
-
 	public Client registerClient(String key, String name, int taxId) throws DuplicateClientKeyExceptionCore {
 		if (_clients.containsKey(key)) {
 			throw new DuplicateClientKeyExceptionCore(key);
@@ -93,6 +92,12 @@ public class Network implements Serializable {
 	public Collection<Client> getAllClients() {
 		return Collections.unmodifiableCollection(_clients.values());
 	}
+
+	public void changeNotifications(String key, Boolean value) throws UnknownClientKeyExceptionCore{
+		getClient(key).setActiveNotifications(value);
+	}
+
+
 /** ********************Terminal related methods*************************** */
 
 //auxiliary function

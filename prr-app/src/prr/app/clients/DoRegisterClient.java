@@ -31,6 +31,7 @@ class DoRegisterClient extends Command<Network> {
 		} catch (DuplicateClientKeyExceptionCore e) {
 			throw new DuplicateClientKeyException(e.getKey());
 		}
+		
 	}
 
 }
