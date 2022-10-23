@@ -3,6 +3,8 @@ package prr.app.terminal;
 import prr.Network;
 import prr.terminals.Terminal;
 import pt.tecnico.uilib.menus.CommandException;
+import prr.exceptions.AlreadySilentExceptionCore;
+import prr.exceptions.AlreadyInStateException;
 //FIXME add more imports if needed
 
 /**
@@ -16,6 +18,11 @@ class DoSilenceTerminal extends TerminalCommand {
 
 	@Override
 	protected final void execute() throws CommandException {
-        _receiver.switchToSilence();
+		try {
+        	_receiver.switchToSilence();
+		} catch (AlreadyInStateException e) {
+			System.out.println("HELLO");
+			_display.popup(Message.alreadySilent());
+		}
 	}
 }

@@ -1,6 +1,7 @@
 package prr.terminals;
 
 import java.io.Serializable;
+import prr.exceptions.AlreadyInStateException;
 
 public class Idle extends State implements Serializable{
 
@@ -15,7 +16,9 @@ public class Idle extends State implements Serializable{
         getTerminal().setState(new Silence(getTerminal()));
     }
 
-    public void turnOn() {}
+    public void turnOn() throws AlreadyInStateException{
+        throw new AlreadyInStateException();
+    }
 
     public void turnOff() {
         setPreviousIdle(true);

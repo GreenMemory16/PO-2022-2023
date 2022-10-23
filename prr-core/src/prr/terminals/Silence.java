@@ -1,6 +1,8 @@
 package prr.terminals;
 
 import java.io.Serializable;
+import prr.exceptions.AlreadySilentExceptionCore;
+import prr.exceptions.AlreadyInStateException;
 
 //class Silence
 public class Silence extends State implements Serializable{
@@ -11,7 +13,9 @@ public class Silence extends State implements Serializable{
     }
 
     //changing state rules
-    public void goToSilence() {}
+    public void goToSilence() throws AlreadyInStateException{
+        throw new AlreadyInStateException();
+    }
 
     public void turnOn() {
         getTerminal().setState(new Idle(getTerminal()));

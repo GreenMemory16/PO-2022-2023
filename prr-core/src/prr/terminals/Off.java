@@ -1,6 +1,7 @@
 package prr.terminals;
 
 import java.io.Serializable;
+import prr.exceptions.AlreadyInStateException;
 
 public class Off extends State implements Serializable{
     
@@ -21,7 +22,9 @@ public class Off extends State implements Serializable{
         goToSilence();
     }
 
-    public void turnOff() {}
+    public void turnOff() throws AlreadyInStateException {
+        throw new AlreadyInStateException();
+    }
 
     public void endOfComm() {}
 

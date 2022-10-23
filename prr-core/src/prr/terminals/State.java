@@ -1,6 +1,8 @@
 package prr.terminals;
 
 import java.io.Serializable;
+import prr.exceptions.AlreadySilentExceptionCore;
+import prr.exceptions.AlreadyInStateException;
 
 //abstract class fthat implements methods for all states
 public abstract class State implements Serializable{
@@ -23,9 +25,9 @@ public abstract class State implements Serializable{
         _previousIdle = value;
     }
 
-    public abstract void goToSilence();
-    public abstract void turnOn();
-    public abstract void turnOff();
+    public abstract void goToSilence() throws AlreadyInStateException;
+    public abstract void turnOn() throws AlreadyInStateException;
+    public abstract void turnOff() throws AlreadyInStateException;
     public abstract void endOfComm();
     public abstract void startOfComm();
     

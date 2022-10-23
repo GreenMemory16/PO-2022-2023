@@ -3,6 +3,7 @@ package prr.app.terminal;
 import prr.Network;
 import prr.terminals.Terminal;
 import pt.tecnico.uilib.menus.CommandException;
+import prr.exceptions.AlreadyInStateException;
 //FIXME add more imports if needed
 //to be implemented later on
 
@@ -18,8 +19,11 @@ class DoTurnOffTerminal extends TerminalCommand {
 
 	@Override
 	protected final void execute() throws CommandException {
-
-		_receiver.turnOff();
+		try {
+			_receiver.turnOff();
+		} catch (AlreadyInStateException e) {
+			_display.popup(Message.alreadyOff());
+		}
 
 		//_network.SwitchState("OFF", _receiver);
 

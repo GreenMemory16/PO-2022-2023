@@ -7,7 +7,8 @@ import java.util.Map;
 import java.util.Set;
 import java.util.TreeMap;
 
-
+import prr.exceptions.AlreadySilentExceptionCore;
+import prr.exceptions.AlreadyInStateException;
 import prr.communication.Communication;
 
 /**
@@ -207,10 +208,9 @@ public abstract class Terminal implements Serializable{
                 this.state = newState;
         }
 
-        public void turnOn() { state.turnOn(); }
-        public void turnOff() { state.turnOff(); }
-        public void switchToIdle() { state.goToIdle(); }
-        public void switchToSilence() {state.goToSilence(); }
+        public void turnOn() throws AlreadyInStateException{ state.turnOn(); }
+        public void turnOff() throws AlreadyInStateException { state.turnOff(); }
+        public void switchToSilence() throws AlreadyInStateException {state.goToSilence(); }
         public void endOfComm() {state.endOfComm(); }
         public void startOfComm() {state.startOfComm(); } 
 

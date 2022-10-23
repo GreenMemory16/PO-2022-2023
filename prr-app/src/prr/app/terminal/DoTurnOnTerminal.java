@@ -3,6 +3,7 @@ package prr.app.terminal;
 import prr.Network;
 import prr.terminals.Terminal;
 import pt.tecnico.uilib.menus.CommandException;
+import prr.exceptions.AlreadyInStateException;
 //FIXME add more imports if needed
 
 /**
@@ -17,6 +18,10 @@ class DoTurnOnTerminal extends TerminalCommand {
 
 	@Override
 	protected final void execute() throws CommandException {
-        _receiver.turnOn();
+		try {
+        	_receiver.turnOn();
+		} catch (AlreadyInStateException e) {
+			_display.popup(Message.alreadyOff());
+		}
 	}
 }
