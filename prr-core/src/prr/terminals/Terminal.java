@@ -13,11 +13,11 @@ import prr.communication.Communication;
 /**
  * Abstract terminal.
  */
-abstract public class Terminal implements Serializable{ 
+public abstract class Terminal implements Serializable{ 
 
 
 	/** Serial number for serialization. */
-	private static final long serialVersionUID = 202208091753L;
+        private static final long serialVersionUID = 202208091753L;
 
         //define attributes
         private String id;
@@ -40,7 +40,7 @@ abstract public class Terminal implements Serializable{
 
         //define contructor(s)
         public Terminal(String id, String clientKey){
-                this.state = new Idle();
+                this.state = new Idle(this);
                 this.id = id;
                 this.clientKey = clientKey;
 
@@ -121,6 +121,7 @@ abstract public class Terminal implements Serializable{
         // the new state or not;
         //that said, depending on the value of the state function, this 
         //methods will switch to the new state or not
+        /*
         public boolean switchToIdleState(){
                 if(state.switchToIdle()){
                         this.state = new Idle();
@@ -146,6 +147,7 @@ abstract public class Terminal implements Serializable{
                 }
                 return state.switchToBusy();
         }
+        */
 
 
         //to enumerate all friends that terminal has
@@ -194,12 +196,23 @@ abstract public class Terminal implements Serializable{
 
 
         public boolean canStartCommunication() {
-                return state.startCommunication();
+                return true;
         }
 
         public boolean canReceiveCommunication(){
-                return state.receiveCommunication();
+                return true;
         }
+
+        public void setState(State newState) {
+                this.state = newState;
+        }
+
+        public void turnOn() { state.turnOn(); }
+        public void turnOff() { state.turnOff(); }
+        public void switchToIdle() { state.goToIdle(); }
+        public void switchToSilence() {state.goToSilence(); }
+        public void endOfComm() {state.endOfComm(); }
+        public void startOfComm() {state.startOfComm(); } 
 
         
 }

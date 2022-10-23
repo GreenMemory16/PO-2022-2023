@@ -3,41 +3,30 @@ package prr.terminals;
 import java.io.Serializable;
 
 public class Busy extends State implements Serializable{
-    //boolean methods that depend on the state in which is used
 
-
-    @Override 
-    public boolean startCommunication(){
-        return false;
-    }
-
-    @Override
-    public boolean receiveCommunication(){
-        //can only recieve text communications
-        return true;
+    public Busy(Terminal terminal) {
+        super(terminal);
     }
 
      //changing state rules
-    @Override
-    public boolean switchToIdle() {
-        return true;
+
+    public void goToSilence() {
+        getTerminal().setState(new Silence(getTerminal()));
     }
 
-    @Override
-    public boolean switchToOff() {
-        return false;
-    }
+    public void turnOn() {}
 
-    @Override
-    public boolean switchToSilence() {
-        return true;
-    }
+    public void turnOff() {}
 
+    public void startOfComm() {}
+
+    public void endOfComm() {
+        if (getPreviousIdle()) {
+            getTerminal().setState(new Idle(getTerminal()));
+        }
+        goToSilence();
+    }
     
-    @Override
-    public boolean switchToBusy() {
-        return false;
-    }
 
     @Override
     public String toString(){

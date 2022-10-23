@@ -19,6 +19,8 @@ class DoTurnOffTerminal extends TerminalCommand {
 	@Override
 	protected final void execute() throws CommandException {
 
+		_receiver.turnOff();
+
 		//_network.SwitchState("OFF", _receiver);
 
 		//_network.Message.alreadyOff();

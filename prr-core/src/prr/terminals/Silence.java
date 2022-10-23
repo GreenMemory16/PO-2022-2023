@@ -5,42 +5,30 @@ import java.io.Serializable;
 //class Silence
 public class Silence extends State implements Serializable{
 
-    //every method depends on the state
-    @Override 
-    public boolean startCommunication(){
-        return true;
+    public Silence(Terminal terminal) {
+        super(terminal);
+        setPreviousIdle(false);
     }
-
-    @Override
-    public boolean receiveCommunication(){
-        //only text communications tho
-        //to be implemented later on
-        return true;
-    }
-
-   
 
     //changing state rules
-    @Override
-    public boolean switchToIdle() {
-        return true;
+    public void goToSilence() {}
+
+    public void turnOn() {
+        getTerminal().setState(new Idle(getTerminal()));
     }
 
-    @Override
-    public boolean switchToOff() {
-        return true;
+    public void turnOff() {
+        setPreviousIdle(false);
+        getTerminal().setState(new Off(getTerminal()));
     }
 
-    @Override
-    public boolean switchToSilence() {
-        return false;
+    public void startOfComm() {
+        setPreviousIdle(false);
+        getTerminal().setState(new Busy(getTerminal()));
     }
 
-    
-    @Override
-    public boolean switchToBusy() {
-        return true;
-    }
+    public void endOfComm() {}
+
 
     @Override
     public String toString(){

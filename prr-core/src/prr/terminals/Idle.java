@@ -4,39 +4,29 @@ import java.io.Serializable;
 
 public class Idle extends State implements Serializable{
 
-    //boolean methods that depend on the state in which is used
-
-    @Override 
-    public boolean startCommunication(){
-        return true;
-    }
-
-    @Override
-    public boolean receiveCommunication(){
-        return true;
+    public Idle(Terminal terminal) {
+        super(terminal);
+        setPreviousIdle(true);
     }
 
      //changing state rules
-    @Override
-    public boolean switchToIdle() {
-        return false;
+
+    public void goToSilence() {
+        getTerminal().setState(new Silence(getTerminal()));
     }
 
-    @Override
-    public boolean switchToOff() {
-        return true;
+    public void turnOn() {}
+
+    public void turnOff() {
+        setPreviousIdle(true);
+        getTerminal().setState(new Off(getTerminal()));
     }
 
-    //can
-    @Override
-    public boolean switchToSilence() {
-        return true;
-    }
+    public void endOfComm() {}
 
-    
-    @Override
-    public boolean switchToBusy() {
-        return true;
+    public void startOfComm() {
+        setPreviousIdle(true);
+        getTerminal().setState(new Busy(getTerminal()));
     }
 
     @Override

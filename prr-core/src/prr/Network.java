@@ -23,6 +23,10 @@ import prr.exceptions.UnrecognizedEntryException;
 import prr.terminals.Basic;
 import prr.terminals.Fancy;
 import prr.terminals.Terminal;
+import prr.terminals.Silence;
+import prr.terminals.Off;
+import prr.terminals.Idle;
+import prr.terminals.Busy;
 
 
 /**
@@ -36,6 +40,8 @@ public class Network implements Serializable {
 	private Map<String, Client> _clients = new TreeMap<>();
 
 	private Map<String, Terminal> _terminals = new TreeMap<String, Terminal>();
+
+	private int _communicationNumber = 1;
 
 	/**
 	 * Read text input file and create corresponding domain entities.
@@ -100,42 +106,34 @@ public class Network implements Serializable {
 
 /** ********************Terminal related methods*************************** */
 
-//auxiliary function
-public static boolean isNumeric(String str) { 
-	try {  
-		  Double.parseDouble(str);  
-		  return true;
-	} catch(NumberFormatException e){  
-	  return false;  
-	}  
-  }
+	//auxiliary function
+	public static boolean isNumeric(String str) { 
+		try {  
+			Double.parseDouble(str);  
+			return true;
+		} catch(NumberFormatException e){  
+		return false;  
+		}  
+	}
 
 
-public boolean SwitchState(String state, Terminal terminal) {
-	if(state.equals("ON")){
-		return terminal.switchToIdleState();
-	}
-	else if (state.equals("OFF")){
-		return terminal.switchToOffState();
-	}
-	else if (state.equals("BUSY")){
-		return terminal.switchToBusyState();
-	}
-	else if (state.equals("IDLE")){
-		return terminal.switchToIdleState();
-	}
-	else{
-		return false;
-	}
-}
-	
+	public void SwitchState(String state, Terminal terminal) {
+		if(state.equals("ON")) {
+			terminal.setState(new Idle(terminal));
+		}
+		else if(state.equals("OFF")) {
+			terminal.setState(new Off(terminal));
+		}
+		else if(state.equals("SILENCE")) {
+			terminal.setState(new Silence(terminal));
+		}
+	}	
 
-
-//registerTerminal
-public Terminal registerTerminal(String id, String clientKey, String type, String state) 
-			throws UnknownClientKeyExceptionCore, TerminalTypeNotSupportedException, 
-			InvalidTerminalKeyExceptionCore, DuplicateTerminalKeyExceptionCore, 
-			UnknownTerminalKeyExceptionCore {
+	//registerTerminal
+	public Terminal registerTerminal(String id, String clientKey, String type, String state) 
+				throws UnknownClientKeyExceptionCore, TerminalTypeNotSupportedException, 
+				InvalidTerminalKeyExceptionCore, DuplicateTerminalKeyExceptionCore, 
+				UnknownTerminalKeyExceptionCore {
 
 		if (id.length() != 6 || !(isNumeric(id))) {
 			throw new InvalidTerminalKeyExceptionCore(id);
@@ -159,16 +157,28 @@ public Terminal registerTerminal(String id, String clientKey, String type, Strin
 			throw new TerminalTypeNotSupportedException();
 		}
 
+		if(state.equals("ON")) {
+			terminal.setState(new Idle(terminal));
+		}
+		else if(state.equals("OFF")) {
+			terminal.setState(new Off(terminal));
+		}
+		else if(state.equals("SILENCE")) {
+			terminal.setState(new Silence(terminal));
+		}
+
+
 		SwitchState(state, terminal);
 
 		// Registers the terminal in the client _terminals list
 		getClient(clientKey).insertTerminal(terminal);
-	
+		
 		//register the terminal in the network list
 		_terminals.put(id, terminal);
 
 		return terminal;
 	}
+
 	//terminal getter
 	public Terminal getTerminal(String id) throws UnknownTerminalKeyExceptionCore {
 		Terminal terminal = _terminals.get(id);
@@ -195,13 +205,16 @@ public Terminal registerTerminal(String id, String clientKey, String type, Strin
 	}
 
 	//makeFRiends calls the add friend from the terminal
-	public void makeFriends(Terminal t1, Terminal t2) {
-		t1.AddFriend(t2);
+	public void makeFriends(Terminal terminal1, Terminal terminal2) {
+		terminal1.AddFriend(terminal2);
 	}
 
 	public void deMakeFriends( Terminal terminal1, Terminal terminal2){
 		terminal1.RemoveFriend(terminal2);
 	}
+
+/* *************************Communication Methods**************************** */
+	
 
 }
 
