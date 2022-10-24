@@ -1,13 +1,15 @@
 package prr.terminals;
 
 import java.io.Serializable;
+import prr.exceptions.InvalidTerminalKeyExceptionCore;
+
 
 public class Fancy extends Terminal implements Serializable {
 
     
     //no extra atributes
     //no extra functions
-    public Fancy(String id, String clientKey){
+    public Fancy(String id, String clientKey)throws InvalidTerminalKeyExceptionCore{
         super(id, clientKey);
     }
 

@@ -1,13 +1,14 @@
 package prr.terminals;
 
 import java.io.Serializable;
+import prr.exceptions.InvalidTerminalKeyExceptionCore;
 
 public class Basic extends Terminal implements Serializable {
 
     
     //no extra atributes
     //no extra methods
-    public Basic(String id, String clientKey){
+    public Basic(String id, String clientKey)throws InvalidTerminalKeyExceptionCore{
         super(id, clientKey);
     }
      //function for friends function later on;

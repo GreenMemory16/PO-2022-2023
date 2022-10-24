@@ -137,15 +137,6 @@ public class Network implements Serializable {
 /** ********************Terminal related methods*************************** */
 
 
-	 //auxiliary function
-	public static boolean isNumeric(String str) { 
-		try {  
-			Double.parseDouble(str);  
-			return true;
-		} catch(NumberFormatException e){  
-		return false;  
-		}  
-	}
 
 	/**
 	 * Switches the terminal state.
@@ -188,24 +179,21 @@ public class Network implements Serializable {
 				InvalidTerminalKeyExceptionCore, DuplicateTerminalKeyExceptionCore 
 				 {
 
-		if (id.length() != 6 || !(isNumeric(id))) {
-			throw new InvalidTerminalKeyExceptionCore(id);
-		}
 		if (_terminals.containsKey(id)) {
 			throw new DuplicateTerminalKeyExceptionCore(id);
 		}
 		if (!(_clients.containsKey(clientKey))) {
 			throw new UnknownClientKeyExceptionCore(clientKey);
 		}
-
 		Terminal terminal;
 
 		if(type.equals("BASIC")){
 			terminal = new Basic(id, clientKey);
-		}
+		}		
 		else if(type.equals("FANCY")) {
 			terminal = new Fancy(id, clientKey);
 		}
+
 		else {
 			throw new TerminalTypeNotSupportedException();
 		}

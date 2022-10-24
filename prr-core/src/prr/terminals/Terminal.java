@@ -7,6 +7,8 @@ import java.util.Map;
 import java.util.Set;
 import java.util.TreeMap;
 
+import prr.exceptions.InvalidTerminalKeyExceptionCore;
+
 import prr.exceptions.AlreadySilentExceptionCore;
 import prr.exceptions.AlreadyInStateException;
 import prr.communication.Communication;
@@ -40,9 +42,14 @@ public abstract class Terminal implements Serializable{
         private List<Integer> debts;
 
         //define contructor(s)
-        public Terminal(String id, String clientKey){
-                this.state = new Idle(this);
+        public Terminal (String id, String clientKey)throws InvalidTerminalKeyExceptionCore{
+                if (id.length() != 6 || !(isNumeric(id))) {
+	        	throw new InvalidTerminalKeyExceptionCore(id);
+	        }     
+        
+
                 this.id = id;
+                this.state = new Idle(this);
                 this.clientKey = clientKey;
 
 
@@ -55,6 +62,16 @@ public abstract class Terminal implements Serializable{
 
                 this._communications = new TreeMap<Integer, Communication>();
         }
+
+         //auxiliary function
+	public static boolean isNumeric(String str) { 
+		try {  
+			Double.parseDouble(str);  
+			return true;
+		} catch(NumberFormatException e){  
+		return false;  
+		}
+	}
 
         //getters: not setters tho
         public String getId(){
