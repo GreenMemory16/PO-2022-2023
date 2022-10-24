@@ -33,6 +33,9 @@ public class Silence extends State implements Serializable{
 
     public void endOfComm() {}
 
+    public boolean statePermitsCommunication() {
+        return true;
+    }
 
     @Override
     public String toString(){

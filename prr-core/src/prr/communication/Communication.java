@@ -17,5 +17,7 @@ public abstract class Communication{
         _sender = sender;
         _reciever = reciever;
     }
+
+    
     
 }

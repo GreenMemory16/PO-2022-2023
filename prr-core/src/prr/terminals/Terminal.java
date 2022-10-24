@@ -55,6 +55,7 @@ public abstract class Terminal implements Serializable{
 
                 this._communications = new TreeMap<Integer, Communication>();
         }
+
         //getters: not setters tho
         public String getId(){
                 return this.id;
@@ -117,40 +118,6 @@ public abstract class Terminal implements Serializable{
                 return terminal == null;           
         }
 
-        //State functions;
-        //each state (class) has its own rules on if it can change to
-        // the new state or not;
-        //that said, depending on the value of the state function, this 
-        //methods will switch to the new state or not
-        /*
-        public boolean switchToIdleState(){
-                if(state.switchToIdle()){
-                        this.state = new Idle();
-                }
-                return state.switchToIdle();
-        }
-        public boolean switchToSilenceState(){
-                if(state.switchToSilence()){
-                        this.state = new Silence();
-                }
-                return state.switchToSilence();
-        }
-        public boolean switchToOffState(){
-                if(state.switchToOff()){
-                        this.state = new Off();
-                }
-                return state.switchToOff();
-
-        }
-        public boolean switchToBusyState(){
-                if(state.switchToBusy()){
-                        this.state = new Busy();                
-                }
-                return state.switchToBusy();
-        }
-        */
-
-
         //to enumerate all friends that terminal has
         private String toStringFriends(){
                 Set<Map.Entry<String, Terminal>> entrySet = friends.entrySet();
@@ -208,11 +175,17 @@ public abstract class Terminal implements Serializable{
                 this.state = newState;
         }
 
+
         public void turnOn() throws AlreadyInStateException{ state.turnOn(); }
         public void turnOff() throws AlreadyInStateException { state.turnOff(); }
         public void switchToSilence() throws AlreadyInStateException {state.goToSilence(); }
         public void endOfComm() {state.endOfComm(); }
         public void startOfComm() {state.startOfComm(); } 
 
+        public boolean canDoTextCommunication() {
+                return getState().statePermitsCommunication();
+        }
+
+        public abstract boolean canDoInteractiveCommunication();
         
 }

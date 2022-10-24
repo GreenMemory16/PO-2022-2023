@@ -30,5 +30,7 @@ public abstract class State implements Serializable{
     public abstract void turnOff() throws AlreadyInStateException;
     public abstract void endOfComm();
     public abstract void startOfComm();
+
+    public abstract boolean statePermitsCommunication();
     
 }

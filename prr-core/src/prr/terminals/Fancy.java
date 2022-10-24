@@ -23,4 +23,8 @@ public class Fancy extends Terminal implements Serializable {
         return "FANCY";
     }
 
+    public boolean canDoInteractiveCommunication() {
+        return getState().statePermitsCommunication();
+    }
+
 }

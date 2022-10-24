@@ -27,6 +27,9 @@ public class Busy extends State implements Serializable{
         goToSilence();
     }
     
+    public boolean statePermitsCommunication() {
+        return false;
+    }
 
     @Override
     public String toString(){

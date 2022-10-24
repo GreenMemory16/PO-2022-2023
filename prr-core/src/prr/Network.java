@@ -43,6 +43,8 @@ public class Network implements Serializable {
 
 	private int _communicationNumber = 1;
 
+	private boolean hasChanged = false;
+
 	/**
 	 * Read text input file and create corresponding domain entities.
 	 * 
@@ -73,6 +75,14 @@ public class Network implements Serializable {
 		} catch (IOException e) {
 			throw new ImportFileException(filename);
 		}
+	}
+
+	public boolean hasChanged() {
+		return hasChanged;
+	}
+
+	public void setHasChanged(boolean value) {
+		hasChanged = value;
 	}
 
 	

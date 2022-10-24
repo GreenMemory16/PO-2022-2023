@@ -32,6 +32,10 @@ public class Idle extends State implements Serializable{
         getTerminal().setState(new Busy(getTerminal()));
     }
 
+    public boolean statePermitsCommunication() {
+        return true;
+    }
+
     @Override
     public String toString(){
         return "IDLE";

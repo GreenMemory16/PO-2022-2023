@@ -21,4 +21,8 @@ public class Basic extends Terminal implements Serializable {
     public String toStringType(){
         return"BASIC";
     }
+
+    public boolean canDoInteractiveCommunication() {
+        return false;
+    }
 }

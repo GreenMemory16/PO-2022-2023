@@ -30,6 +30,10 @@ public class Off extends State implements Serializable{
 
     public void startOfComm() {}
 
+    public boolean statePermitsCommunication() {
+        return false;
+    }
+
     @Override
     public String toString(){
         return "OFF";

@@ -35,6 +35,8 @@ public class NetworkManager {
 		return _network;
 	}
 
+	private String _filename = "";
+
 	/**
 	 * @param filename name of the file containing the serialized application's state
          *        to load.
@@ -42,6 +44,7 @@ public class NetworkManager {
          *         an error while processing this file.
 	 */
 	public void load(String filename) throws UnavailableFileException, IOException, ClassNotFoundException {
+		_filename = filename;
 		try (ObjectInputStream in = new ObjectInputStream(new BufferedInputStream(new FileInputStream(filename)))){
 			System.out.println("Loaded from file " + filename);
 			_network = (Network) in.readObject();
@@ -57,12 +60,15 @@ public class NetworkManager {
 	 * @throws MissingFileAssociationException if the current network does not have a file.
 	 * @throws IOException if there is some error while serializing the state of the network to disk.
 	 */
-	public void save(String filename) throws FileNotFoundException, MissingFileAssociationException, IOException {
-		try (ObjectOutputStream out = new ObjectOutputStream(new BufferedOutputStream(new FileOutputStream(filename)))) {
+	public void save() throws FileNotFoundException, MissingFileAssociationException, IOException {
+		if(_filename == null || _filename.equals("")) {
+			throw new MissingFileAssociationException();
+		}
+		try (ObjectOutputStream out = new ObjectOutputStream(new BufferedOutputStream(new FileOutputStream(_filename)))) {
 			out.writeObject(_network);
 		} catch (IOException e) {
 			e.printStackTrace();
-		}
+		}	
 	}
 
 	/**
@@ -75,7 +81,8 @@ public class NetworkManager {
 	 * @throws IOException if there is some error while serializing the state of the network to disk.
 	 */
 	public void saveAs(String filename) throws FileNotFoundException, MissingFileAssociationException, IOException {
-		save(filename);
+		_filename = filename;
+		save();
 	}
 
 	/**
