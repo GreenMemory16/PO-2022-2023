@@ -76,15 +76,6 @@ public class Network implements Serializable {
 			throw new ImportFileException(filename);
 		}
 	}
-
-	public boolean hasChanged() {
-		return hasChanged;
-	}
-
-	public void setHasChanged(boolean value) {
-		hasChanged = value;
-	}
-
 	
 	public Client registerClient(String key, String name, int taxId) throws DuplicateClientKeyExceptionCore {
 		if (_clients.containsKey(key)) {
