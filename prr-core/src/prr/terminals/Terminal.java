@@ -70,7 +70,7 @@ public abstract class Terminal implements Serializable{
         }
 
         //returns true if terminal is unused
-        public boolean NoCommunications(){
+        public boolean noCommunications(){
                 return(this._communications.size() == 0);
         }
         /* state related function */
@@ -99,13 +99,13 @@ public abstract class Terminal implements Serializable{
 
         //functions related to Friends settings
 
-        public void AddFriend(Terminal terminal) {
+        public void addFriend(Terminal terminal) {
               //should make an exception for this later on
               //in case tjhe terminal is already a friend
               //or if the terminal is the same as the one calling the function
                 friends.put(terminal.getId(), terminal);
         }
-        public void RemoveFriend(Terminal terminal) {
+        public void removeFriend(Terminal terminal) {
                 //should make an exception for this later on
                 //in case tjhe terminal is already a friend
                 //or if the terminal is the same as the one calling the function
@@ -113,7 +113,7 @@ public abstract class Terminal implements Serializable{
           }
         
         //useful to check if the terminal is already a friend
-        public boolean IsFriend(String Id){
+        public boolean isFriend(String Id){
                 Terminal terminal = friends.get(Id);
                 return terminal == null;           
         }
