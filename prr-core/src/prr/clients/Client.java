@@ -41,14 +41,6 @@ public class Client implements Serializable {
         _activeNotifications = value;
     }
 
-    //compares two clients
-    public static final Comparator<Client> KEY_COMPARATOR = new Comparator<>() {
-        @Override
-        public int compare(Client c1, Client c2) {
-          return c1.getKey().compareToIgnoreCase(c2.getKey());
-        }    
-    };
-
     //add a terminal to the client's terminals
     public void insertTerminal(Terminal t) {
         _terminals.put(t.getId(), t);
@@ -60,6 +52,10 @@ public class Client implements Serializable {
             return "YES";
         }
         return "NO";
+    }
+
+    public String getClientLevel() {
+        return _level.getLevel();
     }
 
     //client's toString

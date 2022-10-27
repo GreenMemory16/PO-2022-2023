@@ -7,6 +7,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.TreeMap;
 
+import prr.clients.Client;
 import prr.exceptions.AlreadySilentExceptionCore;
 import prr.exceptions.AlreadyInStateException;
 import prr.communication.Communication;
@@ -25,7 +26,7 @@ public abstract class Terminal implements Serializable{
 
         private State state;
 
-        private String clientKey;
+        private Client client;
 
         //map with all communications made by this terminal
         private Map<Integer, Communication> _communications;
@@ -40,10 +41,10 @@ public abstract class Terminal implements Serializable{
         private List<Integer> debts;
 
         //define contructor(s)
-        public Terminal(String id, String clientKey){
+        public Terminal(String id, Client client){
                 this.state = new Idle(this);
                 this.id = id;
-                this.clientKey = clientKey;
+                this.client = client;
 
 
                 this.friends = new TreeMap<String,Terminal>();
@@ -78,8 +79,8 @@ public abstract class Terminal implements Serializable{
                 return this.state;
         }
 
-        public String getClientKey(){
-                return clientKey;
+        public Client getClient(){
+                return client;
         }
 
         public int getAllPayments(){
@@ -134,7 +135,7 @@ public abstract class Terminal implements Serializable{
         //to String method
         @Override
         public String toString(){
-                return this.toStringType() + "|" + this.getId() + "|" + this.getClientKey() + "|" 
+                return this.toStringType() + "|" + this.getId() + "|" + this.getClient().getKey() + "|" 
                 +  this.getState() + 
                 "|" + getAllPayments() + "|" + getAllDebts() + toStringFriends();
     }

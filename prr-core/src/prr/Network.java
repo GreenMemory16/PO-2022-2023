@@ -65,7 +65,7 @@ public class Network implements Serializable {
 				switch(fields[0]) {
 					case "CLIENT" -> registerClient(fields[1], fields[2], Integer.parseInt(fields[3])); 
 					case "BASIC", "FANCY" -> registerTerminal(fields[1], fields[2], fields[0], fields[3]);
-					case "FRIENDS" -> makeFriends(_terminals.get(fields[1]), _terminals.get(fields[2]));
+					case "FRIENDS" -> importFriends(fields);
 					default -> throw new UnrecognizedEntryException(fields[0]);
 				}
 			} 
@@ -75,6 +75,19 @@ public class Network implements Serializable {
 		} catch (IOException e) {
 			throw new ImportFileException(filename);
 		}
+	}
+
+	public void importFriends(String[] fields) {
+		try {
+			Terminal terminal = getTerminal(fields[1]);
+			for(int i=2; i < fields.length; i++) {
+				Terminal friend = getTerminal(fields[i]);
+				makeFriends(terminal, friend);
+			}
+		} catch (UnknownTerminalKeyExceptionCore e) {
+			e.printStackTrace();
+		}
+			
 	}
 	
 	public Client registerClient(String key, String name, int taxId) throws DuplicateClientKeyExceptionCore {
@@ -149,10 +162,10 @@ public class Network implements Serializable {
 		Terminal terminal;
 
 		if(type.equals("BASIC")){
-			terminal = new Basic(id, clientKey);
+			terminal = new Basic(id, getClient(clientKey));
 		}
 		else if(type.equals("FANCY")) {
-			terminal = new Fancy(id, clientKey);
+			terminal = new Fancy(id, getClient(clientKey));
 		}
 		else {
 			throw new TerminalTypeNotSupportedException();
