@@ -42,8 +42,6 @@ public abstract class Terminal implements Serializable{
 
         private Communication _onGoingComm;
 
-        private int _commNumber = 1;
-
         //amigos; usar um map: TReeMap in this case
         //a key será o id do terminal
         private Map<String,Terminal> friends ;
@@ -170,7 +168,7 @@ public abstract class Terminal implements Serializable{
 
         public boolean canEndCurrentCommunication() {
                 // IDK HOW TO CHECK IF IT WAS THE ORIGINATOR OF THE COMM
-                if (this.getState().toString() == "BUSY") {
+                if (this.getState().toString().equals("BUSY")) {
                         return true;
                 }
                 return false;
@@ -185,11 +183,6 @@ public abstract class Terminal implements Serializable{
         public boolean canStartCommunication() {
                 // DONT DELETE, IT CAME WITH THE CODE!
                 return this.senderAvailableForCommunication();
-        }
-
-        // THIS IS USELESS I THINK?
-        public boolean canReceiveCommunication(){
-                return true;
         }
 
         public void setState(State newState) {
@@ -232,19 +225,23 @@ public abstract class Terminal implements Serializable{
                 }
         }
 
-        public void makeInteractiveCommunication(Terminal receiver, String type) {
+        public void makeInteractiveCommunication(Network network, String id, String type) throws UnknownTerminalKeyExceptionCore{
+                Terminal receiver = network.getTerminal(id);
+
                 if (senderAvailableForCommunication()) {
                         Communication comm;
-                        if(type == "VOICE") {
-                                comm = new VoiceCommunication(_commNumber, this, receiver);
-                                _commNumber++;
+                        if(type.equals("VOICE")) {
+                                comm = new VoiceCommunication(network.getCommunicationId(), this, receiver);
+                                comm.setStatus(true);
+                                startOfComm();
                                 _onGoingComm = comm;
                                 insertCommunication(comm);
                         }
-                        else if (type == "VIDEO") {
+                        else if (type.equals("VIDEO")) {
                                 if (canSupportVideoCommunication()) {
-                                        comm = new VideoCommunication(_commNumber, this, receiver);
-                                        _commNumber++;
+                                        comm = new VideoCommunication(network.getCommunicationId(), this, receiver);
+                                        comm.setStatus(true);
+                                        startOfComm();
                                         _onGoingComm = comm;
                                         insertCommunication(comm);
                                 }

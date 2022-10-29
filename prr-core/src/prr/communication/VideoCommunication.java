@@ -45,4 +45,8 @@ public class VideoCommunication extends Communication {
         return value;
     }
 
+    public String toString() {
+        return getType() + "|" + getId() + "|" + getSender().getId() + "|" + getReceiver().getId() + "|" + getDuration() + "|" + 0 + "|" + getStatusToString();
+    }
+
 }
