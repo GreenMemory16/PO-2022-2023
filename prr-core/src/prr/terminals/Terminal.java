@@ -12,6 +12,13 @@ import java.util.TreeMap;
 import prr.clients.Client;
 import prr.Network;
 import prr.exceptions.AlreadySilentExceptionCore;
+import prr.exceptions.DestinationIsBusyException;
+import prr.exceptions.DestinationIsOffException;
+import prr.exceptions.DestinationIsSilentException;
+import prr.exceptions.NoOnGoingCommunicationException;
+import prr.exceptions.UnsupportedAtDestinationException;
+import prr.exceptions.UnsupportedAtOriginException;
+import prr.exceptions.NoOnGoingCommunicationException;
 import prr.exceptions.SenderEqualsReceiverException;
 import prr.exceptions.UnknownTerminalKeyExceptionCore;
 import prr.exceptions.AlreadyInStateException;
@@ -214,8 +221,20 @@ public abstract class Terminal implements Serializable{
                 return Collections.unmodifiableCollection(_communications.values());
         }
 
-        public void makeTextCommunication(Network network, String id, String message) throws  UnknownTerminalKeyExceptionCore{
+        public String getOnGoingCommunication() throws NoOnGoingCommunicationException { 
+                if (_onGoingComm == null) {
+                        throw new NoOnGoingCommunicationException();
+                }
+                return _onGoingComm.toString();
+        }
+
+        public void makeTextCommunication(Network network, String id, String message) throws  UnknownTerminalKeyExceptionCore, 
+                                                DestinationIsOffException {
                 Terminal receiver = network.getTerminal(id);
+
+                if (receiver.getState().toString().equals("OFF")) {
+                        throw new DestinationIsOffException(id);
+                }
 
                 if (senderAvailableForCommunication() && receiverAvailableForCommunication(receiver)) {
                         int commId = network.getCommunicationId();
@@ -225,28 +244,48 @@ public abstract class Terminal implements Serializable{
                 }
         }
 
-        public void makeInteractiveCommunication(Network network, String id, String type) throws UnknownTerminalKeyExceptionCore{
+        public void makeInteractiveCommunication(Network network, String id, String type) throws UnknownTerminalKeyExceptionCore,
+                                                 DestinationIsOffException, DestinationIsBusyException, DestinationIsSilentException,
+                                                 UnsupportedAtDestinationException, UnsupportedAtOriginException {
                 Terminal receiver = network.getTerminal(id);
+
+                if (receiver.getState().toString().equals("OFF")) {
+                        throw new DestinationIsOffException(id);
+                }
+                if (receiver.getState().toString().equals("BUSY")) {
+                        throw new DestinationIsBusyException(id);
+                }
+                if (receiver.getState().toString().equals("SILENT")) {
+                        throw new DestinationIsSilentException(id);
+                }
 
                 if (senderAvailableForCommunication()) {
                         Communication comm;
                         if(type.equals("VOICE")) {
                                 comm = new VoiceCommunication(network.getCommunicationId(), this, receiver);
                                 comm.setStatus(true);
-                                startOfComm();
+                                this.startOfComm();
+                                receiver.startOfComm();
                                 _onGoingComm = comm;
                                 insertCommunication(comm);
                         }
                         else if (type.equals("VIDEO")) {
-                                if (canSupportVideoCommunication()) {
-                                        comm = new VideoCommunication(network.getCommunicationId(), this, receiver);
-                                        comm.setStatus(true);
-                                        startOfComm();
-                                        _onGoingComm = comm;
-                                        insertCommunication(comm);
+
+                                if (!receiver.canSupportVideoCommunication()) {
+                                        throw new UnsupportedAtDestinationException(id, "VIDEO");
                                 }
+                                if (!this.canSupportVideoCommunication()) {
+                                        throw new UnsupportedAtOriginException(getId(), "VIDEO");
+                                }
+
+                                comm = new VideoCommunication(network.getCommunicationId(), this, receiver);
+                                comm.setStatus(true);
+                                this.startOfComm();
+                                receiver.startOfComm();
+                                _onGoingComm = comm;
+                                insertCommunication(comm);
+                                
                         }
-                        
                 }
         }
         

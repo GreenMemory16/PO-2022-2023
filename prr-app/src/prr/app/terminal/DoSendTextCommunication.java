@@ -4,6 +4,7 @@ import prr.Network;
 import prr.terminals.Terminal;
 import prr.app.exceptions.InvalidTerminalKeyException;
 import prr.app.exceptions.UnknownTerminalKeyException;
+import prr.exceptions.DestinationIsOffException;
 import prr.exceptions.SenderEqualsReceiverException;
 import prr.exceptions.UnknownTerminalKeyExceptionCore;
 import pt.tecnico.uilib.forms.Form;
@@ -29,6 +30,8 @@ class DoSendTextCommunication extends TerminalCommand {
                         _receiver.makeTextCommunication(_network, id, text);
                 } catch (UnknownTerminalKeyExceptionCore e) {
                         throw new UnknownTerminalKeyException(e.getId());
-                } 
+                } catch (DestinationIsOffException e) {
+                        _display.popup(Message.destinationIsOff(e.getId()));
+                }
         }
 } 
