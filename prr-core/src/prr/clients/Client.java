@@ -72,4 +72,13 @@ public class Client implements Serializable {
                 _terminals.size() + "|" + "0" + "|" + "0";
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (o instanceof Client) {
+            Client client = (Client) o;
+            return getKey().equals(client.getKey()) && getName().equals(client.getName()) && getTaxId() == client.getTaxId();
+        }
+        return false;
+    }
+
 }
