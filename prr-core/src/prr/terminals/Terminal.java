@@ -10,7 +10,10 @@ import java.util.Set;
 import java.util.TreeMap;
 
 import prr.clients.Client;
+import prr.Network;
 import prr.exceptions.AlreadySilentExceptionCore;
+import prr.exceptions.SenderEqualsReceiverException;
+import prr.exceptions.UnknownTerminalKeyExceptionCore;
 import prr.exceptions.AlreadyInStateException;
 import prr.communication.Communication;
 import prr.communication.TextCommunication;
@@ -150,6 +153,14 @@ public abstract class Terminal implements Serializable{
         //to string of terminal type: BASIC OR FANCY
         abstract public String toStringType();
 
+        public void makeFriends(Network network, String id) throws UnknownTerminalKeyExceptionCore{
+                network.makeFriends(this, network.getTerminal(id));
+        }
+
+        public void removeFriend(Network network, String id) throws UnknownTerminalKeyExceptionCore {
+                network.deMakeFriends(this, network.getTerminal(id));
+        }
+
         /**
          * Checks if this terminal can end the current interactive communication.
          *
@@ -158,9 +169,10 @@ public abstract class Terminal implements Serializable{
          **/
 
         public boolean canEndCurrentCommunication() {
-                // FIXME add implementation code
-                //only next entrega
-
+                // IDK HOW TO CHECK IF IT WAS THE ORIGINATOR OF THE COMM
+                if (this.getState().toString() == "BUSY") {
+                        return true;
+                }
                 return false;
         }
 
@@ -170,12 +182,12 @@ public abstract class Terminal implements Serializable{
          * @return true if this terminal is neither off neither busy, false otherwise.
          **/
 
-
         public boolean canStartCommunication() {
-                // ADD FULL IMPLEMENTATION FOR VIDEO; VOICE AND TEXT (DIOGO)
-                return senderAvailableForCommunication();
+                // DONT DELETE, IT CAME WITH THE CODE!
+                return this.senderAvailableForCommunication();
         }
 
+        // THIS IS USELESS I THINK?
         public boolean canReceiveCommunication(){
                 return true;
         }
@@ -209,11 +221,13 @@ public abstract class Terminal implements Serializable{
                 return Collections.unmodifiableCollection(_communications.values());
         }
 
-        public void makeTextCommunication(int id, Terminal receiver, String message) {
+        public void makeTextCommunication(Network network, String id, String message) throws  UnknownTerminalKeyExceptionCore{
+                Terminal receiver = network.getTerminal(id);
+
                 if (senderAvailableForCommunication() && receiverAvailableForCommunication(receiver)) {
-                        Communication comm = new TextCommunication(id, this, receiver, message);
+                        int commId = network.getCommunicationId();
+                        Communication comm = new TextCommunication(commId, this, receiver, message);
                         comm.setStatus(false);
-                        //_onGoingComm = comm;
                         insertCommunication(comm);
                 }
         }
@@ -239,5 +253,11 @@ public abstract class Terminal implements Serializable{
                 }
         }
         
-        
+        public boolean equals(Object o) {
+                if (o instanceof Terminal) {
+                        Terminal t = (Terminal) o;
+                        return (getId().equals(t.getId()));
+                }
+                return false;
+        }
 }

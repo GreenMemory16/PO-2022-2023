@@ -2,7 +2,9 @@ package prr.app.terminal;
 
 import prr.Network;
 import prr.terminals.Terminal;
+import prr.app.exceptions.InvalidTerminalKeyException;
 import prr.app.exceptions.UnknownTerminalKeyException;
+import prr.exceptions.SenderEqualsReceiverException;
 import prr.exceptions.UnknownTerminalKeyExceptionCore;
 import pt.tecnico.uilib.forms.Form;
 import pt.tecnico.uilib.menus.CommandException;
@@ -24,9 +26,9 @@ class DoSendTextCommunication extends TerminalCommand {
                 try {
                         String id = stringField("id");
                         String text = stringField("text");
-                        _receiver.makeTextCommunication(_network.getCommunicationId(), _network.getTerminal(id), text);
+                        _receiver.makeTextCommunication(_network, id, text);
                 } catch (UnknownTerminalKeyExceptionCore e) {
-                        e.printStackTrace();
-                }
+                        throw new UnknownTerminalKeyException(e.getId());
+                } 
         }
 } 
