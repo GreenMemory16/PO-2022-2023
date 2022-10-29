@@ -24,7 +24,7 @@ public class Basic extends Terminal implements Serializable {
         return"BASIC";
     }
 
-    public boolean canDoInteractiveCommunication() {
+    public boolean canSupportVideoCommunication() {
         return false;
     }
 }

@@ -8,9 +8,8 @@ public class VoiceCommunication extends Communication {
 
     private int _duration;
 
-    public VoiceCommunication(int id, Terminal sender, Terminal receiver, int duration) {
+    public VoiceCommunication(int id, Terminal sender, Terminal receiver) {
         super(id, sender, receiver);
-        _duration = duration;
     }
 
     public int getDuration() {
@@ -29,9 +28,15 @@ public class VoiceCommunication extends Communication {
     public double calculateCost() {
         double value = 0;
         switch(getSender().getClient().getClientLevel()) {
-            case "NOTMAL": value = (20 * getDuration());
-            case "GOLD": value = (10 * getDuration());
-            case "PLATINUM": value = (10 * getDuration());
+            case "NOTMAL": 
+                value = (20 * getDuration());
+                break;
+            case "GOLD": 
+                value = (10 * getDuration());
+                break;
+            case "PLATINUM": 
+                value = (10 * getDuration());
+                break;
         }
 
         if (senderRecieverFriendship()) {

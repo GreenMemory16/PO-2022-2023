@@ -2,6 +2,8 @@ package prr.terminals;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -11,6 +13,10 @@ import prr.clients.Client;
 import prr.exceptions.AlreadySilentExceptionCore;
 import prr.exceptions.AlreadyInStateException;
 import prr.communication.Communication;
+import prr.communication.TextCommunication;
+import prr.communication.VideoCommunication;
+import prr.communication.VoiceCommunication;
+
 
 /**
  * Abstract terminal.
@@ -30,6 +36,10 @@ public abstract class Terminal implements Serializable{
 
         //map with all communications made by this terminal
         private Map<Integer, Communication> _communications;
+
+        private Communication _onGoingComm;
+
+        private int _commNumber = 1;
 
         //amigos; usar um map: TReeMap in this case
         //a key será o id do terminal
@@ -165,7 +175,8 @@ public abstract class Terminal implements Serializable{
 
 
         public boolean canStartCommunication() {
-                return true;
+                // ADD FULL IMPLEMENTATION FOR VIDEO; VOICE AND TEXT (DIOGO)
+                return availableForCommunication();
         }
 
         public boolean canReceiveCommunication(){
@@ -183,10 +194,49 @@ public abstract class Terminal implements Serializable{
         public void endOfComm() {state.endOfComm(); }
         public void startOfComm() {state.startOfComm(); } 
 
-        public boolean canDoTextCommunication() {
+        public boolean availableForCommunication() {
                 return getState().statePermitsCommunication();
         }
 
-        public abstract boolean canDoInteractiveCommunication();
+        public abstract boolean canSupportVideoCommunication();
+
+        public void insertCommunication(Communication comm) {
+                _communications.put(comm.getId(), comm);
+        }
+
+        public Collection<Communication> getAllTerminalCommunications() {
+                return Collections.unmodifiableCollection(_communications.values());
+        }
+
+        public void makeTextCommunication(int id, Terminal receiver, String message) {
+                if (availableForCommunication()) {
+                        Communication comm = new TextCommunication(id, this, receiver, message);
+                        comm.setStatus(false);
+                        //_onGoingComm = comm;
+                        insertCommunication(comm);
+                }
+        }
+
+        public void makeInteractiveCommunication(Terminal receiver, String type) {
+                if (availableForCommunication()) {
+                        Communication comm;
+                        if(type == "VOICE") {
+                                comm = new VoiceCommunication(_commNumber, this, receiver);
+                                _commNumber++;
+                                _onGoingComm = comm;
+                                insertCommunication(comm);
+                        }
+                        else if (type == "VIDEO") {
+                                if (canSupportVideoCommunication()) {
+                                        comm = new VideoCommunication(_commNumber, this, receiver);
+                                        _commNumber++;
+                                        _onGoingComm = comm;
+                                        insertCommunication(comm);
+                                }
+                        }
+                        
+                }
+        }
+        
         
 }

@@ -12,6 +12,7 @@ import java.util.Map;
 import java.util.TreeMap;
 
 import prr.clients.Client;
+import prr.communication.Communication;
 import prr.exceptions.DuplicateClientKeyExceptionCore;
 import prr.exceptions.DuplicateTerminalKeyExceptionCore;
 import prr.exceptions.ImportFileException;
@@ -41,7 +42,7 @@ public class Network implements Serializable {
 
 	private Map<String, Terminal> _terminals = new TreeMap<String, Terminal>();
 
-	private int _communicationNumber = 1;
+	private int _communicationNumber = 0;
 
 	private boolean hasChanged = false;
 
@@ -229,6 +230,22 @@ public class Network implements Serializable {
 
 /* *************************Communication Methods**************************** */
 	
+	public Collection<Communication> getAllCommunications() {
+		ArrayList<Communication> al = new ArrayList<>();
+		for (Terminal t: _terminals.values()) {
+			al.addAll(t.getAllTerminalCommunications());
+		}
+		return al;
+	}
 
+	public int getCommunicationId() {
+		_communicationNumber++;
+		return _communicationNumber;
+	}
+
+	public void makeTextCommunication(Terminal sender, Terminal receiver, String text) {
+		//sender.makeTextCommunication(_communicationNumber, sender, text);
+		_communicationNumber++;
+	}
 }
 

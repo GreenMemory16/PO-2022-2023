@@ -11,6 +11,8 @@ public abstract class Communication{
     private Terminal _receiver;
     private Terminal _sender;
 
+    private boolean _status = true;
+
 
     public Communication(int id, Terminal sender, Terminal receiver){
         _id = id;
@@ -19,9 +21,20 @@ public abstract class Communication{
     }
 
     public abstract String getType();
-    
+
     public int getId() {
         return _id;
+    }
+
+    public String getStatusToString() {
+        if(_status) {
+            return "ONGOING";
+        }
+        return "FINISHED";
+    }
+
+    public void setStatus(boolean value) {
+        _status = value;
     }
 
     public Terminal getReceiver() {
@@ -33,9 +46,5 @@ public abstract class Communication{
 
 
     public abstract double calculateCost();
-
-    public String toString() {
-        return getType() + "|" + getId() + "|" + getSender().getId() + "|" + getReceiver().getId() + "|" + 0 + "|" + 0 + "|" + "FIXME";
-    }
     
 }
