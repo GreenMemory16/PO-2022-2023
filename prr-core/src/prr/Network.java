@@ -238,14 +238,18 @@ public class Network implements Serializable {
 		return al;
 	}
 
+	public Collection<Communication> getAllCommunicationsFromClient(String key) throws UnknownClientKeyExceptionCore{
+		ArrayList<Communication> al = new ArrayList<>();
+		for(Terminal t: getClient(key).getAllTerminals()) {
+			al.addAll(t.getAllTerminalCommunications());
+		}
+		return al;
+	}
+
 	public int getCommunicationId() {
 		_communicationNumber++;
 		return _communicationNumber;
 	}
 
-	public void makeTextCommunication(Terminal sender, Terminal receiver, String text) {
-		//sender.makeTextCommunication(_communicationNumber, sender, text);
-		_communicationNumber++;
-	}
 }
 

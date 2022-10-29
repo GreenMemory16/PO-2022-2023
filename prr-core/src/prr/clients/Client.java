@@ -1,6 +1,8 @@
 package prr.clients;
 
 import java.io.Serializable;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.Comparator;
 import java.util.Map;
 import java.util.TreeMap;
@@ -56,6 +58,10 @@ public class Client implements Serializable {
 
     public String getClientLevel() {
         return _level.getLevel();
+    }
+
+    public Collection<Terminal> getAllTerminals() {
+        return Collections.unmodifiableCollection(_terminals.values());
     }
 
     //client's toString

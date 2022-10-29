@@ -76,9 +76,6 @@ public abstract class Terminal implements Serializable{
         public Communication getCommunication(int key){
                 return this._communications.get(key);
         }
-        public Map<Integer,Communication> getAllCommunications(){
-                return this._communications;
-        }
 
         //returns true if terminal is unused
         public boolean NoCommunications(){
@@ -176,7 +173,7 @@ public abstract class Terminal implements Serializable{
 
         public boolean canStartCommunication() {
                 // ADD FULL IMPLEMENTATION FOR VIDEO; VOICE AND TEXT (DIOGO)
-                return availableForCommunication();
+                return senderAvailableForCommunication();
         }
 
         public boolean canReceiveCommunication(){
@@ -194,8 +191,12 @@ public abstract class Terminal implements Serializable{
         public void endOfComm() {state.endOfComm(); }
         public void startOfComm() {state.startOfComm(); } 
 
-        public boolean availableForCommunication() {
-                return getState().statePermitsCommunication();
+        public boolean senderAvailableForCommunication() {
+                return this.getState().statePermitsCommunication();
+        }
+
+        public boolean receiverAvailableForCommunication(Terminal receiver) {
+                return receiver.getState().statePermitsCommunication();
         }
 
         public abstract boolean canSupportVideoCommunication();
@@ -209,7 +210,7 @@ public abstract class Terminal implements Serializable{
         }
 
         public void makeTextCommunication(int id, Terminal receiver, String message) {
-                if (availableForCommunication()) {
+                if (senderAvailableForCommunication() && receiverAvailableForCommunication(receiver)) {
                         Communication comm = new TextCommunication(id, this, receiver, message);
                         comm.setStatus(false);
                         //_onGoingComm = comm;
@@ -218,7 +219,7 @@ public abstract class Terminal implements Serializable{
         }
 
         public void makeInteractiveCommunication(Terminal receiver, String type) {
-                if (availableForCommunication()) {
+                if (senderAvailableForCommunication()) {
                         Communication comm;
                         if(type == "VOICE") {
                                 comm = new VoiceCommunication(_commNumber, this, receiver);
