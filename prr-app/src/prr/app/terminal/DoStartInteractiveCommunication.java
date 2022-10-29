@@ -5,6 +5,7 @@ import prr.app.exceptions.UnknownTerminalKeyException;
 import prr.exceptions.DestinationIsBusyException;
 import prr.exceptions.DestinationIsOffException;
 import prr.exceptions.DestinationIsSilentException;
+import prr.exceptions.SenderEqualsReceiverException;
 import prr.exceptions.UnknownTerminalKeyExceptionCore;
 import prr.exceptions.UnsupportedAtDestinationException;
 import prr.exceptions.UnsupportedAtOriginException;
@@ -43,6 +44,8 @@ class DoStartInteractiveCommunication extends TerminalCommand {
 			_display.popup(Message.unsupportedAtDestination(e.getId(), e.getType()));
 		} catch (UnsupportedAtOriginException e) {
 			_display.popup(Message.unsupportedAtOrigin(e.getId(), e.getType()));
+		} catch (SenderEqualsReceiverException e) {
+			_display.popup(Message.destinationIsBusy(e.getId()));
 		}
 	}
 }

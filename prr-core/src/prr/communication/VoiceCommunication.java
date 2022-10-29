@@ -6,7 +6,7 @@ import prr.terminals.Terminal;
 
 public class VoiceCommunication extends Communication {
 
-    private int _duration;
+    private int _duration = 0;
 
     public VoiceCommunication(int id, Terminal sender, Terminal receiver) {
         super(id, sender, receiver);
@@ -14,6 +14,10 @@ public class VoiceCommunication extends Communication {
 
     public int getDuration() {
         return _duration;
+    }
+
+    public void setDuration(int duration) {
+        _duration = duration;
     }
 
     public String getType() {

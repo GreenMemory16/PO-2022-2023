@@ -16,6 +16,10 @@ public class VideoCommunication extends Communication {
         return _duration;
     }
 
+    public void setDuration(int duration) {
+        _duration = duration;
+    }
+
     public String getType() {
         return "VIDEO";
     }

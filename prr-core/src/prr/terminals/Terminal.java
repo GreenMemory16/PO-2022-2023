@@ -175,7 +175,7 @@ public abstract class Terminal implements Serializable{
 
         public boolean canEndCurrentCommunication() {
                 // IDK HOW TO CHECK IF IT WAS THE ORIGINATOR OF THE COMM
-                if (this.getState().toString().equals("BUSY")) {
+                if (this.getState().toString().equals("BUSY") && _onGoingComm != null) {
                         return true;
                 }
                 return false;
@@ -246,7 +246,7 @@ public abstract class Terminal implements Serializable{
 
         public void makeInteractiveCommunication(Network network, String id, String type) throws UnknownTerminalKeyExceptionCore,
                                                  DestinationIsOffException, DestinationIsBusyException, DestinationIsSilentException,
-                                                 UnsupportedAtDestinationException, UnsupportedAtOriginException {
+                                                 UnsupportedAtDestinationException, UnsupportedAtOriginException, SenderEqualsReceiverException {
                 Terminal receiver = network.getTerminal(id);
 
                 if (receiver.getState().toString().equals("OFF")) {
@@ -257,6 +257,9 @@ public abstract class Terminal implements Serializable{
                 }
                 if (receiver.getState().toString().equals("SILENT")) {
                         throw new DestinationIsSilentException(id);
+                }
+                if (this.equals(receiver)) {
+                        throw new SenderEqualsReceiverException(id);
                 }
 
                 if (senderAvailableForCommunication()) {
@@ -283,10 +286,19 @@ public abstract class Terminal implements Serializable{
                                 this.startOfComm();
                                 receiver.startOfComm();
                                 _onGoingComm = comm;
-                                insertCommunication(comm);
-                                
+                                insertCommunication(comm);   
                         }
                 }
+        }
+
+        public void endInteractiveCommunication(Network network, int duration) {
+                // AINDA HÁ COISAS POR FAZER, MOSTRAR O VALOR DO PAGAMENTO, ETC
+
+                //IMPORTANTE! NAO SEI COMO ALTERAR A DURACAO!
+                this.endOfComm();
+                _onGoingComm.getReceiver().endOfComm();
+                _onGoingComm = null;
+
         }
         
         public boolean equals(Object o) {
