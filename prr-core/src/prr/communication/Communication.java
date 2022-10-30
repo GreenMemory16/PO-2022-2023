@@ -8,16 +8,52 @@ import prr.terminals.Terminal;
 public abstract class Communication{
 
     private int _id;
-    private Terminal _reciever;
+    private Terminal _receiver;
     private Terminal _sender;
+    private double _cost = 0;
+
+    private boolean _status = true;
 
 
-    public Communication(int id, Terminal sender, Terminal reciever){
+    public Communication(int id, Terminal sender, Terminal receiver){
         _id = id;
         _sender = sender;
-        _reciever = reciever;
+        _receiver = receiver;
     }
 
-    
+    public abstract String getType();
+
+    public int getId() {
+        return _id;
+    }
+
+    public double getCost() {
+        return _cost;
+    }
+
+    public void setCost(double cost) {
+        _cost = cost;
+    }
+
+    public String getStatusToString() {
+        if(_status) {
+            return "ONGOING";
+        }
+        return "FINISHED";
+    }
+
+    public void setStatus(boolean value) {
+        _status = value;
+    }
+
+    public Terminal getReceiver() {
+        return _receiver;
+    }
+    public Terminal getSender() {
+        return _sender;
+    }
+
+
+    public abstract double calculateCost();
     
 }

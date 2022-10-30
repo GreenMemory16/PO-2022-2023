@@ -2,16 +2,32 @@ package prr.terminals;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.TreeMap;
 
-import prr.exceptions.InvalidTerminalKeyExceptionCore;
-
+import prr.clients.Client;
+import prr.Network;
 import prr.exceptions.AlreadySilentExceptionCore;
+import prr.exceptions.DestinationIsBusyException;
+import prr.exceptions.DestinationIsOffException;
+import prr.exceptions.DestinationIsSilentException;
+import prr.exceptions.NoOnGoingCommunicationException;
+import prr.exceptions.UnsupportedAtDestinationException;
+import prr.exceptions.UnsupportedAtOriginException;
+import prr.exceptions.NoOnGoingCommunicationException;
+import prr.exceptions.SenderEqualsReceiverException;
+import prr.exceptions.UnknownTerminalKeyExceptionCore;
 import prr.exceptions.AlreadyInStateException;
 import prr.communication.Communication;
+import prr.communication.InteractiveCommunication;
+import prr.communication.TextCommunication;
+import prr.communication.VideoCommunication;
+import prr.communication.VoiceCommunication;
+
 
 /**
  * Abstract terminal.
@@ -27,10 +43,12 @@ public abstract class Terminal implements Serializable{
 
         private State state;
 
-        private String clientKey;
+        private Client client;
 
         //map with all communications made by this terminal
         private Map<Integer, Communication> _communications;
+
+        private Communication _onGoingComm;
 
         //amigos; usar um map: TReeMap in this case
         //a key será o id do terminal
@@ -42,15 +60,10 @@ public abstract class Terminal implements Serializable{
         private List<Integer> debts;
 
         //define contructor(s)
-        public Terminal (String id, String clientKey)throws InvalidTerminalKeyExceptionCore{
-                if (id.length() != 6 || !(isNumeric(id))) {
-	        	throw new InvalidTerminalKeyExceptionCore(id);
-	        }     
-        
-
-                this.id = id;
+        public Terminal(String id, Client client){
                 this.state = new Idle(this);
-                this.clientKey = clientKey;
+                this.id = id;
+                this.client = client;
 
 
                 this.friends = new TreeMap<String,Terminal>();
@@ -63,16 +76,6 @@ public abstract class Terminal implements Serializable{
                 this._communications = new TreeMap<Integer, Communication>();
         }
 
-         //auxiliary function
-	public static boolean isNumeric(String str) { 
-		try {  
-			Double.parseDouble(str);  
-			return true;
-		} catch(NumberFormatException e){  
-		return false;  
-		}
-	}
-
         //getters: not setters tho
         public String getId(){
                 return this.id;
@@ -82,12 +85,9 @@ public abstract class Terminal implements Serializable{
         public Communication getCommunication(int key){
                 return this._communications.get(key);
         }
-        public Map<Integer,Communication> getAllCommunications(){
-                return this._communications;
-        }
 
         //returns true if terminal is unused
-        public boolean noCommunications(){
+        public boolean NoCommunications(){
                 return(this._communications.size() == 0);
         }
         /* state related function */
@@ -95,8 +95,8 @@ public abstract class Terminal implements Serializable{
                 return this.state;
         }
 
-        public String getClientKey(){
-                return clientKey;
+        public Client getClient(){
+                return client;
         }
 
         public int getAllPayments(){
@@ -116,13 +116,13 @@ public abstract class Terminal implements Serializable{
 
         //functions related to Friends settings
 
-        public void addFriend(Terminal terminal) {
+        public void AddFriend(Terminal terminal) {
               //should make an exception for this later on
               //in case tjhe terminal is already a friend
               //or if the terminal is the same as the one calling the function
                 friends.put(terminal.getId(), terminal);
         }
-        public void removeFriend(Terminal terminal) {
+        public void RemoveFriend(Terminal terminal) {
                 //should make an exception for this later on
                 //in case tjhe terminal is already a friend
                 //or if the terminal is the same as the one calling the function
@@ -130,7 +130,7 @@ public abstract class Terminal implements Serializable{
           }
         
         //useful to check if the terminal is already a friend
-        public boolean isFriend(String Id){
+        public boolean IsFriend(String Id){
                 Terminal terminal = friends.get(Id);
                 return terminal == null;           
         }
@@ -151,13 +151,21 @@ public abstract class Terminal implements Serializable{
         //to String method
         @Override
         public String toString(){
-                return this.toStringType() + "|" + this.getId() + "|" + this.getClientKey() + "|" 
+                return this.toStringType() + "|" + this.getId() + "|" + this.getClient().getKey() + "|" 
                 +  this.getState() + 
                 "|" + getAllPayments() + "|" + getAllDebts() + toStringFriends();
     }
     
         //to string of terminal type: BASIC OR FANCY
         abstract public String toStringType();
+
+        public void makeFriends(Network network, String id) throws UnknownTerminalKeyExceptionCore{
+                network.makeFriends(this, network.getTerminal(id));
+        }
+
+        public void removeFriend(Network network, String id) throws UnknownTerminalKeyExceptionCore {
+                network.deMakeFriends(this, network.getTerminal(id));
+        }
 
         /**
          * Checks if this terminal can end the current interactive communication.
@@ -167,9 +175,10 @@ public abstract class Terminal implements Serializable{
          **/
 
         public boolean canEndCurrentCommunication() {
-                // FIXME add implementation code
-                //only next entrega
-
+                // IDK HOW TO CHECK IF IT WAS THE ORIGINATOR OF THE COMM
+                if (this.getState().toString().equals("BUSY") && _onGoingComm != null) {
+                        return true;
+                }
                 return false;
         }
 
@@ -179,13 +188,9 @@ public abstract class Terminal implements Serializable{
          * @return true if this terminal is neither off neither busy, false otherwise.
          **/
 
-
         public boolean canStartCommunication() {
-                return true;
-        }
-
-        public boolean canReceiveCommunication(){
-                return true;
+                // DONT DELETE, IT CAME WITH THE CODE!
+                return this.senderAvailableForCommunication();
         }
 
         public void setState(State newState) {
@@ -199,10 +204,112 @@ public abstract class Terminal implements Serializable{
         public void endOfComm() {state.endOfComm(); }
         public void startOfComm() {state.startOfComm(); } 
 
-        public boolean canDoTextCommunication() {
-                return getState().statePermitsCommunication();
+        public boolean senderAvailableForCommunication() {
+                return this.getState().statePermitsCommunication();
         }
 
-        public abstract boolean canDoInteractiveCommunication();
+        public boolean receiverAvailableForCommunication(Terminal receiver) {
+                return receiver.getState().statePermitsCommunication();
+        }
+
+        public abstract boolean canSupportVideoCommunication();
+
+        public void insertCommunication(Communication comm) {
+                _communications.put(comm.getId(), comm);
+        }
+
+        public Collection<Communication> getAllTerminalCommunications() {
+                return Collections.unmodifiableCollection(_communications.values());
+        }
+
+        public String getOnGoingCommunication() throws NoOnGoingCommunicationException { 
+                if (_onGoingComm == null) {
+                        throw new NoOnGoingCommunicationException();
+                }
+                return _onGoingComm.toString();
+        }
+
+        public void makeTextCommunication(Network network, String id, String message) throws  UnknownTerminalKeyExceptionCore, 
+                                                DestinationIsOffException {
+                Terminal receiver = network.getTerminal(id);
+
+                if (receiver.getState().toString().equals("OFF")) {
+                        throw new DestinationIsOffException(id);
+                }
+
+                if (senderAvailableForCommunication() && receiverAvailableForCommunication(receiver)) {
+                        int commId = network.getCommunicationId();
+                        Communication comm = new TextCommunication(commId, this, receiver, message);
+                        comm.setStatus(false);
+                        insertCommunication(comm);
+                }
+        }
+
+        public void makeInteractiveCommunication(Network network, String id, String type) throws UnknownTerminalKeyExceptionCore,
+                                                 DestinationIsOffException, DestinationIsBusyException, DestinationIsSilentException,
+                                                 UnsupportedAtDestinationException, UnsupportedAtOriginException, SenderEqualsReceiverException {
+                Terminal receiver = network.getTerminal(id);
+
+                if (receiver.getState().toString().equals("OFF")) {
+                        throw new DestinationIsOffException(id);
+                }
+                if (receiver.getState().toString().equals("BUSY")) {
+                        throw new DestinationIsBusyException(id);
+                }
+                if (receiver.getState().toString().equals("SILENT")) {
+                        throw new DestinationIsSilentException(id);
+                }
+                if (this.equals(receiver)) {
+                        throw new SenderEqualsReceiverException(id);
+                }
+
+                if (senderAvailableForCommunication()) {
+                        Communication comm;
+                        if(type.equals("VOICE")) {
+                                comm = new VoiceCommunication(network.getCommunicationId(), this, receiver);
+                                comm.setStatus(true);
+                                this.startOfComm();
+                                receiver.startOfComm();
+                                _onGoingComm = comm;
+                                insertCommunication(comm);
+                        }
+                        else if (type.equals("VIDEO")) {
+
+                                if (!receiver.canSupportVideoCommunication()) {
+                                        throw new UnsupportedAtDestinationException(id, "VIDEO");
+                                }
+                                if (!this.canSupportVideoCommunication()) {
+                                        throw new UnsupportedAtOriginException(getId(), "VIDEO");
+                                }
+
+                                comm = new VideoCommunication(network.getCommunicationId(), this, receiver);
+                                comm.setStatus(true);
+                                this.startOfComm();
+                                receiver.startOfComm();
+                                _onGoingComm = comm;
+                                insertCommunication(comm);   
+                        }
+                }
+        }
+
+        public void endInteractiveCommunication(Network network, int duration) {
+                // AINDA HÁ COISAS POR FAZER, MOSTRAR O VALOR DO PAGAMENTO, ETC
+
+                //IMPORTANTE! NAO SEI COMO ALTERAR A DURACAO!
+                this.endOfComm();
+                _onGoingComm.getReceiver().endOfComm();
+                InteractiveCommunication communication = (InteractiveCommunication) _onGoingComm;
+                _onGoingComm = null;
+                communication.setDuration(duration);
+                communication.setStatus(false);
+                _communications.replace(communication.getId(), communication);
+        }
         
+        public boolean equals(Object o) {
+                if (o instanceof Terminal) {
+                        Terminal t = (Terminal) o;
+                        return (getId().equals(t.getId()));
+                }
+                return false;
+        }
 }

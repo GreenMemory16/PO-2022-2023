@@ -1,6 +1,8 @@
 package prr.clients;
 
 import java.io.Serializable;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.Comparator;
 import java.util.Map;
 import java.util.TreeMap;
@@ -41,14 +43,6 @@ public class Client implements Serializable {
         _activeNotifications = value;
     }
 
-    //compares two clients
-    public static final Comparator<Client> KEY_COMPARATOR = new Comparator<>() {
-        @Override
-        public int compare(Client c1, Client c2) {
-          return c1.getKey().compareToIgnoreCase(c2.getKey());
-        }    
-    };
-
     //add a terminal to the client's terminals
     public void insertTerminal(Terminal t) {
         _terminals.put(t.getId(), t);
@@ -62,12 +56,29 @@ public class Client implements Serializable {
         return "NO";
     }
 
+    public String getClientLevel() {
+        return _level.getLevel();
+    }
+
+    public Collection<Terminal> getAllTerminals() {
+        return Collections.unmodifiableCollection(_terminals.values());
+    }
+
     //client's toString
     @Override
     public String toString() {
         return "CLIENT|" + getKey() + "|" + getName() + "|" + getTaxId() + "|" + 
                 _level.getLevel() + "|" + getNotificationSwitch_String() + "|" +
                 _terminals.size() + "|" + "0" + "|" + "0";
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (o instanceof Client) {
+            Client client = (Client) o;
+            return getKey().equals(client.getKey()) && getName().equals(client.getName()) && getTaxId() == client.getTaxId();
+        }
+        return false;
     }
 
 }

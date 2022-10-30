@@ -12,6 +12,7 @@ import java.util.Map;
 import java.util.TreeMap;
 
 import prr.clients.Client;
+import prr.communication.Communication;
 import prr.exceptions.DuplicateClientKeyExceptionCore;
 import prr.exceptions.DuplicateTerminalKeyExceptionCore;
 import prr.exceptions.ImportFileException;
@@ -29,7 +30,9 @@ import prr.terminals.Idle;
 import prr.terminals.Busy;
 
 
-
+/**
+ * Class Store implements a store.
+ */
 public class Network implements Serializable {
 
 	/** Serial number for serialization. */
@@ -39,7 +42,7 @@ public class Network implements Serializable {
 
 	private Map<String, Terminal> _terminals = new TreeMap<String, Terminal>();
 
-	private int _communicationNumber = 1;
+	private int _communicationNumber = 0;
 
 	private boolean hasChanged = false;
 
@@ -63,29 +66,31 @@ public class Network implements Serializable {
 				switch(fields[0]) {
 					case "CLIENT" -> registerClient(fields[1], fields[2], Integer.parseInt(fields[3])); 
 					case "BASIC", "FANCY" -> registerTerminal(fields[1], fields[2], fields[0], fields[3]);
-					case "FRIENDS" -> makeFriends(_terminals.get(fields[1]), _terminals.get(fields[2]));
+					case "FRIENDS" -> importFriends(fields);
 					default -> throw new UnrecognizedEntryException(fields[0]);
 				}
 			} 
 		} catch (DuplicateClientKeyExceptionCore | UnknownClientKeyExceptionCore | TerminalTypeNotSupportedException |
-		 		 InvalidTerminalKeyExceptionCore | DuplicateTerminalKeyExceptionCore e ) {
+		 		UnknownTerminalKeyExceptionCore | InvalidTerminalKeyExceptionCore | DuplicateTerminalKeyExceptionCore e ) {
 			e.printStackTrace();
 		} catch (IOException e) {
 			throw new ImportFileException(filename);
 		}
 	}
-	
-	/**
-	 * Registers a client;
-	 * 
-	 * @param key is the client key;
-	 	* @throws DuplicateClientKeyExceptionCore if the client key is already in use;
-	* @param name is the client name;
-	* @param taxId is the client tax id;
 
-	* @return the client;
-	 */
-	 
+	public void importFriends(String[] fields) {
+		try {
+			Terminal terminal = getTerminal(fields[1]);
+			for(int i=2; i < fields.length; i++) {
+				Terminal friend = getTerminal(fields[i]);
+				makeFriends(terminal, friend);
+			}
+		} catch (UnknownTerminalKeyExceptionCore e) {
+			e.printStackTrace();
+		}
+			
+	}
+	
 	public Client registerClient(String key, String name, int taxId) throws DuplicateClientKeyExceptionCore {
 		if (_clients.containsKey(key)) {
 			throw new DuplicateClientKeyExceptionCore(key);
@@ -97,14 +102,6 @@ public class Network implements Serializable {
 		return client;
 	}
 
-
-	/**
-	 * Gets a certain client;
-	 * 
-	 * @param id is the client ID;
-	 	* @throws UnknownClientKeyExceptionCore if the client key is not in use;
-	 * @return the client;
-	 */
 	public Client getClient(String key) throws UnknownClientKeyExceptionCore {
 		Client c = _clients.get(key);
 		if (c == null) {
@@ -113,22 +110,10 @@ public class Network implements Serializable {
 		return c;
 	}
 
-	/**
-	 * Gets all the clients;
-	 * @return collection of all clients;
-	 */	
 	public Collection<Client> getAllClients() {
 		return Collections.unmodifiableCollection(_clients.values());
 	}
 
-	/**
-	 * Changes Notifications settings of a specific client
-	 * @param key is the client key;
-	 	* @throws UnknownClientKeyExceptionCore if the client key is not in use;
-	* @param value is the new value of the notifications settings;
-
-	 */
-	 
 	public void changeNotifications(String key, Boolean value) throws UnknownClientKeyExceptionCore{
 		getClient(key).setActiveNotifications(value);
 	}
@@ -136,16 +121,18 @@ public class Network implements Serializable {
 
 /** ********************Terminal related methods*************************** */
 
+	//auxiliary function
+	public static boolean isNumeric(String str) { 
+		try {  
+			Double.parseDouble(str);  
+			return true;
+		} catch(NumberFormatException e){  
+		return false;  
+		}  
+	}
 
 
-	/**
-	 * Switches the terminal state.
-	 * 
-	 * @param state is the new state;
-	 * @param terminal is the terminal to be switched;
-	 */
-
-	public void switchState(String state, Terminal terminal) {
+	public void SwitchState(String state, Terminal terminal) {
 		if(state.equals("ON")) {
 			terminal.setState(new Idle(terminal));
 		}
@@ -155,45 +142,32 @@ public class Network implements Serializable {
 		else if(state.equals("SILENCE")) {
 			terminal.setState(new Silence(terminal));
 		}
-		else if(state.equals("BUSY")) {
-			terminal.setState(new Busy(terminal));
-		}
 	}	
 
-	/**
-	 * Registers the terminal;
-	 * 
-	 * @param id is the terminal ID;
-	 	* @throws InvalidTerminalKeyExceptionCore if the terminal ID is invalid;
-	 	* @throws DuplicateTerminalKeyExceptionCore if the terminal ID is already registered;
-	 * @param clientKey is the terminal's client key;
-	 	* @throws UnknownClientKeyExceptionCore if the client key is unknown;
-	 * @param type is the type of the terminal, either FANCY or BASIC;
-	 	* @throws TerminalTypeNotSupportedException if the terminal type is not supported;
-	 * @param state is the state of the terminal, by default is IDLE;
-	 
-	 * @return the terminal;
-	 */
+	//registerTerminal
 	public Terminal registerTerminal(String id, String clientKey, String type, String state) 
 				throws UnknownClientKeyExceptionCore, TerminalTypeNotSupportedException, 
-				InvalidTerminalKeyExceptionCore, DuplicateTerminalKeyExceptionCore 
-				 {
+				InvalidTerminalKeyExceptionCore, DuplicateTerminalKeyExceptionCore, 
+				UnknownTerminalKeyExceptionCore {
 
+		if (id.length() != 6 || !(isNumeric(id))) {
+			throw new InvalidTerminalKeyExceptionCore(id);
+		}
 		if (_terminals.containsKey(id)) {
 			throw new DuplicateTerminalKeyExceptionCore(id);
 		}
 		if (!(_clients.containsKey(clientKey))) {
 			throw new UnknownClientKeyExceptionCore(clientKey);
 		}
+
 		Terminal terminal;
 
 		if(type.equals("BASIC")){
-			terminal = new Basic(id, clientKey);
-		}		
-		else if(type.equals("FANCY")) {
-			terminal = new Fancy(id, clientKey);
+			terminal = new Basic(id, getClient(clientKey));
 		}
-
+		else if(type.equals("FANCY")) {
+			terminal = new Fancy(id, getClient(clientKey));
+		}
 		else {
 			throw new TerminalTypeNotSupportedException();
 		}
@@ -209,7 +183,7 @@ public class Network implements Serializable {
 		}
 
 
-		switchState(state, terminal);
+		SwitchState(state, terminal);
 
 		// Registers the terminal in the client _terminals list
 		getClient(clientKey).insertTerminal(terminal);
@@ -220,13 +194,7 @@ public class Network implements Serializable {
 		return terminal;
 	}
 
-	/**
-	 * Gets a certain terminal;
-	 * 
-	 * @param id is the terminal ID;
-	 	* @throws UnknownTerminalKeyExceptionCore if the terminal ID is unknown;
-	 * @return the terminal;
-	 */
+	//terminal getter
 	public Terminal getTerminal(String id) throws UnknownTerminalKeyExceptionCore {
 		Terminal terminal = _terminals.get(id);
 		if (terminal == null) {
@@ -235,49 +203,67 @@ public class Network implements Serializable {
 		return terminal;
 	}
 
-	/**
-	 * Gets the terminals that have no communications;
-	 * @return terminal list;
-	 */
+	//returns the list of terminals that have no communications
 	public Collection<Terminal> getUnusedTerminals() {
 		List<Terminal> terminal_list = new ArrayList<Terminal>();
 		for(Map.Entry<String,Terminal> entry : _terminals.entrySet()){
-			if(entry.getValue().noCommunications()){
+			if(entry.getValue().NoCommunications()){
 				terminal_list.add(entry.getValue());
 			}
 		}
 		return terminal_list;
 	}
 
-	/**
-	 * Gets all the terminals;
-	 * @return collection of all terminals;
-	 */	
+	//terminal getter
 	public Collection<Terminal> getAllTerminals() {
 		return Collections.unmodifiableCollection(_terminals.values());
 	}
 
-	/**
-	 * Adds a terminal friend;
-	 * @param terminal1 is the terminal that wants to add a friend;
-	 * @param terminal2 is the terminal that is going to be added as a friend;
-	 */
+	//makeFRiends calls the add friend from the terminal
 	public void makeFriends(Terminal terminal1, Terminal terminal2) {
-		terminal1.addFriend(terminal2);
+		terminal1.AddFriend(terminal2);
 	}
 
-
-	/**
-	 * Removes a terminal friend;
-	 * @param terminal1 is the terminal that wants to remove a friend;
-	 * @param terminal2 is the terminal that is going to be removed as a friend;
-	 */
 	public void deMakeFriends( Terminal terminal1, Terminal terminal2){
-		terminal1.removeFriend(terminal2);
+		terminal1.RemoveFriend(terminal2);
 	}
 
 /* *************************Communication Methods**************************** */
 	
+	public Collection<Communication> getAllCommunications() {
+		ArrayList<Communication> al = new ArrayList<>();
+		for (Terminal t: _terminals.values()) {
+			al.addAll(t.getAllTerminalCommunications());
+		}
+		return al;
+	}
+
+	public Collection<Communication> getAllCommunicationsFromClient(String key) throws UnknownClientKeyExceptionCore{
+		ArrayList<Communication> al = new ArrayList<>();
+		for(Terminal t: getClient(key).getAllTerminals()) {
+			al.addAll(t.getAllTerminalCommunications());
+		}
+		return al;
+	}
+
+	public Collection<Communication> getAllCommunicationsToClient(String key) throws UnknownClientKeyExceptionCore {
+		ArrayList<Communication> al = new ArrayList<>();
+		Client receiver = getClient(key);
+
+		for (Terminal t: _terminals.values()) {
+			for (Communication c: t.getAllTerminalCommunications()) {
+				if (c.getReceiver().getClient().equals(receiver)) {
+					System.out.println(c.getId());
+					al.add(c);
+				}
+			}
+		}
+		return al;
+	}
+
+	public int getCommunicationId() {
+		_communicationNumber++;
+		return _communicationNumber;
+	}
 
 }
-
