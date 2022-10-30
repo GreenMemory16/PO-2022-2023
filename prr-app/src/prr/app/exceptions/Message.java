@@ -1,104 +1,84 @@
-package prr.app.terminal;
+package prr.app.exceptions;
 
-/**
- * Messages.
- */
+/** Messages for error reporting. */
 interface Message {
 
-	/** @return status message. */
-	static String originIsOff(String key) {
-		return "O terminal de origem ('" + key + "') está desligado.";
-	}
-
-	/** @return status message. */
-	static String destinationIsOff(String key) {
-		return "O terminal de destino ('" + key + "') está desligado.";
-	}
-
-	/** @return status message. */
-	static String originIsBusy(String key) {
-		return "O terminal de origem ('" + key + "') está ocupado.";
-	}
-
-	/** @return status message. */
-	static String destinationIsBusy(String key) {
-		return "O terminal de destino ('" + key + "') está ocupado.";
-	}
-
-	/** @return status message. */
-	static String destinationIsSilent(String key) {
-		return "O terminal de destino ('" + key + "') está em silêncio.";
-	}
-
-	/** @return status message. */
-	static String unsupportedAtOrigin(String key, String type) {
-		return "O terminal '" + key + "' não pode iniciar comunicações " + type;
-	}
-
-	/** @return status message. */
-	static String unsupportedAtDestination(String key, String type) {
-		return "O terminal '" + key + "' não pode receber comunicações " + type;
-	}
-
 	/**
-	 * @param cost the cost of the communication
-	 * @return string reporting the cost of the communication.
+	 * @return string with "file not found" message.
 	 */
-	static String communicationCost(long cost) {
-		return "Custo da comunicação: " + cost + " unidades.";
-	}
-
-	/** @return status message. */
-	static String alreadyOn() {
-		return "O terminal já estava ligado.";
-	}
-
-	/** @return status message. */
-	static String alreadyOff() {
-		return "O terminal já estava desligado.";
-	}
-
-	/** @return status message. */
-	static String alreadySilent() {
-		return "O terminal já estava em silêncio.";
+	static String fileNotFound() {
+		return "O ficheiro não existe.";
 	}
 
 	/**
-	 * @param idTerminal terminal that has been turned on
-	 * @param idCaller   terminal that tried to communicate before
-	 * @return string with informative message.
+	 * @param filename
+	 * @return string with "file not found" message (more elaborate).
 	 */
-	static String isAvailable(int idTerminal, int idCaller) {
-		return "O terminal '" + idTerminal + "' já está disponível para o terminal '" + idCaller + "'.";
+	static String fileNotFound(String filename) {
+		return "O ficheiro '" + filename + "' não existe.";
 	}
 
 	/**
-	 * @param idTerminal terminal that has been turned on
-	 * @param idCaller   terminal that tried to communicate before
-	 * @return string with informative message.
+	 * @param filename
+	 * @return string with problem description.
 	 */
-	static String isAvailableForTextCommunications(int idTerminal, int idCaller) {
-		return "O terminal '" + idTerminal + "' já está disponível para receber comunicações de texto de '" + idCaller
-				+ "'.";
+	static String problemOpeningFile(Exception cause) {
+                return "Problema ao abrir ficheiro: " + cause.getMessage();
 	}
 
 	/**
-         * @param key
-         * @param payments
-         * @param debts
-         * @return report message.
-         */
-        static String terminalPaymentsAndDebts(String key, long payments, long debts) {
-                return "Valores para o terminal '" + key + "':" + payments + " (pagamentos),  " + debts + " (dívidas).";
+	 * @param key
+	 * @return string with problem description.
+	 */
+	static String unknownClientKey(String key) {
+		return "O cliente '" + key + "' não existe.";
 	}
 
-	/** @return status message. */
-	static String noOngoingCommunication() {
-		return "Não existe nenhuma comunicação em curso.";
+	/**
+	 * @param key
+	 * @return string reporting a duplicate client
+	 */
+	static String duplicateClientKey(String key) {
+		return "O cliente '" + key + "' já existe.";
 	}
 
-	/** @return status message. */
-	static String invalidCommunication() {
-		return "O identificador da comunicação é inválido.";
+	/**
+	 * @param key
+	 * @return string with problem description.
+	 */
+	static String unknownTerminalKey(String key) {
+		return "O terminal '" + key + "' não existe.";
+	}
+
+	/**
+	 * @param key
+	 * @return string reporting duplicate terminals
+	 */
+	public static String duplicateTerminalKey(String key) {
+		return "O terminal '" + key + "' já existe.";
+	}
+
+	/**
+	 * @param key
+	 * @return string reporting invalid keys
+	 */
+	public static String invalidTerminalKey(String key) {
+		return "A chave '" + key + "' não é válida para terminais.";
+	}
+
+	/**
+	 * @param key
+	 * @return string with problem description.
+	 */
+	static String unknownCommunicationKey(int key) {
+		return "A comunicação '" + key + "' não existe.";
+	}
+
+	/**
+	 * @param key
+	 * @return string with problem description.
+	 */
+	public static String duplicateCommunicationKey(int key) {
+		return "A comunicação '" + key + "' já existe.";
 	}
 }

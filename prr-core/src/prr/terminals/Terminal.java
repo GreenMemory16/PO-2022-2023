@@ -99,11 +99,15 @@ public abstract class Terminal implements Serializable{
                 return client;
         }
 
-        public int getAllPayments(){
-                return getAllSomething(this.payments);
+        public long getBalance(){
+                long sum = getAllPayments() + getAllDebts();
+                return sum;
         }
-        public int getAllDebts(){
-                return getAllSomething(this.debts);
+        public long getAllPayments(){
+                return Long.valueOf(getAllSomething(this.payments));
+        }
+        public long getAllDebts(){
+                return Long.valueOf(getAllSomething(this.debts));
         }
         //for abstração sake
         public int getAllSomething(List list){
@@ -312,18 +316,21 @@ public abstract class Terminal implements Serializable{
                 }
                 return false;
         }
-}
 
 
 
 /************************** Payment methods ****************************** */
-public void performPayment(String commId) throws InvalidCommunicationExceptionCore{
+public void performPayment(int commId) throws InvalidCommunicationExceptionCore{
 	Communication c = this.getCommunication(commId);
 	if (c == null || c.getCost() == 0) {
-		throw new InvalidCommunicationExceptionCore(commId);
+		throw new InvalidCommunicationExceptionCore();
 	}
-        if(!c.getReceiver().equals(this) || c.equals(this.getOnGoingCommunication())) {
-                throw new InvalidCommunicationExceptionCore(commId);
+        if(!c.getReceiver().equals(this) || c.equals(this._onGoingComm)) {
+                throw new InvalidCommunicationExceptionCore();
         }
 	c.pay();
+}
+public long showBalance() {
+        return this.getBalance();
+}
 }

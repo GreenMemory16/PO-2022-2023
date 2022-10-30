@@ -265,4 +265,17 @@ public class Network implements Serializable {
 		return _communicationNumber;
 	}
 
+
+/************************ */
+public Collection<Terminal> getPositiveTerminals(){
+	List<Terminal> terminal_list = new ArrayList<Terminal>();
+		for(Map.Entry<String,Terminal> entry : _terminals.entrySet()){
+			if(entry.getValue().getAllPayments() >= 0){
+				//>= maybe
+				terminal_list.add(entry.getValue());
+			}
+		}
+		return terminal_list;
+	}
+
 }

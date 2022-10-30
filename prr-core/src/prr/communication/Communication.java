@@ -35,7 +35,9 @@ public abstract class Communication{
     public void setCost(double cost) {
         _cost = cost;
     }
-
+    public boolean getStatus() {
+        return _status;
+    }
     //to be used to pay communication
     public void pay(){
         this._cost = 0;
@@ -60,9 +62,9 @@ public abstract class Communication{
     }
 
 
-    @Override
     public boolean equals(Communication com){
-        return this._id == com.getId() && this._receiver.equals(com.getReceiver()) && this._sender.equals(com.getSender())
+        return this._id == com.getId() && this._receiver.equals(com.getReceiver()) 
+        && this._sender.equals(com.getSender())
         && this._cost == com.getCost() && this._status == com.getStatus();
     }
     public abstract double calculateCost();
