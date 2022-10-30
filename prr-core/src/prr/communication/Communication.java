@@ -10,6 +10,7 @@ public abstract class Communication{
     private int _id;
     private Terminal _receiver;
     private Terminal _sender;
+    private double _cost = 0;
 
     private boolean _status = true;
 
@@ -24,6 +25,14 @@ public abstract class Communication{
 
     public int getId() {
         return _id;
+    }
+
+    public double getCost() {
+        return _cost;
+    }
+
+    public void setCost(double cost) {
+        _cost = cost;
     }
 
     public String getStatusToString() {

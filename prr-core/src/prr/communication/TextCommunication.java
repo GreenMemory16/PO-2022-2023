@@ -62,7 +62,7 @@ public class TextCommunication extends Communication {
 
     @Override
     public String toString() {
-        return getType() + "|" + getId() + "|" + getSender().getId() + "|" + getReceiver().getId() + "|" + getMessageSize() + "|" + 0 + "|" + getStatusToString();
+        return getType() + "|" + getId() + "|" + getSender().getId() + "|" + getReceiver().getId() + "|" + getMessageSize() + "|" + Math.round(getCost()) + "|" + getStatusToString();
     }
 
     

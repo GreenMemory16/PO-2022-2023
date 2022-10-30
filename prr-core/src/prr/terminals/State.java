@@ -8,7 +8,7 @@ import prr.exceptions.AlreadyInStateException;
 public abstract class State implements Serializable{
 
     private Terminal _terminal;
-    private boolean _previousIdle;
+    private boolean _previousIdle = true;
 
     public State(Terminal terminal) {
         _terminal = terminal;

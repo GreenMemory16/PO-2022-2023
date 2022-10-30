@@ -4,20 +4,10 @@ import prr.terminals.Basic;
 import prr.terminals.Fancy;
 import prr.terminals.Terminal;
 
-public class VoiceCommunication extends Communication {
-
-    private int _duration = 0;
+public class VoiceCommunication extends InteractiveCommunication {
 
     public VoiceCommunication(int id, Terminal sender, Terminal receiver) {
         super(id, sender, receiver);
-    }
-
-    public int getDuration() {
-        return _duration;
-    }
-
-    public void setDuration(int duration) {
-        _duration = duration;
     }
 
     public String getType() {
@@ -32,7 +22,7 @@ public class VoiceCommunication extends Communication {
     public double calculateCost() {
         double value = 0;
         switch(getSender().getClient().getClientLevel()) {
-            case "NOTMAL": 
+            case "NORMAL": 
                 value = (20 * getDuration());
                 break;
             case "GOLD": 
@@ -50,7 +40,7 @@ public class VoiceCommunication extends Communication {
     }
 
     public String toString() {
-        return getType() + "|" + getId() + "|" + getSender().getId() + "|" + getReceiver().getId() + "|" + getDuration() + "|" + 0 + "|" + getStatusToString();
+        return getType() + "|" + getId() + "|" + getSender().getId() + "|" + getReceiver().getId() + "|" + getDuration() + "|" + Math.round(getCost()) + "|" + getStatusToString();
     }
 
 }

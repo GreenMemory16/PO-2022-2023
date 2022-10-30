@@ -23,6 +23,7 @@ import prr.exceptions.SenderEqualsReceiverException;
 import prr.exceptions.UnknownTerminalKeyExceptionCore;
 import prr.exceptions.AlreadyInStateException;
 import prr.communication.Communication;
+import prr.communication.InteractiveCommunication;
 import prr.communication.TextCommunication;
 import prr.communication.VideoCommunication;
 import prr.communication.VoiceCommunication;
@@ -297,8 +298,11 @@ public abstract class Terminal implements Serializable{
                 //IMPORTANTE! NAO SEI COMO ALTERAR A DURACAO!
                 this.endOfComm();
                 _onGoingComm.getReceiver().endOfComm();
+                InteractiveCommunication communication = (InteractiveCommunication) _onGoingComm;
                 _onGoingComm = null;
-
+                communication.setDuration(duration);
+                communication.setStatus(false);
+                _communications.replace(communication.getId(), communication);
         }
         
         public boolean equals(Object o) {
