@@ -1,3 +1,4 @@
+
 package prr.app.lookups;
 
 import prr.Network;
@@ -16,6 +17,6 @@ class DoShowAllCommunications extends Command<Network> {
 
 	@Override
 	protected final void execute() throws CommandException {
-                //FIXME implement command
+        _display.popup(_receiver.getAllCommunications());
 	}
 }

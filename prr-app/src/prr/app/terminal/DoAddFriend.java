@@ -21,13 +21,10 @@ class DoAddFriend extends TerminalCommand {
 
 	@Override
 	protected final void execute() throws CommandException {
-
 		try {
 			String id = stringField("id");
-			Terminal terminal1 = _receiver;
-			Terminal terminal2 = _network.getTerminal(id);
-				
-			_network.makeFriends(terminal1, terminal2);
+			_receiver.makeFriends(_network, id);
+			
 		} catch ( UnknownTerminalKeyExceptionCore e ) {
 			throw new UnknownTerminalKeyException(e.getId());
 		} 

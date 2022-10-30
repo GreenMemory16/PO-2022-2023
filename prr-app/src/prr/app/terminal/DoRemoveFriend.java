@@ -22,14 +22,10 @@ class DoRemoveFriend extends TerminalCommand {
 	protected final void execute() throws CommandException {
 		try{
 			String id = stringField("id");
-			Terminal terminal1 = _receiver;
-			Terminal terminal2 = _network.getTerminal(id);
-		
-		_network.deMakeFriends(terminal1, terminal2);
+			_receiver.removeFriend(_network, id);
 		}
 		catch(UnknownTerminalKeyExceptionCore e){
 			throw new UnknownTerminalKeyException(e.getId());
 		}	
 	}
 }
-
