@@ -71,7 +71,7 @@ public class Network implements Serializable {
 				}
 			} 
 		} catch (DuplicateClientKeyExceptionCore | UnknownClientKeyExceptionCore | TerminalTypeNotSupportedException |
-		 		UnknownTerminalKeyExceptionCore | InvalidTerminalKeyExceptionCore | DuplicateTerminalKeyExceptionCore e ) {
+		 		 InvalidTerminalKeyExceptionCore | DuplicateTerminalKeyExceptionCore e ) {
 			e.printStackTrace();
 		} catch (IOException e) {
 			throw new ImportFileException(filename);
@@ -147,8 +147,7 @@ public class Network implements Serializable {
 	//registerTerminal
 	public Terminal registerTerminal(String id, String clientKey, String type, String state) 
 				throws UnknownClientKeyExceptionCore, TerminalTypeNotSupportedException, 
-				InvalidTerminalKeyExceptionCore, DuplicateTerminalKeyExceptionCore, 
-				UnknownTerminalKeyExceptionCore {
+				InvalidTerminalKeyExceptionCore, DuplicateTerminalKeyExceptionCore {
 
 		if (id.length() != 6 || !(isNumeric(id))) {
 			throw new InvalidTerminalKeyExceptionCore(id);

@@ -18,7 +18,6 @@ import prr.exceptions.DestinationIsSilentException;
 import prr.exceptions.NoOnGoingCommunicationException;
 import prr.exceptions.UnsupportedAtDestinationException;
 import prr.exceptions.UnsupportedAtOriginException;
-import prr.exceptions.NoOnGoingCommunicationException;
 import prr.exceptions.SenderEqualsReceiverException;
 import prr.exceptions.UnknownTerminalKeyExceptionCore;
 import prr.exceptions.AlreadyInStateException;
@@ -27,6 +26,7 @@ import prr.communication.InteractiveCommunication;
 import prr.communication.TextCommunication;
 import prr.communication.VideoCommunication;
 import prr.communication.VoiceCommunication;
+import prr.exceptions.InvalidCommunicationExceptionCore;
 
 
 /**
@@ -312,4 +312,18 @@ public abstract class Terminal implements Serializable{
                 }
                 return false;
         }
+}
+
+
+
+/************************** Payment methods ****************************** */
+public void performPayment(String commId) throws InvalidCommunicationExceptionCore{
+	Communication c = this.getCommunication(commId);
+	if (c == null || c.getCost() == 0) {
+		throw new InvalidCommunicationExceptionCore(commId);
+	}
+        if(!c.getReceiver().equals(this) || c.equals(this.getOnGoingCommunication())) {
+                throw new InvalidCommunicationExceptionCore(commId);
+        }
+	c.pay();
 }
