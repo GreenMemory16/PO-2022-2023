@@ -20,6 +20,7 @@ import prr.exceptions.NoOnGoingCommunicationException;
 import prr.exceptions.UnsupportedAtDestinationException;
 import prr.exceptions.UnsupportedAtOriginException;
 import prr.exceptions.NoOnGoingCommunicationException;
+import prr.exceptions.InvalidCommunicationExceptionCore;
 import prr.exceptions.SenderEqualsReceiverException;
 import prr.exceptions.UnknownTerminalKeyExceptionCore;
 import prr.exceptions.DestinationIsBusyException;

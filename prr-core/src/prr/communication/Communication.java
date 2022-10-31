@@ -10,7 +10,7 @@ public abstract class Communication{
     private int _id;
     private Terminal _receiver;
     private Terminal _sender;
-    private double _cost = 0;
+    private long _cost = 0;
 
     private boolean _status = true;
 
