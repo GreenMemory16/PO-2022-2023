@@ -19,6 +19,6 @@ class DoEndInteractiveCommunication extends TerminalCommand {
 	@Override
 	protected final void execute() throws CommandException {
         int duration = integerField("duration");
-		_receiver.endInteractiveCommunication(_network, duration);
+		_display.popup(Message.communicationCost(_receiver.endInteractiveCommunication(_network, duration)));
 	}
 }

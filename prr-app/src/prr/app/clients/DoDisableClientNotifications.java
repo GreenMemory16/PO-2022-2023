@@ -1,6 +1,7 @@
 package prr.app.clients;
 
 import prr.Network;
+import prr.exceptions.ClientNotificationsAlreadyDefinedException;
 import prr.exceptions.UnknownClientKeyExceptionCore;
 import prr.app.exceptions.UnknownClientKeyException;
 import pt.tecnico.uilib.menus.Command;
@@ -24,6 +25,8 @@ class DoDisableClientNotifications extends Command<Network> {
 
 		} catch (UnknownClientKeyExceptionCore e) {
 			throw new UnknownClientKeyException(e.getKey());
+		} catch (ClientNotificationsAlreadyDefinedException e) {
+			_display.popup(Message.clientNotificationsAlreadyDisabled());
 		}
 	}
 }

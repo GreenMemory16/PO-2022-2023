@@ -11,8 +11,10 @@ import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
 
+
 import prr.clients.Client;
 import prr.communication.Communication;
+import prr.exceptions.ClientNotificationsAlreadyDefinedException;
 import prr.exceptions.DuplicateClientKeyExceptionCore;
 import prr.exceptions.DuplicateTerminalKeyExceptionCore;
 import prr.exceptions.ImportFileException;
@@ -28,6 +30,7 @@ import prr.terminals.Silence;
 import prr.terminals.Off;
 import prr.terminals.Idle;
 import prr.terminals.Busy;
+import prr.notifications.Notification;
 
 
 /**
@@ -43,8 +46,6 @@ public class Network implements Serializable {
 	private Map<String, Terminal> _terminals = new TreeMap<String, Terminal>();
 
 	private int _communicationNumber = 0;
-
-	private boolean hasChanged = false;
 
 	/**
 	 * Read text input file and create corresponding domain entities.
@@ -114,7 +115,11 @@ public class Network implements Serializable {
 		return Collections.unmodifiableCollection(_clients.values());
 	}
 
-	public void changeNotifications(String key, Boolean value) throws UnknownClientKeyExceptionCore{
+	public ArrayList<Notification> getNotifications(String key) throws UnknownClientKeyExceptionCore {
+		return getClient(key).getNotifications();
+	}
+
+	public void changeNotifications(String key, Boolean value) throws UnknownClientKeyExceptionCore, ClientNotificationsAlreadyDefinedException{
 		getClient(key).setActiveNotifications(value);
 	}
 

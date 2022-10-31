@@ -22,14 +22,18 @@ public class TextCommunication extends Communication {
     }
 
     public double calculateCost() {
+        double multiplier;
         if(getMessageSize() < 50) {
-            return calculateSmallText();
+            multiplier = calculateSmallText();
+            return multiplier * getMessageSize();
         }
         else if (getMessageSize() >= 50 && getMessageSize() < 100) {
-            return calculateMediumText();
+            multiplier =  calculateMediumText();
+            return multiplier * getMessageSize();
         } 
         else {
-            return calculateBigText();
+            multiplier = calculateBigText();
+            return multiplier * getMessageSize();
         }
     }
 

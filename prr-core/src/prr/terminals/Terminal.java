@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Collection;
 import java.util.List;
+import java.util.ListIterator;
 import java.util.Map;
 import java.util.Set;
 import java.util.TreeMap;
@@ -27,6 +28,11 @@ import prr.communication.InteractiveCommunication;
 import prr.communication.TextCommunication;
 import prr.communication.VideoCommunication;
 import prr.communication.VoiceCommunication;
+import prr.notifications.Notification;
+import prr.notifications.NotificationOffToIdle;
+import prr.notifications.NotificationOffToSilent;
+import prr.notifications.NotificationBusyToIdle;
+import prr.notifications.NotificationSilentToIdle;
 
 
 /**
@@ -47,6 +53,8 @@ public abstract class Terminal implements Serializable{
 
         //map with all communications made by this terminal
         private Map<Integer, Communication> _communications;
+
+        private ArrayList<Communication> _commAttempts = new ArrayList<>();
 
         private Communication _onGoingComm;
 
@@ -132,7 +140,7 @@ public abstract class Terminal implements Serializable{
         //useful to check if the terminal is already a friend
         public boolean IsFriend(String Id){
                 Terminal terminal = friends.get(Id);
-                return terminal == null;           
+                return !(terminal == null);           
         }
 
         //to enumerate all friends that terminal has
@@ -198,11 +206,62 @@ public abstract class Terminal implements Serializable{
         }
 
 
-        public void turnOn() throws AlreadyInStateException{ state.turnOn(); }
-        public void turnOff() throws AlreadyInStateException { state.turnOff(); }
-        public void switchToSilence() throws AlreadyInStateException {state.goToSilence(); }
-        public void endOfComm() {state.endOfComm(); }
-        public void startOfComm() {state.startOfComm(); } 
+        public void turnOn() throws AlreadyInStateException{ 
+                if (_commAttempts.size() != 0) {
+                        ListIterator<Communication> iter = _commAttempts.listIterator();
+                        while(iter.hasNext()) {
+                                Communication c = iter.next();
+                                if (c.getSender().getClient().canReceiveNotifications()) {
+                                        if (getState().toString().equals("OFF")) {
+                                                c.getSender().getClient().addNotification(new NotificationOffToIdle(c.getReceiver()));
+                                                iter.remove();
+                                        }
+                                        else if (getState().toString().equals("SILENCE") && !c.getType().equals("TEXT")) {
+                                                c.getSender().getClient().addNotification(new NotificationSilentToIdle(c.getReceiver()));
+                                                iter.remove();
+                                                
+                                        }
+                                }
+                        }
+                }
+                state.turnOn(); 
+        }
+        public void turnOff() throws AlreadyInStateException { 
+                state.turnOff(); 
+        }
+        public void switchToSilence() throws AlreadyInStateException {
+                if (_commAttempts.size() != 0) {
+                        ListIterator<Communication> iter = _commAttempts.listIterator();
+                        while(iter.hasNext()) {
+                                Communication c = iter.next();
+                                if(c.getSender().getClient().canReceiveNotifications()) {
+                                        if(getState().toString().equals("OFF")) {
+                                                c.getSender().getClient().addNotification(new NotificationOffToSilent(c.getReceiver()));
+                                                iter.remove();
+                                        }
+                                }
+                        }
+                }
+                state.goToSilence(); 
+        }
+        public void endOfComm() {
+                if (_commAttempts.size() != 0) {
+                        ListIterator<Communication> iter = _commAttempts.listIterator();
+                        while(iter.hasNext()) {
+                                Communication c = iter.next();
+                                if (c.getSender().getClient().canReceiveNotifications()) {
+                                        if (getState().toString().equals("BUSY") && !c.getType().equals("TEXT")) {
+                                                c.getSender().getClient().addNotification(new NotificationBusyToIdle(c.getReceiver()));
+                                                iter.remove();
+                                        }
+                                }
+                        }
+                }
+                state.endOfComm(); 
+        }
+        public void startOfComm() {
+                state.startOfComm(); 
+        } 
 
         public boolean senderAvailableForCommunication() {
                 return this.getState().statePermitsCommunication();
@@ -234,12 +293,14 @@ public abstract class Terminal implements Serializable{
                 Terminal receiver = network.getTerminal(id);
 
                 if (receiver.getState().toString().equals("OFF")) {
+                        receiver.addCommunicationAttempt(new VoiceCommunication(network.getCommunicationId(), this, receiver));
                         throw new DestinationIsOffException(id);
                 }
 
                 if (senderAvailableForCommunication() && receiverAvailableForCommunication(receiver)) {
                         int commId = network.getCommunicationId();
                         Communication comm = new TextCommunication(commId, this, receiver, message);
+                        comm.setCost(comm.calculateCost());
                         comm.setStatus(false);
                         insertCommunication(comm);
                 }
@@ -251,12 +312,15 @@ public abstract class Terminal implements Serializable{
                 Terminal receiver = network.getTerminal(id);
 
                 if (receiver.getState().toString().equals("OFF")) {
+                        receiver.addCommunicationAttempt(new VoiceCommunication(network.getCommunicationId(), this, receiver));
                         throw new DestinationIsOffException(id);
                 }
                 if (receiver.getState().toString().equals("BUSY")) {
+                        receiver.addCommunicationAttempt(new VoiceCommunication(network.getCommunicationId(), this, receiver));
                         throw new DestinationIsBusyException(id);
                 }
-                if (receiver.getState().toString().equals("SILENT")) {
+                if (receiver.getState().toString().equals("SILENCE")) {
+                        receiver.addCommunicationAttempt(new VoiceCommunication(network.getCommunicationId(), this, receiver));
                         throw new DestinationIsSilentException(id);
                 }
                 if (this.equals(receiver)) {
@@ -292,7 +356,7 @@ public abstract class Terminal implements Serializable{
                 }
         }
 
-        public void endInteractiveCommunication(Network network, int duration) {
+        public int endInteractiveCommunication(Network network, int duration) {
                 // AINDA HÁ COISAS POR FAZER, MOSTRAR O VALOR DO PAGAMENTO, ETC
 
                 //IMPORTANTE! NAO SEI COMO ALTERAR A DURACAO!
@@ -301,8 +365,15 @@ public abstract class Terminal implements Serializable{
                 InteractiveCommunication communication = (InteractiveCommunication) _onGoingComm;
                 _onGoingComm = null;
                 communication.setDuration(duration);
+                communication.setCost(communication.calculateCost());
                 communication.setStatus(false);
                 _communications.replace(communication.getId(), communication);
+
+                return (int) Math.round(communication.calculateCost());
+        }
+
+        public void addCommunicationAttempt(Communication communication) {
+                _commAttempts.add(communication);
         }
         
         public boolean equals(Object o) {

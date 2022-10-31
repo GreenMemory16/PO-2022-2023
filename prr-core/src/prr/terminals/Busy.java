@@ -21,7 +21,6 @@ public class Busy extends State implements Serializable{
     public void startOfComm() {}
 
     public void endOfComm() {
-        System.out.println(getPreviousIdle());
         if (getPreviousIdle()) {
             getTerminal().setState(new Idle(getTerminal()));
         }
