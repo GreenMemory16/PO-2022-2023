@@ -131,6 +131,7 @@ public abstract class Terminal implements Serializable{
                 int total = 0;
                 for(int i = 0; i < list.size() ; i++){
                         Communication com = (Communication) list.get(i);
+
                         total += com.getCost();
                 }
                 return total;
@@ -317,8 +318,8 @@ public abstract class Terminal implements Serializable{
                         comm.setCost(comm.calculateCost());
                         comm.setStatus(false);
                         insertCommunication(comm);
-                        insertCommunication(comm);
-                        receiver.addDebt(comm);
+                        //here maybe receiver
+                        this.addDebt(comm);
                 }
         }
 
@@ -384,6 +385,7 @@ public abstract class Terminal implements Serializable{
                 communication.setCost(communication.calculateCost());
                 communication.setStatus(false);
                 _communications.replace(communication.getId(), communication);
+                communication.setCost((long)communication.calculateCost());
 
                 return (int) Math.round(communication.calculateCost());
         }

@@ -291,7 +291,9 @@ public Collection<Client> getNoDebtsClient(){
 	}
 	return client_list;
 }
-
+//dividas e sem dividas show is not working well somehow
+//and the debt is being putted on the wront terminal in text
+//and not being putted at all in voice
 public Collection<Client> getYesDebtsClient(){
 	List<Client> client_list = new ArrayList<Client>();
 	for(Map.Entry<String,Client> entry : _clients.entrySet()){
