@@ -72,7 +72,7 @@ public class Network implements Serializable {
 				}
 			} 
 		} catch (DuplicateClientKeyExceptionCore | UnknownClientKeyExceptionCore | TerminalTypeNotSupportedException |
-		 		UnknownTerminalKeyExceptionCore | InvalidTerminalKeyExceptionCore | DuplicateTerminalKeyExceptionCore e ) {
+		 		 InvalidTerminalKeyExceptionCore | DuplicateTerminalKeyExceptionCore e ) {
 			e.printStackTrace();
 		} catch (IOException e) {
 			throw new ImportFileException(filename);
@@ -152,8 +152,7 @@ public class Network implements Serializable {
 	//registerTerminal
 	public Terminal registerTerminal(String id, String clientKey, String type, String state) 
 				throws UnknownClientKeyExceptionCore, TerminalTypeNotSupportedException, 
-				InvalidTerminalKeyExceptionCore, DuplicateTerminalKeyExceptionCore, 
-				UnknownTerminalKeyExceptionCore {
+				InvalidTerminalKeyExceptionCore, DuplicateTerminalKeyExceptionCore {
 
 		if (id.length() != 6 || !(isNumeric(id))) {
 			throw new InvalidTerminalKeyExceptionCore(id);
@@ -271,5 +270,46 @@ public class Network implements Serializable {
 		return _communicationNumber;
 	}
 
+
+/****************LOOKUPS ******** */
+public Collection<Terminal> getPositiveTerminals(){
+	List<Terminal> terminal_list = new ArrayList<Terminal>();
+		for(Map.Entry<String,Terminal> entry : _terminals.entrySet()){
+			if(entry.getValue().getAllPayments() > entry.getValue().getAllDebts()){
+				//>= maybe
+				terminal_list.add(entry.getValue());
+			}
+		}
+		return terminal_list;
+	}
+public Collection<Client> getNoDebtsClient(){
+	List<Client> client_list = new ArrayList<Client>();
+	for(Map.Entry<String,Client> entry : _clients.entrySet()){
+		if(entry.getValue().Payments() == 0){
+			client_list.add(entry.getValue());
+		}
+	}
+	return client_list;
 }
 
+public Collection<Client> getYesDebtsClient(){
+	List<Client> client_list = new ArrayList<Client>();
+	for(Map.Entry<String,Client> entry : _clients.entrySet()){
+		if(entry.getValue().Debts() != 0){
+			client_list.add(entry.getValue());
+		}
+	}
+	/*Collections.sort(client_list, Collections.reverseOrder());
+	for(Map.Entry<String,Client> entry : _clients.entrySet()){
+		if(entry.getValue().getDebts() != 0){
+			
+			//value será o id do client i think which rules
+		}
+	}*/
+	//this is supposed to work
+	//and i should also sort by id nr (crescente) de nr de cliente
+	//lets try it
+	return client_list;
+}	
+
+}

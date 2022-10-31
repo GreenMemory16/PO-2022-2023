@@ -13,6 +13,8 @@ import prr.exceptions.ClientNotificationsAlreadyDefinedException;
 import prr.NetworkManager;
 import prr.terminals.Terminal;
 import prr.notifications.Notification;
+import java.util.List;
+import java.util.ArrayList;
 
 public class Client implements Serializable {
 
@@ -26,6 +28,9 @@ public class Client implements Serializable {
     private String _name;
     private int _taxId;
 
+    /*private long payments;
+    private long debts;*/
+
     //client's characteristics
     private boolean _activeNotifications = true;
     private ClientLevel _level;
@@ -36,12 +41,32 @@ public class Client implements Serializable {
         _name = name;
         _taxId = taxId;
         _level = new NormalLevel(this);
+        /*this.payments = 0;
+        this.debts = 0;*/
     }
 
     //getters
     public String getKey() { return _key; }
     public String getName() { return _name; }
     public int getTaxId() { return _taxId; }
+    /*public long getPayments(){ return this.payments;}
+    public long getDebts(){ return this.debts;}*/
+
+
+    public long Payments(){
+        long payments = 0;
+        for(Map.Entry<String,Terminal> entry : _terminals.entrySet()){
+            payments += entry.getValue().getAllPayments();
+        }
+        return payments;
+    }
+    public long Debts(){
+        long debts = 0;
+        for(Map.Entry<String,Terminal> entry : _terminals.entrySet()){
+            debts += entry.getValue().getAllDebts();
+        }
+        return debts;
+    }
 
     //setters
     public void setActiveNotifications(Boolean value) throws ClientNotificationsAlreadyDefinedException {
@@ -89,7 +114,7 @@ public class Client implements Serializable {
     public String toString() {
         return "CLIENT|" + getKey() + "|" + getName() + "|" + getTaxId() + "|" + 
                 _level.getLevel() + "|" + getNotificationSwitch_String() + "|" +
-                _terminals.size() + "|" + "0" + "|" + "0";
+                _terminals.size() + "|" +this.Payments() + "|" + this.Debts();
     }
 
     @Override
@@ -100,5 +125,7 @@ public class Client implements Serializable {
         }
         return false;
     }
+
+}
 
 }

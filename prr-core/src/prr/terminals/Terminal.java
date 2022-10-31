@@ -22,6 +22,14 @@ import prr.exceptions.UnsupportedAtOriginException;
 import prr.exceptions.NoOnGoingCommunicationException;
 import prr.exceptions.SenderEqualsReceiverException;
 import prr.exceptions.UnknownTerminalKeyExceptionCore;
+import prr.exceptions.DestinationIsBusyException;
+import prr.exceptions.DestinationIsOffException;
+import prr.exceptions.DestinationIsSilentException;
+import prr.exceptions.NoOnGoingCommunicationException;
+import prr.exceptions.UnsupportedAtDestinationException;
+import prr.exceptions.UnsupportedAtOriginException;
+import prr.exceptions.SenderEqualsReceiverException;
+import prr.exceptions.UnknownTerminalKeyExceptionCore;
 import prr.exceptions.AlreadyInStateException;
 import prr.communication.Communication;
 import prr.communication.InteractiveCommunication;
@@ -64,8 +72,8 @@ public abstract class Terminal implements Serializable{
 
         //private lista de dividas e pagamentos
         //enunciado diz que o terminal deve ter contabilidade propria
-        private List<Integer> payments;
-        private List<Integer> debts;
+        private List<Communication> payments;
+        private List<Communication> debts;
 
         //define contructor(s)
         public Terminal(String id, Client client){
@@ -76,10 +84,10 @@ public abstract class Terminal implements Serializable{
 
                 this.friends = new TreeMap<String,Terminal>();
 
-                this.payments = new ArrayList<Integer>();
-                this.payments.add(0);
-                this.debts = new ArrayList<Integer>();
-                this.debts.add(0);
+                this.payments = new ArrayList<Communication>();
+                //this.payments.add(0);
+                this.debts = new ArrayList<Communication>();
+                //this.debts.add(0);
 
                 this._communications = new TreeMap<Integer, Communication>();
         }
@@ -107,17 +115,22 @@ public abstract class Terminal implements Serializable{
                 return client;
         }
 
-        public int getAllPayments(){
-                return getAllSomething(this.payments);
+        public long getBalance(){
+                long sum = getAllPayments() + getAllDebts();
+                return sum;
         }
-        public int getAllDebts(){
-                return getAllSomething(this.debts);
+        public long getAllPayments(){
+                return Long.valueOf(getAllSomething(this.payments));
+        }
+        public long getAllDebts(){
+                return Long.valueOf(getAllSomething(this.debts));
         }
         //for abstração sake
         public int getAllSomething(List list){
                 int total = 0;
                 for(int i = 0; i < list.size() ; i++){
-                        total += (Integer) list.get(i);
+                        Communication com = (Communication) list.get(i);
+                        total += com.getCost();
                 }
                 return total;
         }
@@ -303,6 +316,8 @@ public abstract class Terminal implements Serializable{
                         comm.setCost(comm.calculateCost());
                         comm.setStatus(false);
                         insertCommunication(comm);
+                        insertCommunication(comm);
+                        receiver.addDebt(comm);
                 }
         }
 
@@ -383,4 +398,27 @@ public abstract class Terminal implements Serializable{
                 }
                 return false;
         }
+
+/************************** Payment methods ****************************** */
+public void performPayment(int commId) throws InvalidCommunicationExceptionCore{
+	Communication c = this.getCommunication(commId);
+	if (c == null || c.getCost() == 0) {
+		throw new InvalidCommunicationExceptionCore();
+	}
+        if(!c.getReceiver().equals(this) || c.equals(this._onGoingComm) || !this.debts.contains(c)) {
+                throw new InvalidCommunicationExceptionCore();
+        }
+	this.addPayment(c);
+}
+public long showBalance() {
+        return this.getBalance();
+}
+public void addDebt(Communication com){
+        this.debts.add(com);
+}
+public void addPayment(Communication com){
+        this.payments.add(com);
+        this.debts.remove(com);
+}
+
 }

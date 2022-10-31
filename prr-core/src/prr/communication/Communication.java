@@ -27,12 +27,16 @@ public abstract class Communication{
         return _id;
     }
 
-    public double getCost() {
+    public long getCost() {
         return _cost;
     }
 
-    public void setCost(double cost) {
+
+    public void setCost(long cost) {
         _cost = cost;
+    }
+    public boolean getStatus() {
+        return _status;
     }
 
     public String getStatusToString() {
@@ -54,6 +58,11 @@ public abstract class Communication{
     }
 
 
-    public abstract double calculateCost();
+    public boolean equals(Communication com){
+        return this._id == com.getId() && this._receiver.equals(com.getReceiver()) 
+        && this._sender.equals(com.getSender())
+        && this._cost == com.getCost() && this._status == com.getStatus();
+    }
+    public abstract long calculateCost();
     
 }

@@ -45,9 +45,6 @@ class DoRegisterTerminal extends Command<Network> {
 		catch(InvalidTerminalKeyExceptionCore e){
 			throw new InvalidTerminalKeyException(e.getId());
 		}
-		catch(UnknownTerminalKeyExceptionCore e){
-			throw new UnknownTerminalKeyException(e.getId());
-		} 
 		//this exception won't happen right now
 		catch(TerminalTypeNotSupportedException e) {
 			e.printStackTrace();

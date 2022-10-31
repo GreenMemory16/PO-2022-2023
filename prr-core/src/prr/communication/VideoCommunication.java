@@ -19,24 +19,25 @@ public class VideoCommunication extends InteractiveCommunication {
         return (getSender().IsFriend(getReceiver().getId()));
     }
     
-    public double calculateCost() {
-        double value = 0;
+    public long calculateCost() {
+        long value = 0;
         switch(getSender().getClient().getClientLevel()) {
             case "NORMAL": 
-                value = (30 * getDuration());
+                value = (long) (30 * getDuration());
                 break;
             case "GOLD": 
-                value = (20 * getDuration());
+                value = (long)(20 * getDuration());
                 break;
             case "PLATINUM": 
-                value = (10 * getDuration());
+                value = (long) (10 * getDuration());
                 break;
         }
 
         if (senderRecieverFriendship()) {
             value *= 0.5;
         }
-        return value;
+        this.setCost((long) value);
+        return (long) value;
     }
 
     public String toString() {

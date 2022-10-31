@@ -29,4 +29,3 @@ class DoRemoveFriend extends TerminalCommand {
 		}	
 	}
 }
-

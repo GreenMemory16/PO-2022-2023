@@ -5,7 +5,6 @@ import prr.terminals.Terminal;
 import pt.tecnico.uilib.menus.CommandException;
 import prr.exceptions.AlreadySilentExceptionCore;
 import prr.exceptions.AlreadyInStateException;
-//FIXME add more imports if needed
 
 /**
  * Silence the terminal.
@@ -21,7 +20,6 @@ class DoSilenceTerminal extends TerminalCommand {
 		try {
         	_receiver.switchToSilence();
 		} catch (AlreadyInStateException e) {
-			System.out.println("HELLO");
 			_display.popup(Message.alreadySilent());
 		}
 	}

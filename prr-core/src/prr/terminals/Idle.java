@@ -14,6 +14,7 @@ public class Idle extends State implements Serializable{
 
     public void goToSilence() {
         getTerminal().setState(new Silence(getTerminal()));
+        
     }
 
     public void turnOn() throws AlreadyInStateException{

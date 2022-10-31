@@ -21,19 +21,25 @@ public class TextCommunication extends Communication {
         return "TEXT";
     }
 
-    public double calculateCost() {
-        double multiplier;
+    public long calculateCost() {
+        long multiplier;
         if(getMessageSize() < 50) {
-            multiplier = calculateSmallText();
-            return multiplier * getMessageSize();
+            multiplier = (long) calculateSmallText();
+            long cost = multiplier * (long) getMessageSize();
+            this.setCost(cost);
+            return cost;
         }
         else if (getMessageSize() >= 50 && getMessageSize() < 100) {
-            multiplier =  calculateMediumText();
-            return multiplier * getMessageSize();
+            multiplier =  (long) calculateMediumText();
+            long cost = multiplier * (long) getMessageSize();
+            this.setCost(cost);
+            return cost;
         } 
         else {
-            multiplier = calculateBigText();
-            return multiplier * getMessageSize();
+            multiplier = (long) calculateBigText();
+            long cost =  multiplier * (long) getMessageSize();
+            this.setCost(cost);
+            return cost;
         }
     }
 
