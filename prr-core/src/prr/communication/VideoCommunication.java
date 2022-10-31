@@ -19,7 +19,7 @@ public class VideoCommunication extends InteractiveCommunication {
         return (getSender().IsFriend(getReceiver().getId()));
     }
     
-    public double calculateCost() {
+    public long calculateCost() {
         double value = 0;
         switch(getSender().getClient().getClientLevel()) {
             case "NORMAL": 
@@ -36,7 +36,8 @@ public class VideoCommunication extends InteractiveCommunication {
         if (senderRecieverFriendship()) {
             value *= 0.5;
         }
-        return value;
+        this.setCost((long) value);
+        return (long) value;
     }
 
     public String toString() {

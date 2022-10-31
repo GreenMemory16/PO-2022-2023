@@ -21,7 +21,7 @@ class DoTurnOnTerminal extends TerminalCommand {
 		try {
         	_receiver.turnOn();
 		} catch (AlreadyInStateException e) {
-			_display.popup(Message.alreadyOff());
+			_display.popup(Message.alreadyOn());
 		}
 	}
 }

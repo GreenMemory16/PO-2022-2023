@@ -56,8 +56,8 @@ public abstract class Terminal implements Serializable{
 
         //private lista de dividas e pagamentos
         //enunciado diz que o terminal deve ter contabilidade propria
-        private List<Integer> payments;
-        private List<Integer> debts;
+        private List<Communication> payments;
+        private List<Communication> debts;
 
         //define contructor(s)
         public Terminal(String id, Client client){
@@ -68,10 +68,10 @@ public abstract class Terminal implements Serializable{
 
                 this.friends = new TreeMap<String,Terminal>();
 
-                this.payments = new ArrayList<Integer>();
-                this.payments.add(0);
-                this.debts = new ArrayList<Integer>();
-                this.debts.add(0);
+                this.payments = new ArrayList<Communication>();
+                //this.payments.add(0);
+                this.debts = new ArrayList<Communication>();
+                //this.debts.add(0);
 
                 this._communications = new TreeMap<Integer, Communication>();
         }
@@ -113,7 +113,8 @@ public abstract class Terminal implements Serializable{
         public int getAllSomething(List list){
                 int total = 0;
                 for(int i = 0; i < list.size() ; i++){
-                        total += (Integer) list.get(i);
+                        Communication com = (Communication) list.get(i);
+                        total += com.getCost();
                 }
                 return total;
         }
@@ -246,6 +247,7 @@ public abstract class Terminal implements Serializable{
                         Communication comm = new TextCommunication(commId, this, receiver, message);
                         comm.setStatus(false);
                         insertCommunication(comm);
+                        receiver.addDebt(comm);
                 }
         }
 
@@ -325,12 +327,20 @@ public void performPayment(int commId) throws InvalidCommunicationExceptionCore{
 	if (c == null || c.getCost() == 0) {
 		throw new InvalidCommunicationExceptionCore();
 	}
-        if(!c.getReceiver().equals(this) || c.equals(this._onGoingComm)) {
+        if(!c.getReceiver().equals(this) || c.equals(this._onGoingComm) || !this.debts.contains(c)) {
                 throw new InvalidCommunicationExceptionCore();
         }
-	c.pay();
+	this.addPayment(c);
 }
 public long showBalance() {
         return this.getBalance();
 }
+public void addDebt(Communication com){
+        this.debts.add(com);
+}
+public void addPayment(Communication com){
+        this.payments.add(com);
+        this.debts.remove(com);
+}
+
 }

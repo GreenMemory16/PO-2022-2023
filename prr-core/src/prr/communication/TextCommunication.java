@@ -21,15 +21,21 @@ public class TextCommunication extends Communication {
         return "TEXT";
     }
 
-    public double calculateCost() {
+    public long calculateCost() {
         if(getMessageSize() < 50) {
-            return calculateSmallText();
+            long cost = (long) calculateSmallText();
+            this.setCost(cost);
+            return cost;
         }
         else if (getMessageSize() >= 50 && getMessageSize() < 100) {
-            return calculateMediumText();
+            long cost = (long) calculateMediumText();
+            this.setCost(cost);
+            return cost;
         } 
         else {
-            return calculateBigText();
+            long cost = (long) calculateBigText();
+            this.setCost(cost);
+            return cost;
         }
     }
 

@@ -10,7 +10,7 @@ public abstract class Communication{
     private int _id;
     private Terminal _receiver;
     private Terminal _sender;
-    private double _cost = 0;
+    private long _cost = 0;
 
     private boolean _status = true;
 
@@ -27,20 +27,16 @@ public abstract class Communication{
         return _id;
     }
 
-    public double getCost() {
+    public long getCost() {
         return _cost;
     }
 
 
-    public void setCost(double cost) {
+    public void setCost(long cost) {
         _cost = cost;
     }
     public boolean getStatus() {
         return _status;
-    }
-    //to be used to pay communication
-    public void pay(){
-        this._cost = 0;
     }
 
     public String getStatusToString() {
@@ -67,6 +63,6 @@ public abstract class Communication{
         && this._sender.equals(com.getSender())
         && this._cost == com.getCost() && this._status == com.getStatus();
     }
-    public abstract double calculateCost();
+    public abstract long calculateCost();
     
 }
