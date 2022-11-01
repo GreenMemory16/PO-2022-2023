@@ -41,16 +41,14 @@ public class Client implements Serializable {
         _name = name;
         _taxId = taxId;
         _level = new NormalLevel(this);
-        /*this.payments = 0;
-        this.debts = 0;*/
     }
 
     //getters
     public String getKey() { return _key; }
     public String getName() { return _name; }
     public int getTaxId() { return _taxId; }
-    /*public long getPayments(){ return this.payments;}
-    public long getDebts(){ return this.debts;}*/
+    public ClientLevel getLevel() { return _level; }
+    public void setLevel(ClientLevel level) { _level = level; }
 
 
     public long Payments(){
@@ -66,6 +64,12 @@ public class Client implements Serializable {
             debts += entry.getValue().getAllDebts();
         }
         return debts;
+    }
+
+    public long Saldo(){
+        long saldo = 0;
+        saldo += Payments() + Debts();
+        return saldo;
     }
 
     //setters

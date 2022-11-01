@@ -43,6 +43,9 @@ import prr.notifications.NotificationOffToIdle;
 import prr.notifications.NotificationOffToSilent;
 import prr.notifications.NotificationBusyToIdle;
 import prr.notifications.NotificationSilentToIdle;
+import prr.clients.NormalLevel;
+import prr.clients.PlatinumLevel;
+import prr.clients.GoldLevel;
 
 
 /**
@@ -332,8 +335,63 @@ public abstract class Terminal implements Serializable{
                         //here maybe receiver
                         this.addDebt(comm);
                         comm.getReceiver().recievedCommunications();
+                        Client client = comm.getSender().getClient();
+                        this.changeState(client, this);
                 }
         }
+
+        public void changeState(Client client, Terminal terminal){
+                goldToNormal(client);
+                goldToPlatinium(client, terminal);
+                platiniumToGold(client, terminal);
+                platiniumToNormal(client);
+        }
+
+        public void goldToNormal(Client client){
+                if(client.Saldo() < 0 && client.getLevel().getLevel().equals("GOLD")){
+                        client.setLevel(new NormalLevel(client));
+                }
+        }
+
+        public void goldToPlatinium(Client client, Terminal terminal){
+                //it might there be a problem if the 5 comms are old and it passed again
+                //enunciado não diz se têm de ser as mais recentes ou não RIP
+                int commCounter = 0;
+                for(Map.Entry<Integer, Communication> entry : terminal._communications.entrySet()){
+                        if(entry.getValue().getType().equals("VIDEO")){
+                                commCounter ++;
+                        }
+                        else{
+                                commCounter = 0;
+                        }
+                }
+                if(client.Saldo() > 0 && client.getLevel().getLevel().equals("GOLD") && commCounter == 5){
+                        client.setLevel(new PlatinumLevel(client));
+                }
+        }
+        public void platiniumToGold(Client client, Terminal terminal){
+                int commCounter = 0;
+                for(Map.Entry<Integer, Communication> entry : terminal._communications.entrySet()){
+                        if(entry.getValue().getType().equals("TEXT")){
+                                commCounter ++;
+                        }
+                        else{
+                                commCounter = 0;
+                        }
+                }
+                if(client.Saldo() > 0 && client.getLevel().getLevel().equals("PLATINIUM") && commCounter == 2){
+                        client.setLevel(new GoldLevel(client));
+                }
+        }
+
+        public void platiniumToNormal(Client client){
+                if(client.Saldo() < 0 && client.getLevel().getLevel().equals("PLATINIUM")){
+                        client.setLevel(new NormalLevel(client));
+                }
+        }
+
+
+       
 
         public void makeInteractiveCommunication(Network network, String id, String type) throws UnknownTerminalKeyExceptionCore,
                                                  DestinationIsOffException, DestinationIsBusyException, DestinationIsSilentException,
@@ -399,6 +457,8 @@ public abstract class Terminal implements Serializable{
                 communication.setCost(communication.calculateCost());
                 addDebt(communication);
                 communication.getReceiver().recievedCommunications();
+                Client client = communication.getSender().getClient();
+                changeState(client,this);
 
                 return (int) Math.round(communication.calculateCost());
         }
@@ -425,6 +485,15 @@ public abstract class Terminal implements Serializable{
                         throw new InvalidCommunicationExceptionCore();
                 }
                 this.addPayment(c);
+                //changing from Normal to Gold
+                normalToGold(this.getClient());
+                
+        }
+
+        public void normalToGold(Client client){
+                if(client.Saldo() > 500 && client.getLevel().getLevel().equals("NORMAL")){
+                        client.setLevel(new GoldLevel(client));
+                }
         }
 
         public void addDebt(Communication com){
