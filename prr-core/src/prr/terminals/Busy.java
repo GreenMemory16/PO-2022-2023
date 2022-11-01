@@ -4,14 +4,15 @@ import java.io.Serializable;
 
 public class Busy extends State implements Serializable{
 
-    public Busy(Terminal terminal) {
-        super(terminal);
+    public Busy(Terminal terminal, boolean previousIdle) {
+        super(terminal, previousIdle);
     }
 
      //changing state rules
 
     public void goToSilence() {
-        getTerminal().setState(new Silence(getTerminal()));
+        getTerminal().setState(new Silence(getTerminal(), getPreviousIdle()));
+        setPreviousIdle(false);
     }
 
     public void turnOn() {}
@@ -22,7 +23,7 @@ public class Busy extends State implements Serializable{
 
     public void endOfComm() {
         if (getPreviousIdle()) {
-            getTerminal().setState(new Idle(getTerminal()));
+            getTerminal().setState(new Idle(getTerminal(),getPreviousIdle()));
         }
         else {
             goToSilence();

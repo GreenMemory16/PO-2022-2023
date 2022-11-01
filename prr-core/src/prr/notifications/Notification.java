@@ -15,4 +15,12 @@ public abstract class Notification {
     }
 
     public abstract String getType();
+
+    public boolean equals(Object o) {
+        if (o instanceof Notification) {
+            Notification n = (Notification) o;
+            return getTerminal().equals(n.getTerminal()) && getType().equals(n.getType());
+        }
+        return false;
+    }
 }

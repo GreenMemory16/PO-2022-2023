@@ -5,21 +5,18 @@ import prr.exceptions.AlreadyInStateException;
 
 public class Off extends State implements Serializable{
     
-    public Off(Terminal terminal) {
-        super(terminal);
+    public Off(Terminal terminal, boolean previousIdle) {
+        super(terminal, previousIdle);
     }
 
      //changing state rules
 
     public void goToSilence() {
-        getTerminal().setState(new Silence(getTerminal()));
+        getTerminal().setState(new Silence(getTerminal(), getPreviousIdle()));
     }
 
     public void turnOn() {
-        if (getPreviousIdle()) {
-            getTerminal().setState(new Idle(getTerminal()));
-        }
-        goToSilence();
+        getTerminal().setState(new Idle(getTerminal(), getPreviousIdle()));
     }
 
     public void turnOff() throws AlreadyInStateException {

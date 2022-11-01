@@ -102,11 +102,17 @@ public class Client implements Serializable {
     }
 
     public void addNotification(Notification notification) {
-        _notifications.add(notification);
+        if (!_notifications.contains(notification)) {
+            _notifications.add(notification);
+        }
     }
 
     public ArrayList<Notification> getNotifications() {
         return _notifications;
+    }
+
+    public void removeNotifications() {
+        _notifications.clear();
     }
 
     //client's toString

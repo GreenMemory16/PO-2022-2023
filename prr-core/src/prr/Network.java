@@ -18,6 +18,7 @@ import prr.exceptions.ClientNotificationsAlreadyDefinedException;
 import prr.exceptions.DuplicateClientKeyExceptionCore;
 import prr.exceptions.DuplicateTerminalKeyExceptionCore;
 import prr.exceptions.ImportFileException;
+import prr.exceptions.InvalidFriendExceptionCore;
 import prr.exceptions.InvalidTerminalKeyExceptionCore;
 import prr.exceptions.TerminalTypeNotSupportedException;
 import prr.exceptions.UnknownClientKeyExceptionCore;
@@ -82,13 +83,14 @@ public class Network implements Serializable {
 	public void importFriends(String[] fields) {
 		try {
 			Terminal terminal = getTerminal(fields[1]);
-			for(int i=2; i < fields.length; i++) {
-				Terminal friend = getTerminal(fields[i]);
+			String[] friendsIds = fields[2].split(",");
+			for(int i=0; i < friendsIds.length; i++) {
+				Terminal friend = getTerminal(friendsIds[i]);
 				makeFriends(terminal, friend);
 			}
 		} catch (UnknownTerminalKeyExceptionCore e) {
 			e.printStackTrace();
-		}
+		} 
 			
 	}
 	
@@ -116,7 +118,9 @@ public class Network implements Serializable {
 	}
 
 	public ArrayList<Notification> getNotifications(String key) throws UnknownClientKeyExceptionCore {
-		return getClient(key).getNotifications();
+		ArrayList<Notification> notifications = new ArrayList<>(getClient(key).getNotifications());
+		getClient(key).removeNotifications();
+		return notifications;
 	}
 
 	public void changeNotifications(String key, Boolean value) throws UnknownClientKeyExceptionCore, ClientNotificationsAlreadyDefinedException{
@@ -139,13 +143,13 @@ public class Network implements Serializable {
 
 	public void SwitchState(String state, Terminal terminal) {
 		if(state.equals("ON")) {
-			terminal.setState(new Idle(terminal));
+			terminal.setState(new Idle(terminal, true));
 		}
 		else if(state.equals("OFF")) {
-			terminal.setState(new Off(terminal));
+			terminal.setState(new Off(terminal, terminal.getState().getPreviousIdle()));
 		}
 		else if(state.equals("SILENCE")) {
-			terminal.setState(new Silence(terminal));
+			terminal.setState(new Silence(terminal, false));
 		}
 	}	
 
@@ -177,13 +181,14 @@ public class Network implements Serializable {
 		}
 
 		if(state.equals("ON")) {
-			terminal.setState(new Idle(terminal));
+			terminal.setState(new Idle(terminal, true));
 		}
 		else if(state.equals("OFF")) {
-			terminal.setState(new Off(terminal));
+			terminal.setState(new Off(terminal, true));
 		}
 		else if(state.equals("SILENCE")) {
-			terminal.setState(new Silence(terminal));
+			terminal.setState(new Silence(terminal, false));
+			terminal.getState().setPreviousIdle(false);
 		}
 
 
@@ -225,6 +230,10 @@ public class Network implements Serializable {
 
 	//makeFRiends calls the add friend from the terminal
 	public void makeFriends(Terminal terminal1, Terminal terminal2) {
+		if (terminal1.equals(terminal2)) {
+			return;
+		}
+
 		terminal1.AddFriend(terminal2);
 	}
 
@@ -257,7 +266,6 @@ public class Network implements Serializable {
 		for (Terminal t: _terminals.values()) {
 			for (Communication c: t.getAllTerminalCommunications()) {
 				if (c.getReceiver().getClient().equals(receiver)) {
-					System.out.println(c.getId());
 					al.add(c);
 				}
 			}

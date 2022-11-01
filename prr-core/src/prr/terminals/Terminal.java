@@ -21,6 +21,7 @@ import prr.exceptions.UnsupportedAtDestinationException;
 import prr.exceptions.UnsupportedAtOriginException;
 import prr.exceptions.NoOnGoingCommunicationException;
 import prr.exceptions.InvalidCommunicationExceptionCore;
+import prr.exceptions.InvalidFriendExceptionCore;
 import prr.exceptions.SenderEqualsReceiverException;
 import prr.exceptions.UnknownTerminalKeyExceptionCore;
 import prr.exceptions.DestinationIsBusyException;
@@ -78,7 +79,7 @@ public abstract class Terminal implements Serializable{
 
         //define contructor(s)
         public Terminal(String id, Client client){
-                this.state = new Idle(this);
+                this.state = new Idle(this, true);
                 this.id = id;
                 this.client = client;
 
@@ -162,18 +163,18 @@ public abstract class Terminal implements Serializable{
         }
 
         //to enumerate all friends that terminal has
-        private String toStringFriends(){
+        public String toStringFriends(){
                 Set<Map.Entry<String, Terminal>> entrySet = friends.entrySet();
                 Map.Entry<Integer, String>[] entryArray = entrySet.toArray(new Map.Entry[entrySet.size()]);
-                String returnString = "";
+                String returnString = "|";
                 
                 for(int i = 0; i < entryArray.length ; i++){
-                        returnString += "|" + entryArray[i].getKey();
+                        returnString += entryArray[i].getKey() + ",";
                 }
-                return returnString;
+                return returnString.substring(0, returnString.length()-1);
                 
         }
-        
+
         //to String method
         @Override
         public String toString(){

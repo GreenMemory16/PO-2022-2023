@@ -10,8 +10,9 @@ public abstract class State implements Serializable{
     private Terminal _terminal;
     private boolean _previousIdle = true;
 
-    public State(Terminal terminal) {
+    public State(Terminal terminal, boolean previousIdle) {
         _terminal = terminal;
+        _previousIdle = previousIdle;
     }
 
     public Terminal getTerminal() {

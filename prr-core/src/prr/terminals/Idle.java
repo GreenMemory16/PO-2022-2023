@@ -5,16 +5,14 @@ import prr.exceptions.AlreadyInStateException;
 
 public class Idle extends State implements Serializable{
 
-    public Idle(Terminal terminal) {
-        super(terminal);
-        setPreviousIdle(true);
+    public Idle(Terminal terminal, boolean previousIdle) {
+        super(terminal, previousIdle);
     }
 
      //changing state rules
 
     public void goToSilence() {
-        getTerminal().setState(new Silence(getTerminal()));
-        
+        getTerminal().setState(new Silence(getTerminal(), true));
     }
 
     public void turnOn() throws AlreadyInStateException{
@@ -22,15 +20,13 @@ public class Idle extends State implements Serializable{
     }
 
     public void turnOff() {
-        setPreviousIdle(true);
-        getTerminal().setState(new Off(getTerminal()));
+        getTerminal().setState(new Off(getTerminal(), true));
     }
 
     public void endOfComm() {}
 
     public void startOfComm() {
-        setPreviousIdle(true);
-        getTerminal().setState(new Busy(getTerminal()));
+        getTerminal().setState(new Busy(getTerminal(), true));
     }
 
     public boolean statePermitsInteractiveCommunication() {
