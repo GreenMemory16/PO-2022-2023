@@ -116,18 +116,21 @@ public abstract class Terminal implements Serializable{
                 return client;
         }
 
-        public long getBalance(){
-                long sum = getAllPayments() + getAllDebts();
+        public int getBalance(){
+                int sum = Math.round(getAllPayments() + getAllDebts());
                 return sum;
         }
-        public long getAllPayments(){
-                return Long.valueOf(getAllSomething(this.payments));
+
+        public int getAllPayments(){
+                return (int) Math.round(getAllSomething(this.payments));
         }
-        public long getAllDebts(){
-                return Long.valueOf(getAllSomething(this.debts));
+
+        public int getAllDebts(){
+                return (int) Math.round(getAllSomething(this.debts));
         }
+
         //for abstração sake
-        public int getAllSomething(List list){
+        public int getAllSomething(List list) {
                 int total = 0;
                 for(int i = 0; i < list.size() ; i++){
                         Communication com = (Communication) list.get(i);
@@ -213,7 +216,7 @@ public abstract class Terminal implements Serializable{
 
         public boolean canStartCommunication() {
                 // DONT DELETE, IT CAME WITH THE CODE!
-                return this.senderAvailableForCommunication();
+                return this.AvailableForInteractiveCommunication(this);
         }
 
         public void setState(State newState) {
@@ -278,12 +281,12 @@ public abstract class Terminal implements Serializable{
                 state.startOfComm(); 
         } 
 
-        public boolean senderAvailableForCommunication() {
-                return this.getState().statePermitsCommunication();
+        public boolean AvailableForTextCommunication(Terminal terminal) {
+                return terminal.getState().statePermitsTextCommunication();
         }
 
-        public boolean receiverAvailableForCommunication(Terminal receiver) {
-                return receiver.getState().statePermitsCommunication();
+        public boolean AvailableForInteractiveCommunication(Terminal terminal) {
+                return terminal.getState().statePermitsInteractiveCommunication();
         }
 
         public abstract boolean canSupportVideoCommunication();
@@ -312,7 +315,7 @@ public abstract class Terminal implements Serializable{
                         throw new DestinationIsOffException(id);
                 }
 
-                if (senderAvailableForCommunication() && receiverAvailableForCommunication(receiver)) {
+                if (AvailableForTextCommunication(this) && AvailableForTextCommunication(receiver)) {
                         int commId = network.getCommunicationId();
                         Communication comm = new TextCommunication(commId, this, receiver, message);
                         comm.setCost(comm.calculateCost());
@@ -344,7 +347,7 @@ public abstract class Terminal implements Serializable{
                         throw new SenderEqualsReceiverException(id);
                 }
 
-                if (senderAvailableForCommunication()) {
+                if (AvailableForInteractiveCommunication(this)) {
                         Communication comm;
                         if(type.equals("VOICE")) {
                                 comm = new VoiceCommunication(network.getCommunicationId(), this, receiver);
@@ -385,7 +388,8 @@ public abstract class Terminal implements Serializable{
                 communication.setCost(communication.calculateCost());
                 communication.setStatus(false);
                 _communications.replace(communication.getId(), communication);
-                communication.setCost((long)communication.calculateCost());
+                communication.setCost(communication.calculateCost());
+                addDebt(communication);
 
                 return (int) Math.round(communication.calculateCost());
         }
@@ -403,25 +407,25 @@ public abstract class Terminal implements Serializable{
         }
 
 /************************** Payment methods ****************************** */
-public void performPayment(int commId) throws InvalidCommunicationExceptionCore{
-	Communication c = this.getCommunication(commId);
-	if (c == null || c.getCost() == 0) {
-		throw new InvalidCommunicationExceptionCore();
-	}
-        if(!c.getReceiver().equals(this) || c.equals(this._onGoingComm) || !this.debts.contains(c)) {
-                throw new InvalidCommunicationExceptionCore();
+        public void performPayment(int commId) throws InvalidCommunicationExceptionCore{
+                Communication c = this.getCommunication(commId);
+                if (c == null || c.getCost() == 0) {
+                        throw new InvalidCommunicationExceptionCore();
+                }
+                if(!c.getReceiver().equals(this) || c.equals(this._onGoingComm) || !this.debts.contains(c)) {
+                        throw new InvalidCommunicationExceptionCore();
+                }
+                this.addPayment(c);
         }
-	this.addPayment(c);
-}
-public long showBalance() {
-        return this.getBalance();
-}
-public void addDebt(Communication com){
-        this.debts.add(com);
-}
-public void addPayment(Communication com){
-        this.payments.add(com);
-        this.debts.remove(com);
-}
+
+        public void addDebt(Communication com){
+                this.debts.add(com);
+        }
+
+        public void addPayment(Communication com){
+                this.payments.add(com);
+                this.debts.remove(com);
+        }
+        
 
 }

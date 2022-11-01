@@ -22,28 +22,24 @@ public class TextCommunication extends Communication {
     }
 
     public long calculateCost() {
-        long multiplier;
         if(getMessageSize() < 50) {
-            multiplier = (long) calculateSmallText();
-            long cost = multiplier * (long) getMessageSize();
+            long cost = calculateSmallText();
             this.setCost(cost);
             return cost;
         }
         else if (getMessageSize() >= 50 && getMessageSize() < 100) {
-            multiplier =  (long) calculateMediumText();
-            long cost = multiplier * (long) getMessageSize();
+            long cost = calculateMediumText();
             this.setCost(cost);
             return cost;
         } 
         else {
-            multiplier = (long) calculateBigText();
-            long cost =  multiplier * (long) getMessageSize();
+            long cost = calculateBigText();
             this.setCost(cost);
             return cost;
         }
     }
 
-    public double calculateSmallText() { 
+    public long calculateSmallText() { 
         switch(getSender().getClient().getClientLevel()) {
             case "NORMAL": return 10;
             case "GOLD": return 10;
@@ -52,7 +48,7 @@ public class TextCommunication extends Communication {
         }
     }
 
-    public double calculateMediumText() {
+    public long calculateMediumText() {
         switch(getSender().getClient().getClientLevel()) {
             case "NORMAL": return 16;
             case "GOLD": return 10;
@@ -61,7 +57,7 @@ public class TextCommunication extends Communication {
         }
     }
 
-    public double calculateBigText() { 
+    public long calculateBigText() { 
         switch(getSender().getClient().getClientLevel()) {
             case "NORMAL": return (getMessageSize() * 2);
             case "GOLD": return (getMessageSize() * 2);

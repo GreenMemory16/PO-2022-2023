@@ -30,8 +30,12 @@ public class Off extends State implements Serializable{
 
     public void startOfComm() {}
 
-    public boolean statePermitsCommunication() {
+    public boolean statePermitsInteractiveCommunication() {
         return false;
+    }
+
+    public boolean statePermitsTextCommunication() {
+        return true;
     }
 
     @Override

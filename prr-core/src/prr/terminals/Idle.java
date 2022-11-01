@@ -33,7 +33,11 @@ public class Idle extends State implements Serializable{
         getTerminal().setState(new Busy(getTerminal()));
     }
 
-    public boolean statePermitsCommunication() {
+    public boolean statePermitsInteractiveCommunication() {
+        return true;
+    }
+
+    public boolean statePermitsTextCommunication() {
         return true;
     }
 

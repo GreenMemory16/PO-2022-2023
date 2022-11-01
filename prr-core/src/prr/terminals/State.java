@@ -31,6 +31,8 @@ public abstract class State implements Serializable{
     public abstract void endOfComm();
     public abstract void startOfComm();
 
-    public abstract boolean statePermitsCommunication();
+    public abstract boolean statePermitsInteractiveCommunication();
+
+    public abstract boolean statePermitsTextCommunication();
     
 }

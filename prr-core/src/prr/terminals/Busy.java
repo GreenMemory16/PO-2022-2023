@@ -21,7 +21,6 @@ public class Busy extends State implements Serializable{
     public void startOfComm() {}
 
     public void endOfComm() {
-        System.out.println(getPreviousIdle());
         if (getPreviousIdle()) {
             getTerminal().setState(new Idle(getTerminal()));
         }
@@ -30,8 +29,12 @@ public class Busy extends State implements Serializable{
         }
     }
     
-    public boolean statePermitsCommunication() {
+    public boolean statePermitsInteractiveCommunication() {
         return false;
+    }
+
+    public boolean statePermitsTextCommunication() {
+        return true;
     }
 
     @Override

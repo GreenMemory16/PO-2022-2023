@@ -15,10 +15,10 @@ class DoShowTerminalBalance extends TerminalCommand {
 
 	@Override
 	protected final void execute() throws CommandException {
-		long payments = _receiver.getAllPayments();
-		long debts = _receiver.getAllDebts();
+		int payments = _receiver.getAllPayments();
+		int debts = _receiver.getAllDebts();
 		String terminal = _receiver.getId();
 
-		_display.popup(Message.terminalPaymentsAndDebts(terminal,payments, debts));
+		_display.popup(Message.terminalPaymentsAndDebts(terminal, payments, debts));
 	}
 }

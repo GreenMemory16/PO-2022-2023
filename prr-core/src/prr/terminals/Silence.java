@@ -33,7 +33,11 @@ public class Silence extends State implements Serializable{
 
     public void endOfComm() {}
 
-    public boolean statePermitsCommunication() {
+    public boolean statePermitsInteractiveCommunication() {
+        return true;
+    }
+
+    public boolean statePermitsTextCommunication() {
         return true;
     }
 
