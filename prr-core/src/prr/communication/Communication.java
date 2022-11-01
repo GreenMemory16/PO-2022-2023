@@ -59,7 +59,7 @@ public abstract class Communication{
 
 
     public boolean equals(Communication com){
-        return this._id == com.getId() && this._receiver.equals(com.getReceiver()) 
+        return com != null && this._id == com.getId() && this._receiver.equals(com.getReceiver()) 
         && this._sender.equals(com.getSender())
         && this._cost == com.getCost() && this._status == com.getStatus();
     }

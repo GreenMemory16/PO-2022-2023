@@ -468,7 +468,7 @@ public abstract class Terminal implements Serializable{
         }
         
         public boolean equals(Object o) {
-                if (o instanceof Terminal) {
+                if (o != null && o instanceof Terminal) {
                         Terminal t = (Terminal) o;
                         return (getId().equals(t.getId()));
                 }
@@ -478,12 +478,14 @@ public abstract class Terminal implements Serializable{
 /************************** Payment methods ****************************** */
         public void performPayment(int commId) throws InvalidCommunicationExceptionCore{
                 Communication c = this.getCommunication(commId);
-                if (c == null || c.calculateCost() == 0) {
+                if (c == null || c.calculateCost() == 0  || !this.debts.contains(c)) {
                         throw new InvalidCommunicationExceptionCore();
                 }
-                if(!c.getReceiver().equals(this) || !c.equals(this._onGoingComm) || !this.debts.contains(c)) {
+                //WHY DOESNT THIS FK WORK WTH
+                if(c.getStatusToString().equals("ONGOING") /*|| !c.getReceiver().equals(this)*/) {
                         throw new InvalidCommunicationExceptionCore();
                 }
+                
                 this.addPayment(c);
                 //changing from Normal to Gold
                 normalToGold(this.getClient());
