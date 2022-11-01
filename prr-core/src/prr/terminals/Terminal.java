@@ -64,6 +64,8 @@ public abstract class Terminal implements Serializable{
         //map with all communications made by this terminal
         private Map<Integer, Communication> _communications;
 
+        private int recievedCommunications;
+
         private ArrayList<Communication> _commAttempts = new ArrayList<>();
 
         private Communication _onGoingComm;
@@ -82,6 +84,7 @@ public abstract class Terminal implements Serializable{
                 this.state = new Idle(this, true);
                 this.id = id;
                 this.client = client;
+                this.recievedCommunications = 0;
 
 
                 this.friends = new TreeMap<String,Terminal>();
@@ -106,7 +109,7 @@ public abstract class Terminal implements Serializable{
 
         //returns true if terminal is unused
         public boolean NoCommunications(){
-                return(this._communications.size() == 0);
+                return(this._communications.size() == 0 && this.recievedCommunications == 0);
         }
         /* state related function */
         public State getState(){
@@ -192,6 +195,10 @@ public abstract class Terminal implements Serializable{
 
         public void removeFriend(Network network, String id) throws UnknownTerminalKeyExceptionCore {
                 network.deMakeFriends(this, network.getTerminal(id));
+        }
+
+        public void recievedCommunications(){
+                this.recievedCommunications++;
         }
 
         /**
@@ -324,6 +331,7 @@ public abstract class Terminal implements Serializable{
                         insertCommunication(comm);
                         //here maybe receiver
                         this.addDebt(comm);
+                        comm.getReceiver().recievedCommunications();
                 }
         }
 
@@ -378,7 +386,6 @@ public abstract class Terminal implements Serializable{
         }
 
         public int endInteractiveCommunication(Network network, int duration) {
-                // AINDA HÁ COISAS POR FAZER, MOSTRAR O VALOR DO PAGAMENTO, ETC
 
                 //IMPORTANTE! NAO SEI COMO ALTERAR A DURACAO!
                 this.endOfComm();
@@ -391,6 +398,7 @@ public abstract class Terminal implements Serializable{
                 _communications.replace(communication.getId(), communication);
                 communication.setCost(communication.calculateCost());
                 addDebt(communication);
+                communication.getReceiver().recievedCommunications();
 
                 return (int) Math.round(communication.calculateCost());
         }
@@ -410,10 +418,10 @@ public abstract class Terminal implements Serializable{
 /************************** Payment methods ****************************** */
         public void performPayment(int commId) throws InvalidCommunicationExceptionCore{
                 Communication c = this.getCommunication(commId);
-                if (c == null || c.getCost() == 0) {
+                if (c == null || c.calculateCost() == 0) {
                         throw new InvalidCommunicationExceptionCore();
                 }
-                if(!c.getReceiver().equals(this) || c.equals(this._onGoingComm) || !this.debts.contains(c)) {
+                if(!c.getReceiver().equals(this) || !c.equals(this._onGoingComm) || !this.debts.contains(c)) {
                         throw new InvalidCommunicationExceptionCore();
                 }
                 this.addPayment(c);
