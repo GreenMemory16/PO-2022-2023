@@ -419,7 +419,7 @@ public Collection<Terminal> getPositiveTerminals(){
 public Collection<Client> getNoDebtsClient(){
 	List<Client> client_list = new ArrayList<Client>();
 	for(Map.Entry<String,Client> entry : _clients.entrySet()){
-		if(entry.getValue().Payments() == 0){
+		if(entry.getValue().Debts() == 0){
 			client_list.add(entry.getValue());
 		}
 	}
@@ -437,6 +437,8 @@ public Collection<Client> getYesDebtsClient(){
 			client_list.add(entry.getValue());
 		}
 	}
+
+	Collections.sort(client_list, new DebtComparator());
 	//this is supposed to work
 	//FIX ME
 	//and i should also sort by id nr (crescente) de nr de cliente
