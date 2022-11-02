@@ -481,8 +481,7 @@ public abstract class Terminal implements Serializable{
                 if (c == null || c.calculateCost() == 0  || !this.debts.contains(c)) {
                         throw new InvalidCommunicationExceptionCore();
                 }
-                //WHY DOESNT THIS FK WORK WTH
-                if(c.getStatusToString().equals("ONGOING") /*|| !c.getReceiver().equals(this)*/) {
+                if(c.getStatusToString().equals("ONGOING") || !c.getSender().equals(this)) {
                         throw new InvalidCommunicationExceptionCore();
                 }
                 
