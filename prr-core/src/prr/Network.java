@@ -438,11 +438,8 @@ public Collection<Client> getYesDebtsClient(){
 		}
 	}
 
+	//to sort by debt and client id
 	Collections.sort(client_list, new DebtComparator());
-	//this is supposed to work
-	//FIX ME
-	//and i should also sort by id nr (crescente) de nr de cliente
-	//lets try it
 	return client_list;
 }	
 
