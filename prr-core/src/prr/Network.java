@@ -440,4 +440,28 @@ public Collection<Client> getYesDebtsClient(){
 	return client_list;
 }	
 
+/****************Total Balance ******/
+public int getTotalBalance(){
+	int sum = 0;
+	for(Map.Entry<String,Terminal> terminal : _terminals.entrySet()){
+		sum += terminal.getValue().getBalance();
+	}
+	return sum;
+}
+public int getTotalPayments(){
+	int sum = 0;
+	for(Map.Entry<String,Terminal> terminal : _terminals.entrySet()){
+		sum += terminal.getValue().getAllPayments();
+	}
+	return sum;
+}
+
+public int getTotalDebts(){
+	int sum = 0;
+	for(Map.Entry<String,Terminal> terminal : _terminals.entrySet()){
+		sum += terminal.getValue().getAllDebts();
+	}
+	return sum;
+}
+
 }

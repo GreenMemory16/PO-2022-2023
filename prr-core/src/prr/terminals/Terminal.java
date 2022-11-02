@@ -124,7 +124,7 @@ public abstract class Terminal implements Serializable{
         }
 
         public int getBalance(){
-                int sum = Math.round(getAllPayments() + getAllDebts());
+                int sum = Math.round(getAllPayments() - getAllDebts());
                 return sum;
         }
 
@@ -226,7 +226,6 @@ public abstract class Terminal implements Serializable{
          **/
 
         public boolean canStartCommunication() {
-                // DONT DELETE, IT CAME WITH THE CODE!
                 return this.AvailableForInteractiveCommunication(this);
         }
 
