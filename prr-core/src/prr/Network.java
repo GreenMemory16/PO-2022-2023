@@ -42,10 +42,13 @@ public class Network implements Serializable {
 	/** Serial number for serialization. */
 	private static final long serialVersionUID = 202208091753L;
 
+	// Map of all clients created
 	private Map<String, Client> _clients = new TreeMap<>(String.CASE_INSENSITIVE_ORDER);
 
+	// Map of all terminals created
 	private Map<String, Terminal> _terminals = new TreeMap<String, Terminal>();
 
+	//Current communication number
 	private int _communicationNumber = 0;
 
 	/**
@@ -80,6 +83,12 @@ public class Network implements Serializable {
 		}
 	}
 
+	/**
+	 * Imports clients
+	 * 
+	 * @param fields array of fields
+	 	*@throws UnknownTermianlKeyExceptionCore if the terminal key is unknown 
+	 */
 	public void importFriends(String[] fields) {
 		try {
 			Terminal terminal = getTerminal(fields[1]);
@@ -94,6 +103,15 @@ public class Network implements Serializable {
 			
 	}
 	
+	/**
+	 * Registers a new client;
+	 * 
+	 * @param key is the client key
+	 	*@throws DuplicateClientKeyExceptionCore if the client key is already registered
+	*@param name is the client name
+	*@param taxId is the client tax id
+	 * @return client created
+	 */
 	public Client registerClient(String key, String name, int taxId) throws DuplicateClientKeyExceptionCore {
 		if (_clients.containsKey(key)) {
 			throw new DuplicateClientKeyExceptionCore(key);
@@ -105,6 +123,13 @@ public class Network implements Serializable {
 		return client;
 	}
 
+	/**
+	 * Gets a certain client;
+	 * 
+	 * @param key is the client key
+	 	*@throws UnknownClientKeyExceptionCore if the client does not exist
+	 * @return c is the client 
+	 */
 	public Client getClient(String key) throws UnknownClientKeyExceptionCore {
 		Client c = _clients.get(key);
 		if (c == null) {
@@ -113,9 +138,22 @@ public class Network implements Serializable {
 		return c;
 	}
 
+	/**
+	 * Gets all clients.
+	 
+	 * @return a Collection of clients 
+	 */
 	public Collection<Client> getAllClients() {
 		return Collections.unmodifiableCollection(_clients.values());
 	}
+
+	/**
+	 * Gets the notifications from a certain client.
+	 * 
+	 * @param key is the client key
+	 	*@throws UnknownClientKeyExceptionCore if the client does not exist
+	 * @return an Array of notifications 
+	 */
 
 	public ArrayList<Notification> getNotifications(String key) throws UnknownClientKeyExceptionCore {
 		ArrayList<Notification> notifications = new ArrayList<>(getClient(key).getNotifications());
@@ -123,23 +161,43 @@ public class Network implements Serializable {
 		return notifications;
 	}
 
-	public void changeNotifications(String key, Boolean value) throws UnknownClientKeyExceptionCore, ClientNotificationsAlreadyDefinedException{
+	/**
+	 * Changes the notifications of a client to either active or not active;
+	 * 
+	 * @param key is the terminal key
+	 	*@throws UnknownClientKeyExceptionCore if the client does not exist
+	 * @param value is the boolean value to change the notifications to
+	 */
+	public void changeNotifications(String key, Boolean value) throws UnknownClientKeyExceptionCore, 
+	ClientNotificationsAlreadyDefinedException{
 		getClient(key).setActiveNotifications(value);
 	}
 
 
 /** ********************Terminal related methods*************************** */
 
-	//auxiliary function
+	/**
+	 * Auxiliary function to check if a string is numeric
+	 * 
+	 * @param str is the string
+	 * @return the boolean value true if the string is numeric, false otherwise
+	 */
 	public static boolean isNumeric(String str) { 
 		try {  
-			Double.parseDouble(str);  
+			Double.parseDouble(str);
 			return true;
 		} catch(NumberFormatException e){  
 		return false;  
 		}  
 	}
 
+/**
+	 * Switches the terminal to the another state;
+	 * 
+	 * @param state the new state
+	 * @param terminal the terminal to be switched
+	 */
+	
 
 	public void SwitchState(String state, Terminal terminal) {
 		if(state.equals("ON")) {
@@ -153,7 +211,19 @@ public class Network implements Serializable {
 		}
 	}	
 
-	//registerTerminal
+	/**
+	 * Registers a terminal;
+	 * 
+	 * @param id terminal id
+	 	* @throws InvalidTerminalKeyExceptionCore if the terminal id is invalid
+		* @throws DuplicateTerminalKeyExceptionCore if the terminal id is already registered
+	 * @param clientkey client key
+	 	* @throws UnknownClientKeyExceptionCore if the client key is unknown
+	 * @param type terminal type
+	 	* @throws TerminalTypeNotSupportedException if the terminal type is not supported
+	 * @param state terminal state
+	 * @return terminal the registered terminal
+	 */
 	public Terminal registerTerminal(String id, String clientKey, String type, String state) 
 				throws UnknownClientKeyExceptionCore, TerminalTypeNotSupportedException, 
 				InvalidTerminalKeyExceptionCore, DuplicateTerminalKeyExceptionCore {
@@ -203,7 +273,13 @@ public class Network implements Serializable {
 		return terminal;
 	}
 
-	//terminal getter
+	/**
+	 * Gets the terminal with the given id.
+	 * 
+	 * @param id the terminal id
+	 	*@throws UnknownTerminalKeyExceptionCore if the terminal does not exist	
+	*@return terminal with the given id
+	 */
 	public Terminal getTerminal(String id) throws UnknownTerminalKeyExceptionCore {
 		Terminal terminal = _terminals.get(id);
 		if (terminal == null) {
@@ -212,8 +288,11 @@ public class Network implements Serializable {
 		return terminal;
 	}
 
-	//returns the list of terminals that have no communications
-	public Collection<Terminal> getUnusedTerminals() {
+/**
+	 * Gets all the terminals that have not received nor sent communication;
+	 * 
+	 * @return Collection of terminals
+	 */	public Collection<Terminal> getUnusedTerminals() {
 		List<Terminal> terminal_list = new ArrayList<Terminal>();
 		for(Map.Entry<String,Terminal> entry : _terminals.entrySet()){
 			if(entry.getValue().NoCommunications()){
@@ -223,26 +302,47 @@ public class Network implements Serializable {
 		return terminal_list;
 	}
 
-	//terminal getter
+	/**
+	 * Gets all terminals
+	 * 
+	 * @return Collection of all terminals
+	 */
 	public Collection<Terminal> getAllTerminals() {
 		return Collections.unmodifiableCollection(_terminals.values());
 	}
 
-	//makeFRiends calls the add friend from the terminal
+
+
+	/**
+	 * Adds a friend to the terminal; a terminal cannot be added as a friend of itself
+	 * 
+	 * @param terminal1 is the terminal thats going to add a friend
+	 * @param terminal2 is the terminal thats going to be added as a friend
+	 */
 	public void makeFriends(Terminal terminal1, Terminal terminal2) {
 		if (terminal1.equals(terminal2)) {
 			return;
 		}
-
 		terminal1.AddFriend(terminal2);
 	}
 
+	/**
+	 * Removes a terminal friend 
+	 * 
+	 * @param terminal1 is the terminal thats going to remove a friend
+	 * @param terminal2 is the terminal thats going to be removed 
+
+	 */
 	public void deMakeFriends( Terminal terminal1, Terminal terminal2){
 		terminal1.RemoveFriend(terminal2);
 	}
 
 /* *************************Communication Methods**************************** */
-	
+	/**
+	 *Gets all the communications by all terminals;;
+	 * @return Collection of all communications
+	 */
+
 	public Collection<Communication> getAllCommunications() {
 		ArrayList<Communication> al = new ArrayList<>();
 		for (Terminal t: _terminals.values()) {
@@ -251,6 +351,12 @@ public class Network implements Serializable {
 		return al;
 	}
 
+	/**
+	 * Gets all the communications this client has sent;
+	 * 
+	 * @param clientKey is the client key
+         * @throws UnknownClientKeyExceptionCore when client key does not exist
+	 */
 	public Collection<Communication> getAllCommunicationsFromClient(String key) throws UnknownClientKeyExceptionCore{
 		ArrayList<Communication> al = new ArrayList<>();
 		for(Terminal t: getClient(key).getAllTerminals()) {
@@ -259,6 +365,11 @@ public class Network implements Serializable {
 		return al;
 	}
 
+	/**
+	 * Gets all the communications that were sent to this client.
+	 * @param key The client key.
+         * @throws UnknownClientKeyExceptionCore if the client key is unknown.
+	 */
 	public Collection<Communication> getAllCommunicationsToClient(String key) throws UnknownClientKeyExceptionCore {
 		ArrayList<Communication> al = new ArrayList<>();
 		Client receiver = getClient(key);
@@ -272,6 +383,11 @@ public class Network implements Serializable {
 		}
 		return al;
 	}
+	/**
+	 * Gets the Communication ID for the communication that's being registered;
+	 * 
+	 * @return the communication ID
+	 */
 
 	public int getCommunicationId() {
 		_communicationNumber++;
@@ -280,6 +396,12 @@ public class Network implements Serializable {
 
 
 /****************LOOKUPS ******** */
+/**
+	 * Gets terminals with positive balance;
+	 * 
+	 * @return Collection of terminals with positive balance
+	 */
+
 public Collection<Terminal> getPositiveTerminals(){
 	List<Terminal> terminal_list = new ArrayList<Terminal>();
 		for(Map.Entry<String,Terminal> entry : _terminals.entrySet()){
@@ -290,6 +412,10 @@ public Collection<Terminal> getPositiveTerminals(){
 		}
 		return terminal_list;
 	}
+	/**
+	 * Gets clients with no debts;
+	 * @return Collection of clients with no debts   
+	 */
 public Collection<Client> getNoDebtsClient(){
 	List<Client> client_list = new ArrayList<Client>();
 	for(Map.Entry<String,Client> entry : _clients.entrySet()){
@@ -299,9 +425,11 @@ public Collection<Client> getNoDebtsClient(){
 	}
 	return client_list;
 }
-//dividas e sem dividas show is not working well somehow
-//and the debt is being putted on the wront terminal in text
-//and not being putted at all in voice
+/**
+	 *Gets clients with debts;
+	 * 
+	 * @return Collection of clients with debts
+	 */
 public Collection<Client> getYesDebtsClient(){
 	List<Client> client_list = new ArrayList<Client>();
 	for(Map.Entry<String,Client> entry : _clients.entrySet()){
@@ -309,14 +437,8 @@ public Collection<Client> getYesDebtsClient(){
 			client_list.add(entry.getValue());
 		}
 	}
-	/*Collections.sort(client_list, Collections.reverseOrder());
-	for(Map.Entry<String,Client> entry : _clients.entrySet()){
-		if(entry.getValue().getDebts() != 0){
-			
-			//value será o id do client i think which rules
-		}
-	}*/
 	//this is supposed to work
+	//FIX ME
 	//and i should also sort by id nr (crescente) de nr de cliente
 	//lets try it
 	return client_list;
