@@ -331,7 +331,7 @@ public class Network implements Serializable {
 	 * @param terminal2 is the terminal thats going to be removed 
 
 	 */
-	public void deMakeFriends( Terminal terminal1, Terminal terminal2){
+	public void removeFriends( Terminal terminal1, Terminal terminal2){
 		terminal1.RemoveFriend(terminal2);
 	}
 

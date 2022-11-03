@@ -6,10 +6,37 @@ import java.io.Serializable;
 public class PlatinumLevel extends ClientLevel implements Serializable {
 
     public PlatinumLevel(Client client) {
-        super();
+        super(client);
     }
 
-    public String getLevel() {
+    public void promote() {
+        /*nothing*/
+    }
+
+    public void demote() {
+        if (shouldDemote()) {
+            getClient().setLevel(new GoldLevel(getClient()));
+        }
+        else {
+            doubleDemote();
+        }
+    }
+
+    public void doubleDemote() {
+        if (getClient().getBalance() < 0) {
+            getClient().setLevel(new NormalLevel(getClient()));
+        }
+    }
+
+    public boolean shouldPromote() {
+        return false;
+    }
+
+    public boolean shouldDemote() {
+        return getConsecutiveTextComms() >= 2 && getClient().getBalance() >= 0;
+    }
+
+    public String levelToString() {
         return "PLATINUM";
     }
 

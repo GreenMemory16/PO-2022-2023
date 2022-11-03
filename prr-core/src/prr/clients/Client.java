@@ -50,6 +50,9 @@ public class Client implements Serializable {
     public ClientLevel getLevel() { return _level; }
     public void setLevel(ClientLevel level) { _level = level; }
 
+    public void tryPromotingClient() {getLevel().promote();}
+
+    public void tryDemotingClient() {getLevel().demote();}
 
     public long Payments(){
         long payments = 0;
@@ -66,10 +69,8 @@ public class Client implements Serializable {
         return debts;
     }
 
-    public long Saldo(){
-        long saldo = 0;
-        saldo += Payments() + Debts();
-        return saldo;
+    public long getBalance(){
+        return Payments() - Debts();
     }
 
     //setters
@@ -80,13 +81,14 @@ public class Client implements Serializable {
         _activeNotifications = value;
     }
 
+
     //add a terminal to the client's terminals
     public void insertTerminal(Terminal t) {
         _terminals.put(t.getId(), t);
     }
 
     //to change notifictions status
-    public String getNotificationSwitch_String() {
+    public String getNotificationSwitchToString() {
         if (_activeNotifications) {
             return "YES";
         }
@@ -98,7 +100,7 @@ public class Client implements Serializable {
     }
 
     public String getClientLevel() {
-        return _level.getLevel();
+        return _level.levelToString();
     }
 
     public Collection<Terminal> getAllTerminals() {
@@ -123,7 +125,7 @@ public class Client implements Serializable {
     @Override
     public String toString() {
         return "CLIENT|" + getKey() + "|" + getName() + "|" + getTaxId() + "|" + 
-                _level.getLevel() + "|" + getNotificationSwitch_String() + "|" +
+                _level.levelToString() + "|" + getNotificationSwitchToString() + "|" +
                 _terminals.size() + "|" +this.Payments() + "|" + this.Debts();
     }
 

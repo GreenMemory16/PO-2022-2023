@@ -2,6 +2,7 @@ package prr.app.terminal;
 
 import prr.Network;
 import prr.app.exceptions.UnknownTerminalKeyException;
+import prr.exceptions.CantStartCommunicationException;
 import prr.exceptions.DestinationIsBusyException;
 import prr.exceptions.DestinationIsOffException;
 import prr.exceptions.DestinationIsSilentException;
@@ -46,6 +47,8 @@ class DoStartInteractiveCommunication extends TerminalCommand {
 			_display.popup(Message.unsupportedAtOrigin(e.getId(), e.getType()));
 		} catch (SenderEqualsReceiverException e) {
 			_display.popup(Message.destinationIsBusy(e.getId()));
+		} catch (CantStartCommunicationException e) {
+			//nothing
 		}
 	}
 }
