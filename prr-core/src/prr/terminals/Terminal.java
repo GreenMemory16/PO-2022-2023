@@ -315,7 +315,7 @@ public abstract class Terminal implements Serializable {
         }
         else if (AvailableForTextCommunication(this) && AvailableForTextCommunication(receiver)) {
             int commId = network.getCommunicationId();
-            Communication comm = new TextCommunication(commId, this, receiver, message);
+            TextCommunication comm = new TextCommunication(commId, this, receiver, message);
             setTextCommunicationStandards(comm);
 
             getClientSender(comm).getLevel().incrementConsecutiveTextComms();
@@ -328,8 +328,8 @@ public abstract class Terminal implements Serializable {
         }
     }
 
-    public void setTextCommunicationStandards(Communication comm) {
-        comm.setCost(comm.calculateCost());
+    public void setTextCommunicationStandards(TextCommunication comm) {
+        comm.setCost(getClientSender(comm).getLevel().calculateTextCost(comm));
         comm.setStatus(false);
         insertCommunication(comm);
         this.addDebt(comm);
@@ -409,14 +409,16 @@ public abstract class Terminal implements Serializable {
         addDebt(communication);
         communication.getReceiver().addRecievedCommunications();
 
-        updateClientLevel(getClientSender(communication));
-
-        return (int) Math.round(communication.calculateCost());
+        return (int) Math.round(communication.getCost());
     }
 
     public void setCommunicationEndUpdates(InteractiveCommunication comm, int duration) {
         comm.setDuration(duration);
-        comm.setCost(comm.calculateCost());
+        if (comm.getType().equals("VOICE")) {
+            comm.setCost(getClientSender(comm).getLevel().calculateVoiceCost(comm));
+        } else if (comm.getType().equals("VIDEO")) {
+            comm.setCost(getClientSender(comm).getLevel().calculateVideoCost(comm));
+        }
         comm.setStatus(false);
     }
 
@@ -428,7 +430,7 @@ public abstract class Terminal implements Serializable {
 
     public void performPayment(int commId) throws InvalidCommunicationExceptionCore {
         Communication comm = this.getCommunication(commId);
-        if (comm == null || comm.calculateCost() == 0 || !this.debts.contains(comm)) {
+        if (comm == null || comm.getCost() == 0 || !this.debts.contains(comm)) {
             throw new InvalidCommunicationExceptionCore();
         }
         if (comm.getStatusToString().equals("ONGOING") || !comm.getSender().equals(this)) {

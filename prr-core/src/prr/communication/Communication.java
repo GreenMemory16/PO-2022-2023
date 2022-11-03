@@ -62,6 +62,4 @@ public abstract class Communication implements Serializable{
         && this._sender.equals(com.getSender())
         && this._cost == com.getCost() && this._status == com.getStatus();
     }
-    public abstract long calculateCost();
-    
 }

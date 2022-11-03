@@ -22,7 +22,5 @@ public abstract class InteractiveCommunication extends Communication {
 
 
     public abstract boolean senderRecieverFriendship();
-    
-    public abstract long calculateCost(); 
-        
+     
 }

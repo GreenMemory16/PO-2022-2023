@@ -3,7 +3,7 @@ package prr.clients;
 public class NormalLevel extends ClientLevel {
 
     public NormalLevel(Client client) {
-        super(client);
+        super(client, new NormalClientTarif());
     }
 
     //to be promoted to gold level client

@@ -1,10 +1,12 @@
 package prr.clients;
 
+import prr.tarifs.PlatinumClientTarif;
+
 //client type
 public class PlatinumLevel extends ClientLevel {
 
     public PlatinumLevel(Client client) {
-        super(client);
+        super(client, new PlatinumClientTarif());
     }
 
     //a platinium level client cant be promoted; does nothing
