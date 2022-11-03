@@ -13,7 +13,6 @@ import prr.exceptions.UnsupportedAtOriginException;
 import prr.terminals.Terminal;
 import pt.tecnico.uilib.forms.Form;
 import pt.tecnico.uilib.menus.CommandException;
-//FIXME add more imports if needed
 
 /**
  * Command for starting communication.

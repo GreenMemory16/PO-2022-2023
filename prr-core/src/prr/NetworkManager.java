@@ -5,21 +5,14 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
-import java.io.BufferedReader;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
-import java.io.FileReader;
-import java.util.Collection;
 
-import prr.clients.Client;
-import prr.terminals.Terminal;
-import prr.exceptions.DuplicateClientKeyExceptionCore;
 import prr.exceptions.ImportFileException;
 import prr.exceptions.MissingFileAssociationException;
 import prr.exceptions.TerminalTypeNotSupportedException;
 import prr.exceptions.UnavailableFileException;
-import prr.exceptions.UnknownClientKeyExceptionCore;
 import prr.exceptions.UnrecognizedEntryException;
 
 

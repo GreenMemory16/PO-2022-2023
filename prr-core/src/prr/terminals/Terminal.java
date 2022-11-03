@@ -7,7 +7,6 @@ import java.util.Collection;
 import java.util.List;
 import java.util.ListIterator;
 import java.util.Map;
-import java.util.Set;
 import java.util.TreeMap;
 
 import prr.clients.Client;
@@ -77,29 +76,23 @@ public abstract class Terminal implements Serializable {
         this.friends = new TreeMap<String, Terminal>();
 
         this.payments = new ArrayList<Communication>();
-        // this.payments.add(0);
         this.debts = new ArrayList<Communication>();
-        // this.debts.add(0);
 
         this._communications = new TreeMap<Integer, Communication>();
     }
 
-    // getters: not setters tho
     public String getId() {
         return this.id;
     }
 
-    /* communications methods */
     public Communication getCommunication(int key) {
         return this._communications.get(key);
     }
 
-    // returns true if terminal is unused
     public boolean NoCommunications() {
         return (this._communications.size() == 0 && this.recievedCommunications == 0);
     }
 
-    /* state related function */
     public State getState() {
         return this.state;
     }
@@ -143,7 +136,6 @@ public abstract class Terminal implements Serializable {
         return _commAttempts.size() > 0;
     }
 
-    // functions related to Friends settings
     public void AddFriend(Terminal terminal) {
         friends.put(terminal.getId(), terminal);
     }
@@ -152,27 +144,20 @@ public abstract class Terminal implements Serializable {
         friends.remove(terminal.getId(), terminal);
     }
 
-    // useful to check if the terminal is already a friend
     public boolean IsFriend(String Id) {
         Terminal terminal = friends.get(Id);
         return !(terminal == null);
     }
 
-    // to enumerate all friends that terminal has
     public String toStringFriends() {
-        Set<Map.Entry<String, Terminal>> entrySet = friends.entrySet();
-        Map.Entry<Integer, String>[] entryArray = entrySet.toArray(new Map.Entry[entrySet.size()]);
-        String returnString = "|";
+        String friendsString = "";
 
-        for (int i = 0; i < entryArray.length; i++) {
-            returnString += entryArray[i].getKey() + ",";
+        if (friends.size() > 0) {
+            friendsString += "|" + String.join(",", friends.keySet());
         }
-        return returnString.substring(0, returnString.length() - 1);
 
+        return friendsString;
     }
-
-    // to string of terminal type: BASIC OR FANCY
-    abstract public String toStringType();
 
     public void makeFriends(Network network, String id) throws UnknownTerminalKeyExceptionCore {
         network.makeFriends(this, network.getTerminal(id));
@@ -459,6 +444,8 @@ public abstract class Terminal implements Serializable {
         }
         return false;
     }
+
+    abstract public String toStringType();
 
     public String toString() {
         return this.toStringType() + "|" + this.getId() + "|" + this.getClient().getKey() + "|"

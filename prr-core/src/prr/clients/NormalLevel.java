@@ -1,9 +1,7 @@
 package prr.clients;
 
-import java.io.Serializable;
-
 //client type
-public class NormalLevel extends ClientLevel implements Serializable{
+public class NormalLevel extends ClientLevel {
 
     public NormalLevel(Client client) {
         super(client);

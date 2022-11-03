@@ -18,7 +18,6 @@ import prr.exceptions.ClientNotificationsAlreadyDefinedException;
 import prr.exceptions.DuplicateClientKeyExceptionCore;
 import prr.exceptions.DuplicateTerminalKeyExceptionCore;
 import prr.exceptions.ImportFileException;
-import prr.exceptions.InvalidFriendExceptionCore;
 import prr.exceptions.InvalidTerminalKeyExceptionCore;
 import prr.exceptions.TerminalTypeNotSupportedException;
 import prr.exceptions.UnknownClientKeyExceptionCore;
@@ -30,7 +29,6 @@ import prr.terminals.Terminal;
 import prr.terminals.Silence;
 import prr.terminals.Off;
 import prr.terminals.Idle;
-import prr.terminals.Busy;
 import prr.notifications.Notification;
 
 

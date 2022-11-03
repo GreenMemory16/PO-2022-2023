@@ -1,7 +1,5 @@
 package prr.communication;
 
-import prr.terminals.Basic;
-import prr.terminals.Fancy;
 import prr.terminals.Terminal;
 
 //to be fully implemented later on

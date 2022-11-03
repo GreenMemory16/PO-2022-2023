@@ -1,11 +1,9 @@
 package prr.terminals;
 
-import java.io.Serializable;
-import prr.exceptions.AlreadySilentExceptionCore;
 import prr.exceptions.AlreadyInStateException;
 
 //class Silence
-public class Silence extends State implements Serializable{
+public class Silence extends State {
 
     public Silence(Terminal terminal, boolean previousIdle) {
         super(terminal, previousIdle);

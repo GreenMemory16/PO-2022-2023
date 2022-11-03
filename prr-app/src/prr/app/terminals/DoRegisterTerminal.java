@@ -9,7 +9,6 @@ import prr.exceptions.DuplicateTerminalKeyExceptionCore;
 import prr.exceptions.InvalidTerminalKeyExceptionCore;
 import prr.exceptions.TerminalTypeNotSupportedException;
 import prr.exceptions.UnknownClientKeyExceptionCore;
-import prr.exceptions.UnknownTerminalKeyExceptionCore;
 
 import pt.tecnico.uilib.menus.Command;
 import pt.tecnico.uilib.menus.CommandException;

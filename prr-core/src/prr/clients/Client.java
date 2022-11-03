@@ -4,17 +4,11 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
-import java.util.Comparator;
 import java.util.Map;
 import java.util.TreeMap;
-import java.util.logging.Level;
-import prr.clients.ClientLevel;
 import prr.exceptions.ClientNotificationsAlreadyDefinedException;
-import prr.NetworkManager;
 import prr.terminals.Terminal;
 import prr.notifications.Notification;
-import java.util.List;
-import java.util.ArrayList;
 
 public class Client implements Serializable {
 

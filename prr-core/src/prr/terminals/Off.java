@@ -1,9 +1,8 @@
 package prr.terminals;
 
-import java.io.Serializable;
 import prr.exceptions.AlreadyInStateException;
 
-public class Off extends State implements Serializable{
+public class Off extends State {
     
     public Off(Terminal terminal, boolean previousIdle) {
         super(terminal, previousIdle);

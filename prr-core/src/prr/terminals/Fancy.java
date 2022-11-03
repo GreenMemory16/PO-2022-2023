@@ -1,10 +1,8 @@
 package prr.terminals;
 
-import java.io.Serializable;
-
 import prr.clients.Client;
 
-public class Fancy extends Terminal implements Serializable {
+public class Fancy extends Terminal {
 
     
     //no extra atributes

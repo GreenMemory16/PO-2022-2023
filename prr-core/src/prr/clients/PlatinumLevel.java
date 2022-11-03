@@ -1,9 +1,7 @@
 package prr.clients;
 
-import java.io.Serializable;
-
 //client type
-public class PlatinumLevel extends ClientLevel implements Serializable {
+public class PlatinumLevel extends ClientLevel {
 
     public PlatinumLevel(Client client) {
         super(client);
