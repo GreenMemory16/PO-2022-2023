@@ -8,6 +8,5 @@ public class InvalidCommunicationExceptionCore extends Exception {
 
       public InvalidCommunicationExceptionCore(){
         super();
-        //no arguments to be passed on
     }
 }

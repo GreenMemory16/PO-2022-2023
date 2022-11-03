@@ -407,6 +407,7 @@ public Collection<Terminal> getPositiveTerminals(){
 		}
 		return terminal_list;
 	}
+	
 	/**
 	 * Gets clients with no debts;
 	 * @return Collection of clients with no debts   
@@ -439,6 +440,12 @@ public Collection<Client> getYesDebtsClient(){
 }	
 
 /****************Total Balance ******/
+/**
+ * Gets the global Balance
+ * @return sum of all balances
+ * 
+ */
+
 public int getTotalBalance(){
 	int sum = 0;
 	for(Map.Entry<String,Terminal> terminal : _terminals.entrySet()){
@@ -446,6 +453,12 @@ public int getTotalBalance(){
 	}
 	return sum;
 }
+
+/**
+ * Gets the global payments
+ * @return sum of all payments
+ * 
+ */
 public int getTotalPayments(){
 	int sum = 0;
 	for(Map.Entry<String,Terminal> terminal : _terminals.entrySet()){
@@ -454,6 +467,11 @@ public int getTotalPayments(){
 	return sum;
 }
 
+/**
+ * Gets the global debt
+ * @return sum of all debts
+ * 
+ */
 public int getTotalDebts(){
 	int sum = 0;
 	for(Map.Entry<String,Terminal> terminal : _terminals.entrySet()){
