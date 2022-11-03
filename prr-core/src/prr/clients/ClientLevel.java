@@ -4,7 +4,10 @@ import java.io.Serializable;
 
 public abstract class ClientLevel implements Serializable{
 
+    //a client level has a client
     private Client _client;
+    
+    //counters
     private int _consecutiveVideoComms = 0;
     private int _consecutiveTextComms = 0;
 

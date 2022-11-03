@@ -15,6 +15,7 @@ public class Client implements Serializable {
     //each client has it's own terminals
     private Map<String, Terminal> _terminals = new TreeMap<>();
 
+    //each client has notifications
     private ArrayList<Notification> _notifications = new ArrayList<>();
 
     //client's identifiers
@@ -22,11 +23,9 @@ public class Client implements Serializable {
     private String _name;
     private int _taxId;
 
-    /*private long payments;
-    private long debts;*/
-
     //client's characteristics
     private boolean _activeNotifications = true;
+    //client level
     private ClientLevel _level;
 
     //constructor
@@ -42,12 +41,20 @@ public class Client implements Serializable {
     public String getName() { return _name; }
     public int getTaxId() { return _taxId; }
     public ClientLevel getLevel() { return _level; }
-    public void setLevel(ClientLevel level) { _level = level; }
 
-    public void tryPromotingClient() {getLevel().promote();}
+    public String getClientLevel() {
+        return _level.levelToString();
+    }
 
-    public void tryDemotingClient() {getLevel().demote();}
+    public Collection<Terminal> getAllTerminals() {
+        return Collections.unmodifiableCollection(_terminals.values());
+    }
 
+    public ArrayList<Notification> getNotifications() {
+        return _notifications;
+    }
+
+    //payment getter
     public long Payments(){
         long payments = 0;
         for(Map.Entry<String,Terminal> entry : _terminals.entrySet()){
@@ -55,6 +62,7 @@ public class Client implements Serializable {
         }
         return payments;
     }
+    //debt getter
     public long Debts(){
         long debts = 0;
         for(Map.Entry<String,Terminal> entry : _terminals.entrySet()){
@@ -63,6 +71,7 @@ public class Client implements Serializable {
         return debts;
     }
 
+    //balance getter
     public long getBalance(){
         return Payments() - Debts();
     }
@@ -74,7 +83,6 @@ public class Client implements Serializable {
         }
         _activeNotifications = value;
     }
-
 
     //add a terminal to the client's terminals
     public void insertTerminal(Terminal t) {
@@ -89,17 +97,17 @@ public class Client implements Serializable {
         return "NO";
     }
 
+
+    public void setLevel(ClientLevel level) { _level = level; }
+
+    public void tryPromotingClient() {getLevel().promote();}
+
+    public void tryDemotingClient() {getLevel().demote();}
+
     public boolean canReceiveNotifications() {
         return _activeNotifications;
     }
 
-    public String getClientLevel() {
-        return _level.levelToString();
-    }
-
-    public Collection<Terminal> getAllTerminals() {
-        return Collections.unmodifiableCollection(_terminals.values());
-    }
 
     public void addNotification(Notification notification) {
         if (!_notifications.contains(notification)) {
@@ -107,9 +115,6 @@ public class Client implements Serializable {
         }
     }
 
-    public ArrayList<Notification> getNotifications() {
-        return _notifications;
-    }
 
     public void removeNotifications() {
         _notifications.clear();
