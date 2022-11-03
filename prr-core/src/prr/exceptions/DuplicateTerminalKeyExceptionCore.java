@@ -9,10 +9,18 @@ public class DuplicateTerminalKeyExceptionCore extends Exception{
     //terminal id
     private String id;
 
+    /**
+     * 
+     * @param id
+     */
     public DuplicateTerminalKeyExceptionCore(String id) {
         this.id = id;
     }
 
+    /**
+     * 
+     * @return the id
+     */
     public String getId() {
         return this.id;
     }
