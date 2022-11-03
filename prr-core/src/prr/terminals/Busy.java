@@ -6,8 +6,6 @@ public class Busy extends State {
         super(terminal, previousIdle);
     }
 
-     //changing state rules
-
     public void goToSilence() {
         getTerminal().setState(new Silence(getTerminal(), getPreviousIdle()));
         setPreviousIdle(false);

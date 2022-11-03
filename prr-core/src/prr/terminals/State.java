@@ -3,7 +3,6 @@ package prr.terminals;
 import java.io.Serializable;
 import prr.exceptions.AlreadyInStateException;
 
-//abstract class fthat implements methods for all states
 public abstract class State implements Serializable{
 
     private Terminal _terminal;

@@ -57,7 +57,7 @@ public abstract class Terminal implements Serializable {
 
     private Communication _onGoingComm;
 
-    // amigos; usar um map: TReeMap in this case
+    // amigos; usar um map: TreeMap in this case
     // a key será o id do terminal
     private Map<String, Terminal> friends;
 
@@ -180,7 +180,6 @@ public abstract class Terminal implements Serializable {
      **/
 
     public boolean canEndCurrentCommunication() {
-        // IDK HOW TO CHECK IF IT WAS THE ORIGINATOR OF THE COMM
         if (this.getState().toString().equals("BUSY") && _onGoingComm != null) {
             return true;
         }

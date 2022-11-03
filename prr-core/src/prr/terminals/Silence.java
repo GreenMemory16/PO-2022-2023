@@ -2,14 +2,12 @@ package prr.terminals;
 
 import prr.exceptions.AlreadyInStateException;
 
-//class Silence
 public class Silence extends State {
 
     public Silence(Terminal terminal, boolean previousIdle) {
         super(terminal, previousIdle);
     }
 
-    //changing state rules
     public void goToSilence() throws AlreadyInStateException{
         throw new AlreadyInStateException();
     }
