@@ -4,7 +4,6 @@ import prr.Network;
 import prr.terminals.Terminal;
 import pt.tecnico.uilib.menus.CommandException;
 import prr.exceptions.AlreadyInStateException;
-//FIXME add more imports if needed
 
 /**
  * Turn on the terminal.

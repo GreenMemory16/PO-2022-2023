@@ -114,18 +114,17 @@ public abstract class Terminal implements Serializable {
     }
 
     public int getAllPayments() {
-        return (int) Math.round(getAllSomething(this.payments));
+        return (int) Math.round(getAllOf(this.payments));
     }
 
     public int getAllDebts() {
-        return (int) Math.round(getAllSomething(this.debts));
+        return (int) Math.round(getAllOf(this.debts));
     }
 
-    // for abstração sake
-    public int getAllSomething(List list) {
+    public int getAllOf(List<Communication> list) {
         int total = 0;
         for (int i = 0; i < list.size(); i++) {
-            Communication com = (Communication) list.get(i);
+            Communication com = list.get(i);
 
             total += com.getCost();
         }
@@ -145,7 +144,6 @@ public abstract class Terminal implements Serializable {
     }
 
     // functions related to Friends settings
-
     public void AddFriend(Terminal terminal) {
         friends.put(terminal.getId(), terminal);
     }
