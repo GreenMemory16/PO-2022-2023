@@ -5,7 +5,7 @@ import pt.tecnico.uilib.menus.Command;
 import pt.tecnico.uilib.menus.CommandException;
 import java.util.List;
 import java.util.ArrayList;
-import prr.clients.*;
+import prr.clients.Client;
 /**
  * Show clients with positive balance.
  */

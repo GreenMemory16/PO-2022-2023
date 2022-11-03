@@ -9,8 +9,6 @@ import prr.app.exceptions.UnknownTerminalKeyException;
 /**
  * Remove friend.
  */
-//i should make exceptions FIX ME same with addfriend
-//to be implemented later on
 class DoRemoveFriend extends TerminalCommand {
 
 	DoRemoveFriend(Network context, Terminal terminal) {

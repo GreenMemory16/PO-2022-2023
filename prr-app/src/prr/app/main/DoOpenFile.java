@@ -1,12 +1,10 @@
 package prr.app.main;
 
-import java.io.FileNotFoundException;
 import java.io.IOException;
 
 import prr.exceptions.UnavailableFileException;
 import prr.NetworkManager;
 import prr.app.exceptions.FileOpenFailedException;
-import pt.tecnico.uilib.forms.Form;
 import pt.tecnico.uilib.menus.Command;
 import pt.tecnico.uilib.menus.CommandException;
 

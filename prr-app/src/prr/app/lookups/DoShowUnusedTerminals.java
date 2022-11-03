@@ -20,7 +20,6 @@ class DoShowUnusedTerminals extends Command<Network> {
 
 	@Override
 	protected final void execute() throws CommandException {
-		//list of all terminals without communications
 		List<Terminal> terminal_list = new ArrayList<Terminal>(); 
 		terminal_list.addAll(_receiver.getUnusedTerminals());
 				

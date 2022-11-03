@@ -11,7 +11,6 @@ import prr.exceptions.UnknownTerminalKeyExceptionCore;
 import prr.exceptions.UnsupportedAtDestinationException;
 import prr.exceptions.UnsupportedAtOriginException;
 import prr.terminals.Terminal;
-import pt.tecnico.uilib.forms.Form;
 import pt.tecnico.uilib.menus.CommandException;
 
 /**

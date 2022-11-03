@@ -4,7 +4,6 @@ import prr.Network;
 import prr.app.exceptions.DuplicateTerminalKeyException;
 import prr.app.exceptions.InvalidTerminalKeyException;
 import prr.app.exceptions.UnknownClientKeyException;
-import prr.app.exceptions.UnknownTerminalKeyException;
 import prr.exceptions.DuplicateTerminalKeyExceptionCore;
 import prr.exceptions.InvalidTerminalKeyExceptionCore;
 import prr.exceptions.TerminalTypeNotSupportedException;

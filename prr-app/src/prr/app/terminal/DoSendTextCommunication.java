@@ -2,13 +2,10 @@ package prr.app.terminal;
 
 import prr.Network;
 import prr.terminals.Terminal;
-import prr.app.exceptions.InvalidTerminalKeyException;
 import prr.app.exceptions.UnknownTerminalKeyException;
 import prr.exceptions.CantStartCommunicationException;
 import prr.exceptions.DestinationIsOffException;
-import prr.exceptions.SenderEqualsReceiverException;
 import prr.exceptions.UnknownTerminalKeyExceptionCore;
-import pt.tecnico.uilib.forms.Form;
 import pt.tecnico.uilib.menus.CommandException;
 
 /**
@@ -33,7 +30,6 @@ class DoSendTextCommunication extends TerminalCommand {
                 } catch (DestinationIsOffException e) {
                         _display.popup(Message.destinationIsOff(e.getId()));
                 } catch (CantStartCommunicationException e) {
-                        //nothing
                 } 
         }
 } 

@@ -3,7 +3,7 @@ package prr.app.lookups;
 import prr.Network;
 import pt.tecnico.uilib.menus.Command;
 import pt.tecnico.uilib.menus.CommandException;
-import prr.clients.*;
+import prr.clients.Client;
 import java.util.List;
 import java.util.ArrayList;
 

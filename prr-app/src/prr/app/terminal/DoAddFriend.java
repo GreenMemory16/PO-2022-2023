@@ -3,7 +3,6 @@ package prr.app.terminal;
 import prr.Network;
 import prr.app.exceptions.UnknownTerminalKeyException;
 import prr.exceptions.UnknownTerminalKeyExceptionCore;
-import prr.exceptions.InvalidFriendExceptionCore;
 
 import prr.terminals.Terminal;
 import pt.tecnico.uilib.menus.CommandException;

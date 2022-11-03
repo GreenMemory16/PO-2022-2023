@@ -2,7 +2,6 @@ package prr.app.terminal;
 
 import prr.Network;
 import prr.terminals.Terminal;
-import pt.tecnico.uilib.forms.Form;
 import pt.tecnico.uilib.menus.CommandException;
 
 /**
