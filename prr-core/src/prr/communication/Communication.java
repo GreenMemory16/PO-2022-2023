@@ -4,7 +4,6 @@ import java.io.Serializable;
 
 import prr.terminals.Terminal;
 
-//to be fully implemented later on
 public abstract class Communication implements Serializable{
 
     private int _id;
