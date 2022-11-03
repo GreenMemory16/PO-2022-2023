@@ -1,5 +1,7 @@
 package prr.clients;
 
+import prr.tarifs.NormalClientTarif;
+
 public class NormalLevel extends ClientLevel {
 
     public NormalLevel(Client client) {

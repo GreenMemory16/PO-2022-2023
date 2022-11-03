@@ -1,9 +1,5 @@
 package prr.clients;
 
-import prr.communication.Communication;
-import prr.communication.TextCommunication;
-import prr.communication.VideoCommunication;
-import prr.communication.VoiceCommunication;
 import prr.tarifs.GoldClientTarif;
 
 //client type

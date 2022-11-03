@@ -3,8 +3,6 @@ package prr.clients;
 import java.io.Serializable;
 
 import prr.communication.TextCommunication;
-import prr.communication.VoiceCommunication;
-import prr.communication.VideoCommunication;
 import prr.communication.InteractiveCommunication;
 import prr.tarifs.ClientTarif;
 
