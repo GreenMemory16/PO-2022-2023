@@ -210,6 +210,29 @@ public abstract class Terminal implements Serializable {
     }
 
     public void turnOn() throws AlreadyInStateException {
+        toIdleNotificationSending();
+        state.turnOn();
+    }
+
+    public void turnOff() throws AlreadyInStateException {
+        state.turnOff();
+    }
+
+    public void switchToSilence() throws AlreadyInStateException {
+        toSilenceNotificationSending();
+        state.goToSilence();
+    }
+
+    public void endOfComm() {
+        NotBusyNotificationSending();
+        state.endOfComm();
+    }
+
+    public void startOfComm() {
+        state.startOfComm();
+    }
+
+    public void toIdleNotificationSending() {
         if (hasCommunicationAttempts()) {
             ListIterator<Communication> iter = _commAttempts.listIterator();
             while (iter.hasNext()) {
@@ -226,14 +249,9 @@ public abstract class Terminal implements Serializable {
                 }
             }
         }
-        state.turnOn();
     }
 
-    public void turnOff() throws AlreadyInStateException {
-        state.turnOff();
-    }
-
-    public void switchToSilence() throws AlreadyInStateException {
+    public void toSilenceNotificationSending() {
         if (hasCommunicationAttempts()) {
             ListIterator<Communication> iter = _commAttempts.listIterator();
             while (iter.hasNext()) {
@@ -246,10 +264,9 @@ public abstract class Terminal implements Serializable {
                 }
             }
         }
-        state.goToSilence();
     }
 
-    public void endOfComm() {
+    public void NotBusyNotificationSending() {
         if (hasCommunicationAttempts()) {
             ListIterator<Communication> iter = _commAttempts.listIterator();
             while (iter.hasNext()) {
@@ -262,11 +279,6 @@ public abstract class Terminal implements Serializable {
                 }
             }
         }
-        state.endOfComm();
-    }
-
-    public void startOfComm() {
-        state.startOfComm();
     }
 
     public boolean AvailableForTextCommunication(Terminal terminal) {
@@ -295,16 +307,14 @@ public abstract class Terminal implements Serializable {
     }
 
     public void makeTextCommunication(Network network, String id, String message)
-            throws UnknownTerminalKeyExceptionCore,
-            DestinationIsOffException {
+            throws UnknownTerminalKeyExceptionCore, DestinationIsOffException, CantStartCommunicationException {
         Terminal receiver = network.getTerminal(id);
 
         if (receiver.getState().toString().equals("OFF")) {
             receiver.addCommunicationAttempt(new VoiceCommunication(network.getCommunicationId(), this, receiver));
             throw new DestinationIsOffException(id);
         }
-
-        if (AvailableForTextCommunication(this) && AvailableForTextCommunication(receiver)) {
+        else if (AvailableForTextCommunication(this) && AvailableForTextCommunication(receiver)) {
             int commId = network.getCommunicationId();
             Communication comm = new TextCommunication(commId, this, receiver, message);
             setTextCommunicationStandards(comm);
@@ -313,6 +323,9 @@ public abstract class Terminal implements Serializable {
             getClientSender(comm).getLevel().resetConsecutiveVideoComms();
 
             updateClientLevel(comm.getSender().getClient());
+        }
+        else {
+            throw new CantStartCommunicationException();
         }
     }
 
@@ -347,11 +360,7 @@ public abstract class Terminal implements Serializable {
             Communication comm;
             if (type.equals("VOICE")) {
                 comm = new VoiceCommunication(network.getCommunicationId(), this, receiver);
-                comm.setStatus(true);
-                this.startOfComm();
-                receiver.startOfComm();
-                _onGoingComm = comm;
-                insertCommunication(comm);
+                setInteractiveCommunicationStandards(comm, receiver);
 
                 getClientSender(comm).getLevel().resetConsecutiveTextComms();
                 getClientSender(comm).getLevel().resetConsecutiveVideoComms();
@@ -365,11 +374,7 @@ public abstract class Terminal implements Serializable {
                 }
 
                 comm = new VideoCommunication(network.getCommunicationId(), this, receiver);
-                comm.setStatus(true);
-                this.startOfComm();
-                receiver.startOfComm();
-                _onGoingComm = comm;
-                insertCommunication(comm);
+                setInteractiveCommunicationStandards(comm, receiver);
 
                 getClientSender(comm).getLevel().resetConsecutiveTextComms();
                 getClientSender(comm).getLevel().incrementConsecutiveVideoComms();
@@ -378,6 +383,14 @@ public abstract class Terminal implements Serializable {
         else {
             throw new CantStartCommunicationException();
         }
+    }
+
+    public void setInteractiveCommunicationStandards(Communication comm, Terminal receiver) {
+        comm.setStatus(true);
+        this.startOfComm();
+        receiver.startOfComm();
+        _onGoingComm = comm;
+        insertCommunication(comm);
     }
 
     public void updateClientLevel(Client client) {
